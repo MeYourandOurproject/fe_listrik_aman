@@ -59,7 +59,7 @@ onMounted(() => {
 .hero-section {
   min-height: 100vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)),
-    url("../assets/hero-img.jpg");
+    url("../../assets/hero-img.jpg");
   display: flex;
   background-size: cover;
   padding-top: 50px;

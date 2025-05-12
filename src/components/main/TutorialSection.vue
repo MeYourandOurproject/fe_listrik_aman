@@ -28,13 +28,18 @@
         </div>
       </div>
     </div>
+
     <!-- Kolom Kanan: Lihat Lebih Banyak -->
-    <div class="d-flex justify-content-center align-items-center mt-4">
-      <button type="button" class="btn btn-outline-light btn-lg">
-        Lebih Banyak Tips, Trik dan Tutorial
-        <i class="bi bi-arrow-right-circle-fill ms-2"></i>
-      </button>
-    </div>
+    <router-link to="/coding-and-iot" class="text-decoration-none text-reset">
+      <div class="d-flex justify-content-center align-items-center mt-4">
+        <button
+          type="button"
+          class="btn btn-outline-light btn-lg text-decoration-none"
+        >
+          Lebih Banyak Tips, Trik dan Tutorial
+          <i class="bi bi-arrow-right-circle-fill ms-2"></i>
+        </button></div
+    ></router-link>
   </div>
 </template>
 
@@ -64,7 +69,7 @@ const tutorials = ref([
 <style>
 .tutorial-section {
   background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)),
-    url("../assets/hero-img.jpg");
+    url("../../assets/hero-img.jpg");
   background-size: cover;
   background-position: bottom;
 }

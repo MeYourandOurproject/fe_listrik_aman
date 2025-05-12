@@ -6,7 +6,11 @@
       <div class="row">
         <div class="disabled" id="tentang-kami"></div>
         <div class="title-tentang-kami mt-0 pt-0">
-          <img src="../assets/logobrand.png" alt="" class="image-brand mt-5" />
+          <img
+            src="../../assets/logobrand.png"
+            alt=""
+            class="image-brand mt-5"
+          />
           <div class="col-12">
             <h1>Tentang Listrik Aman Indonesia</h1>
             <h4 class="text-lead">

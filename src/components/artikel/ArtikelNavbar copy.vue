@@ -11,7 +11,7 @@
         <!-- Logo Brand -->
         <div class="col-3 text-center">
           <a class="navbar-brand" href="#">
-            <img src="../assets/logobrand.png" alt="" class="logo-brand" />
+            <img src="../../assets/logobrand.png" alt="" class="logo-brand" />
           </a>
         </div>
 

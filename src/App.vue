@@ -1,26 +1,27 @@
 <template>
   <div id="app">
-    <Navbar />
+    <!-- <Navbar />
     <LandingPage />
-    <Footer />
+    <Footer /> -->
+    <router-view />
   </div>
 </template>
 
 <script>
 // import HelloWorld from "./components/HelloWorld.vue";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import LandingPage from "./views/LandingPage.vue";
+// import LandingPage from "./views/pages/main/LandingPage.vue";
 
-import Navbar from "@/components/NavbarLayout.vue";
-import Footer from "@/components/FooterLayout.vue";
+// import Navbar from "@/components/NavbarLayout.vue";
+// import Footer from "@/components/FooterLayout.vue";
 
 export default {
   name: "App",
-  components: {
-    LandingPage,
-    Navbar,
-    Footer,
-  },
+  // components: {
+  //   LandingPage,
+  //   Navbar,
+  //   Footer,
+  // },
 };
 </script>
 

@@ -5,7 +5,7 @@
     >
       <a class="footer-brand" href="#">
         <img
-          src="../assets/logobrand.png"
+          src="../../assets/logobrand.png"
           alt=""
           class="footer-logo-brand mt-5 mb-3"
         />
@@ -85,7 +85,7 @@
   /* background-color: rgb(73, 73, 73); */
   min-height: 50vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)),
-    url("../assets/hero-img.jpg");
+    url("../../assets/hero-img.jpg");
   background-size: cover;
 }
 

@@ -1,22 +1,23 @@
 <template>
   <div
     :class="[
-      'container-fluid shadow-sm',
+      'container-fluid ',
       'fixed-top',
-      navbarScrolled ? 'bg-white' : 'bg-white',
+      navbarScrolled ? 'bg-white shadow-sm' : 'bg-warning',
     ]"
   >
-    <div :class="['container', navbarScrolled ? 'my-3' : 'my-3']">
+    <div :class="['container', navbarScrolled ? 'my-2' : 'my-3']">
       <div class="row align-items-center">
         <!-- Logo Brand -->
-        <div class="col-3 text-center">
-          <a class="navbar-brand" href="#">
+        <div class="col-2 text-center">
+          <!-- <div class="text-white fs-1">Jurnal of</div> -->
+          <a class="navbar-brand" href="/">
             <img src="../../assets/logobrand.png" alt="" class="logo-brand" />
           </a>
         </div>
 
         <!-- Tombol Hamburger untuk Mobile -->
-        <div class="col-9 d-lg-none text-end">
+        <div class="col-10 d-lg-none text-end">
           <button
             :class="['navbar-toggler', navbarScrolled ? '' : 'text-white']"
             type="button"
@@ -31,34 +32,69 @@
         </div>
 
         <!-- Menu untuk Desktop (Horizontal) -->
-        <div class="col-9 d-none d-lg-block">
+        <div class="col-5 d-none d-lg-block">
           <ul
             class="nav text-center justify-content-center align-items-center gap-1 fw-bold d-flex"
           >
             <li class="nav-item">
-              <a class="nav-link" href="#layanan">Layanan</a>
+              <a class="nav-link" href="#layanan">Free eBooks</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#estimasi-biaya">Estimasi Biaya</a>
+              <a class="nav-link" href="#estimasi-biaya">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#project">Project</a>
+              <a class="nav-link" href="#project">Contact</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-5 d-none d-lg-block">
+          <ul
+            class="nav text-center justify-content-center align-items-center gap-3 fw-bold d-flex"
+          >
+            <li class="nav-item">
+              <div class="d-flex align-items-center">
+                <a
+                  href="https://wa.me/6285924333088"
+                  class="text-decoration-none me-2"
+                >
+                  <i class="bi bi-youtube text-dark fs-2"></i>
+                </a>
+                <small>Youtube</small>
+              </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#tutorial">Tips & Trik</a>
+              <div class="d-flex align-items-center">
+                <a
+                  href="https://wa.me/6285924333088"
+                  class="text-decoration-none me-2"
+                >
+                  <i class="bi bi-instagram text-dark fs-3"></i>
+                </a>
+                <small>Instagram</small>
+              </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#tentang-kami">Tentang Kami</a>
+              <div class="d-flex align-items-center">
+                <a
+                  href="https://wa.me/6285924333088"
+                  class="text-decoration-none me-2"
+                >
+                  <i class="bi bi-facebook text-dark fs-3"></i>
+                </a>
+                <small>Facebook</small>
+              </div>
             </li>
             <li class="nav-item">
-              <a
-                href="https://wa.me/6285924333088"
-                class="text-decoration-none me-2 ms-5"
-              >
-                <button class="btn btn-lg btn-success">
-                  <i class="bi bi-whatsapp me-2"></i>Tanya Admin
-                </button>
-              </a>
+              <div class="d-flex align-items-center">
+                <a
+                  href="https://wa.me/6285924333088"
+                  class="text-decoration-none me-2"
+                >
+                  <i class="bi bi-tiktok text-dark fs-3"></i>
+                </a>
+                <small>Tiktok</small>
+              </div>
             </li>
           </ul>
         </div>
@@ -72,23 +108,17 @@
             'text-center',
             'gap-1',
             'fw-bold',
-            navbarScrolled ? 'bg-white' : 'bg-dark',
+            navbarScrolled ? 'bg-white' : '',
           ]"
         >
           <li class="nav-item">
-            <a class="nav-link" href="#layanan">Layanan</a>
+            <a class="nav-link" href="#layanan">Free eBooks</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#estimasi-biaya">Estimasi Biaya</a>
+            <a class="nav-link" href="#estimasi-biaya">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#project">Project</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#tutorial">Tips & Trik</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#tentang-kami">Tentang Kami</a>
+            <a class="nav-link" href="#project">Contact</a>
           </li>
         </ul>
       </div>
@@ -144,16 +174,16 @@ html {
 }
 
 /* Navbar Transparan */
-.bg-transparent .nav-link {
-  color: white !important; /* Pastikan teks putih */
+.bg-warning .nav-link {
+  color: black !important; /* Pastikan teks putih */
 }
 
-.bg-transparent .navbar-brand img {
-  filter: brightness(0) invert(1); /* Logo jadi putih */
+.bg-warning .navbar-brand img {
+  filter: brightness(100) invert(1); /* Logo jadi putih */
 }
 
-.bg-transparent .navbar-toggler i {
-  color: white !important; /* Ikon hamburger putih */
+.bg-warning .navbar-toggler i {
+  color: black !important; /* Ikon hamburger putih */
 }
 
 /* Navbar Saat di-scroll */
@@ -171,11 +201,11 @@ html {
 
 /* Efek Hover */
 .nav-link:hover {
-  color: #f49655 !important; /* Warna oranye saat hover */
+  color: rgb(255, 255, 255) !important; /* Warna oranye saat hover */
 }
 
 /* Transisi Halus */
-.bg-transparent,
+.bg-warning,
 .bg-white,
 .nav-link,
 .logo-brand {

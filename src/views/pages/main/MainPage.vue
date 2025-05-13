@@ -1,18 +1,18 @@
 <template>
-  <MainLayout>
-    <div class="mainlayout">
-      <HeroSection />
-      <LayananSection />
-      <EstimasiBiayaSection />
-      <ProjectSection />
-      <TutorialSection />
-      <TentangKamiSection />
-    </div>
-  </MainLayout>
+  <!-- <MainLayout> -->
+  <div class="mainlayout">
+    <HeroSection />
+    <LayananSection />
+    <EstimasiBiayaSection />
+    <ProjectSection />
+    <TutorialSection />
+    <TentangKamiSection />
+  </div>
+  <!-- </MainLayout> -->
 </template>
 
 <script>
-import MainLayout from "@/views/layouts/main/MainLayout.vue";
+// import MainLayout from "@/views/layouts/main/MainLayout.vue";
 import HeroSection from "@/components/main/HeroSection.vue";
 import LayananSection from "@/components/main/LayananSection.vue";
 import EstimasiBiayaSection from "@/components/main/EstimasiBiayaSection.vue";
@@ -23,7 +23,7 @@ import TentangKamiSection from "@/components/main/TentangKamiSection.vue";
 export default {
   name: "MainPage",
   components: {
-    MainLayout,
+    // MainLayout,
     HeroSection,
     LayananSection,
     EstimasiBiayaSection,

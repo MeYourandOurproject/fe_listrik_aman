@@ -1,7 +1,7 @@
 <template>
   <div>
     <ArtikelNavbar />
-    <slot />
+    <router-view />
     <ArtikelFooter />
   </div>
 </template>

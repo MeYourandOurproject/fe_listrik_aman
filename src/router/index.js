@@ -14,6 +14,7 @@ import DashboardAdmin from "@/views/pages/admin/DashboardAdmin.vue";
 import ArtikelAdmin from "@/views/pages/admin/artikel-admin/ArtikelAdmin.vue";
 import CreateArtikel from "@/views/pages/admin/artikel-admin/CreateArtikel.vue";
 import EditArtikel from "@/views/pages/admin/artikel-admin/EditArtikel.vue";
+import ReadArtikel from "@/views/pages/admin/artikel-admin/ReadArtikel.vue";
 
 const routes = [
   {
@@ -70,10 +71,21 @@ const routes = [
         meta: { title: "CREATE ARTIKEL", requiresAuth: true },
       },
       {
+        path: "artikel/read/:slug",
+        name: "ReadArtikel",
+        component: ReadArtikel,
+        meta: { title: "READ ARTIKEL", requiresAuth: true },
+      },
+      {
         path: "artikel/edit/:slug",
         name: "EditArtikel",
         component: EditArtikel,
         meta: { title: "EDIT ARTIKEL", requiresAuth: true },
+      },
+      {
+        path: "artikel/delete/:slug",
+        name: "DeleteArtikel",
+        meta: { title: "DELETE ARTIKEL", requiresAuth: true },
       },
     ],
   },

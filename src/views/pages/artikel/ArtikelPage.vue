@@ -39,7 +39,7 @@
                 <img
                   :src="artikel.thumbnail"
                   class="w-100"
-                  style="object-fit: cover; height: 100%"
+                  style="object-fit: cover; height: 480px"
                 />
                 <div
                   class="position-absolute bottom-0 start-0 end-0 p-4 bg-dark bg-opacity-50 text-white"

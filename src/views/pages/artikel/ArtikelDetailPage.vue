@@ -54,13 +54,13 @@
                 >
                   {{ artikel.title }}
                 </router-link>
-                <!-- <div
-                  v-html="artikel.content.split(' ').slice(0, 15).join(' ')"
+                <div
+                  v-html="artikel.content.split(' ').slice(0, 10).join(' ')"
                   class="col formatted-content"
-                ></div> -->
-                <p class="mb-0">
+                ></div>
+                <!-- <p class="mb-0">
                   {{ artikel.content.split(" ").slice(0, 10).join(" ") }}...
-                </p>
+                </p> -->
               </div>
             </div>
           </div>

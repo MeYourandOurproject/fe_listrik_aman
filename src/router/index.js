@@ -9,6 +9,8 @@ import ArtikelDetailPage from "@/views/pages/artikel/ArtikelDetailPage.vue";
 
 import LoginPage from "@/views/pages/admin/LoginPage.vue";
 
+import BioPage from "@/views/pages/bio/bioPage.vue";
+
 import AdminLayout from "@/views/layouts/admin/AdminLayout.vue";
 import DashboardAdmin from "@/views/pages/admin/DashboardAdmin.vue";
 import ArtikelAdmin from "@/views/pages/admin/artikel-admin/ArtikelAdmin.vue";
@@ -17,6 +19,7 @@ import EditArtikel from "@/views/pages/admin/artikel-admin/EditArtikel.vue";
 import ReadArtikel from "@/views/pages/admin/artikel-admin/ReadArtikel.vue";
 
 const routes = [
+  { path: "/bio", component: BioPage, meta: { title: "Bio" } },
   {
     path: "/",
     component: MainLayout,

@@ -30,7 +30,7 @@
     </div>
 
     <!-- Kolom Kanan: Lihat Lebih Banyak -->
-    <router-link to="/coding-and-iot" class="text-decoration-none text-reset">
+    <router-link to="/artikel" class="text-decoration-none text-reset">
       <div class="d-flex justify-content-center align-items-center mt-4">
         <button
           type="button"

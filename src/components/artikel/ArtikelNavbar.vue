@@ -11,7 +11,7 @@
         <!-- Logo Brand -->
         <div class="col-2 text-center">
           <!-- <div class="text-white fs-1">Jurnal of</div> -->
-          <a class="navbar-brand" href="/">
+          <a class="navbar-brand" href="/artikel">
             <img src="../../assets/logobrand.png" alt="" class="logo-brand" />
           </a>
         </div>
@@ -66,7 +66,7 @@
             <li class="nav-item">
               <div class="d-flex align-items-center">
                 <a
-                  href="https://wa.me/6285924333088"
+                  href="https://www.instagram.com/listrikamanidn"
                   class="text-decoration-none me-2"
                 >
                   <i class="bi bi-instagram text-dark fs-3"></i>
@@ -77,7 +77,7 @@
             <li class="nav-item">
               <div class="d-flex align-items-center">
                 <a
-                  href="https://wa.me/6285924333088"
+                  href="https://www.facebook.com/profile.php?id=61574942556223"
                   class="text-decoration-none me-2"
                 >
                   <i class="bi bi-facebook text-dark fs-3"></i>

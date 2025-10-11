@@ -33,7 +33,7 @@ const routes = [
     ],
   },
   {
-    path: "/coding-and-iot",
+    path: "/artikel",
     component: ArtikelLayout,
     children: [
       {

@@ -49,7 +49,7 @@
 
                 <!-- Router Link untuk Navigasi -->
                 <router-link
-                  :to="`/coding-and-iot/${artikel.slug}`"
+                  :to="`/artikel/${artikel.slug}`"
                   class="fw-bold fs-7 mt-2 text-decoration-none d-block"
                 >
                   {{ artikel.title }}

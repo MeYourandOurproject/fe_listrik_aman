@@ -164,7 +164,9 @@ export default {
     // Fungsi mengambil daftar artikel
     const fetchArticles = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/artikels");
+        const response = await fetch(
+          "https://api.listrikaman.gaharuoutbound.com/api/artikels"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -186,7 +188,7 @@ export default {
 
       try {
         const response = await fetch(
-          `http://localhost:3001/api/artikels/${slug}`
+          `https://api.listrikaman.gaharuoutbound.com/api/artikels/${slug}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");

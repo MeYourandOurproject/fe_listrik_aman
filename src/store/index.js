@@ -46,7 +46,8 @@ const store = createStore({
       try {
         const response = await fetch(
           // "https://api.gaharuoutbound.com/api/users/login",
-          "http://localhost:3001/api/users/login",
+          "https://api.listrikaman.gaharuoutbound.com/api/users/login",
+          // "http://localhost:3001/api/users/login",
           {
             method: "POST",
             headers: {

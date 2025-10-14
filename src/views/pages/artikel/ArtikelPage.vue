@@ -56,7 +56,7 @@
                     class="isi my-3"
                   ></div>
                   <router-link
-                    :to="`/coding-and-iot/${artikel.slug}`"
+                    :to="`/artikel/${artikel.slug}`"
                     class="text-decoration-none mt-auto"
                   >
                     <button
@@ -116,7 +116,7 @@
               {{ artikel.author }}, {{ formatDate(artikel.updatedAt) }}
             </p>
             <router-link
-              :to="`/coding-and-iot/${artikel.slug}`"
+              :to="`/artikel/${artikel.slug}`"
               class="text-decoration-none"
             >
               <button
@@ -152,7 +152,7 @@
               {{ artikel.author }}, {{ formatDate(artikel.updatedAt) }}
             </p>
             <router-link
-              :to="`/coding-and-iot/${artikel.slug}`"
+              :to="`/artikel/${artikel.slug}`"
               class="text-decoration-none"
             >
               <button

@@ -145,7 +145,7 @@ const fetchArticle = async () => {
     const slug = route.params.slug;
     const response = await fetch(
       // `https://api.gaharuoutbound.com/api/artikel/${slug}`
-      `http://localhost:3001/api/artikels/${slug}`
+      `https://api.listrikaman.gaharuoutbound.com/api/artikels/${slug}`
     );
     if (!response.ok) throw new Error("Failed to fetch data");
 
@@ -194,7 +194,7 @@ const insertImage = async () => {
     try {
       const response = await fetch(
         // "https://api.gaharuoutbound.com/api/upload",
-        "http://localhost:3001/api/upload",
+        "https://api.listrikaman.gaharuoutbound.com/api/upload",
         {
           method: "POST",
           body: formData,
@@ -269,7 +269,7 @@ const handleSubmit = async () => {
   try {
     const response = await fetch(
       // `https://api.gaharuoutbound.com/api/artikel/${id}`,
-      `http://localhost:3001/api/artikels/${id}`,
+      `https://api.listrikaman.gaharuoutbound.com/api/artikels/${id}`,
       {
         method: "PUT",
         body: formData,

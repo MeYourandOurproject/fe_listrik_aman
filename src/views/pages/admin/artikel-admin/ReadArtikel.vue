@@ -43,7 +43,7 @@ export default {
       try {
         const response = await fetch(
           // `https://api.gaharuoutbound.com/api/artikel/${slug}`
-          `http://localhost:3001/api/artikels/${slug}`
+          `https://api.listrikaman.gaharuoutbound.com/api/artikels/${slug}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");

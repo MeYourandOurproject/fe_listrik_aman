@@ -165,8 +165,8 @@ export default {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          //   "https://api.gaharuoutbound.com/api/artikel"
-          "http://localhost:3001/api/artikels"
+          // "http://localhost:3001/api/artikels"
+          "https://api.listrikaman.gaharuoutbound.com/api/artikels"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -191,7 +191,7 @@ export default {
       try {
         const response = await fetch(
           //   `https://api.gaharuoutbound.com/api/artikel/${id}`,
-          `http://localhost:3001/api/artikels/${id}`,
+          `https://api.listrikaman.gaharuoutbound.com/api/artikels/${id}`,
           {
             method: "DELETE",
             headers: {

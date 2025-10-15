@@ -209,8 +209,8 @@ const handleSubmit = async () => {
 
   try {
     const response = await fetch(
-      // "https://api.gaharuoutbound.com/api/artikel/create",
-      "https://api.listrikaman.gaharuoutbound.com/api/artikels/create",
+      "https://api.listrikaman.gaharuoutbound.com/artikels/create",
+
       {
         method: "POST",
         body: formData,

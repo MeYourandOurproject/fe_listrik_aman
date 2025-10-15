@@ -194,7 +194,7 @@ const insertImage = async () => {
     try {
       const response = await fetch(
         // "https://api.gaharuoutbound.com/api/upload",
-        "https://api.listrikaman.gaharuoutbound.com/api/upload",
+        "https://api.listrikaman.gaharuoutbound.com/api/uploads",
         {
           method: "POST",
           body: formData,

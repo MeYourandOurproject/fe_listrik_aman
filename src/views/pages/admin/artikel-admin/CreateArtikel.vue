@@ -146,7 +146,7 @@ const insertImage = async () => {
     try {
       const response = await fetch(
         // "https://api.gaharuoutbound.com/api/upload",
-        "http://localhost:3001/api/upload",
+        "https://api.listrikaman.gaharuoutbound.com/api/upload",
         {
           method: "POST",
           body: formData,
@@ -210,7 +210,7 @@ const handleSubmit = async () => {
   try {
     const response = await fetch(
       // "https://api.gaharuoutbound.com/api/artikel/create",
-      "http://localhost:3001/api/artikels/create",
+      "https://api.listrikaman.gaharuoutbound.com/api/artikels/create",
       {
         method: "POST",
         body: formData,

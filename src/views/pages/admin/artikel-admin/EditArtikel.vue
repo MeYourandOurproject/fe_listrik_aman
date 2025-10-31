@@ -281,8 +281,8 @@ const handleSubmit = async () => {
       }
     );
 
-    const result = await response.json();
-    console.log("Response from server:", result);
+    // const result = await response.json();
+    // console.log("Response from server:", result);
 
     if (response.ok) {
       showSuccessAlert.value = true;

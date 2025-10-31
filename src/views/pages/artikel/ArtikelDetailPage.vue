@@ -15,12 +15,10 @@
             v-else-if="article"
             class="row align-items-start justify-content-start"
           >
-            <h1 class="text-start">{{ article.title }}</h1>
-            <p class="text-start">Ditulis oleh: {{ article.author }}</p>
+            <h1 class="text-start fw-bold">{{ article.title }}</h1>
+            <p class="text-start fst-italic">✍️ {{ article.author }} - {{formateDate(article.updatedAt)}}</p>
             <img :src="article.thumbnail" alt="" class="thumbnail mb-3" />
-            <!-- <div class="col text-justify">
-              <p>{{ article.content }}</p>
-            </div> -->
+            
             <div
               v-html="article.content"
               class="col text-justify formatted-content"
@@ -50,14 +48,14 @@
                 <!-- Router Link untuk Navigasi -->
                 <router-link
                   :to="`/artikel/${artikel.slug}`"
-                  class="fw-bold fs-7 mt-2 text-decoration-none d-block"
+                  class="fs-7 mt-2 text-decoration-none d-block artikel-link"
                 >
                   {{ artikel.title }}
                 </router-link>
-                <div
+                <!-- <div
                   v-html="artikel.content.split(' ').slice(0, 10).join(' ')"
                   class="col formatted-content"
-                ></div>
+                ></div> -->
                 <!-- <p class="mb-0">
                   {{ artikel.content.split(" ").slice(0, 10).join(" ") }}...
                 </p> -->
@@ -145,27 +143,34 @@
   max-height: 90vh;
   overflow-y: auto;
 }
+
+.artikel-link{
+  color: black;
+}
+
+.artikel-link:hover{
+  color: blue;
+}
 </style>
 
 <script>
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-// import FunActivity from "../layouts/FunActivity.vue";
 
 export default {
-  // components: { FunActivity },
   setup() {
     const route = useRoute();
-    // const router = useRouter();
     const article = ref(null);
     const articles = ref([]);
     const loading = ref(false);
+
+    const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
 
     // Fungsi mengambil daftar artikel
     const fetchArticles = async () => {
       try {
         const response = await fetch(
-          "https://api.listrikaman.gaharuoutbound.com/api/artikels"
+          `${API_BASE_URL}/api/artikels`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -188,7 +193,7 @@ export default {
 
       try {
         const response = await fetch(
-          `https://api.listrikaman.gaharuoutbound.com/api/artikels/${slug}`
+          `${API_BASE_URL}/api/artikels/${slug}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -251,6 +256,11 @@ export default {
       },
     ]);
 
+    const formateDate =(dataString)=>{
+      const date = new Date(dataString);
+      return date.toLocaleString('id-ID',{ month: 'short', year: 'numeric' })
+    }
+
     // Pantau perubahan slug dan perbarui data tanpa refresh
     watch(
       () => route.params.slug,
@@ -269,6 +279,7 @@ export default {
       articles,
       loading,
       tocItems,
+      formateDate
     };
   },
 };

@@ -160,13 +160,13 @@ export default {
     const sortOrder = ref("desc");
     const showSuccessAlert = ref(false);
     const showErrorAlert = ref(false);
-    // const image = ref("");
+
+    const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
 
     const fetchData = async () => {
       try {
         const response = await fetch(
-          // "http://localhost:3001/api/artikels"
-          "https://api.listrikaman.gaharuoutbound.com/api/artikels"
+          `${API_BASE_URL}/api/artikels`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -181,17 +181,14 @@ export default {
 
     const deleteData = async (id) => {
       const token = localStorage.getItem("token");
-      // console.log({ id, token });
 
       const confirmation = confirm(
         "Are you sure you want to delete this item?"
       );
       if (!confirmation) return;
-      // const token = localStorage.getItem("token");
       try {
         const response = await fetch(
-          //   `https://api.gaharuoutbound.com/api/artikel/${id}`,
-          `https://api.listrikaman.gaharuoutbound.com/api/artikels/${id}`,
+          `${API_BASE_URL}/api/artikels/${id}`,
           {
             method: "DELETE",
             headers: {

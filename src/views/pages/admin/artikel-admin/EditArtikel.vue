@@ -267,6 +267,8 @@ const handleSubmit = async () => {
   //   console.log(pair[0] + ": " + pair[1]);
   // }
 
+  // console.log(token)
+
   try {
     const response = await fetch(
       `${API_BASE_URL}/api/artikels/${id}`,

@@ -138,14 +138,15 @@ const articleData = ref({
   thumbnail: "",
 });
 
+const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+
 // 🟢 Fetch data artikel by slug
 const fetchArticle = async () => {
   loading.value = true;
   try {
     const slug = route.params.slug;
     const response = await fetch(
-      // `https://api.gaharuoutbound.com/api/artikel/${slug}`
-      `https://api.listrikaman.gaharuoutbound.com/api/artikels/${slug}`
+      `${API_BASE_URL}/api/artikels/${slug}`
     );
     if (!response.ok) throw new Error("Failed to fetch data");
 
@@ -188,13 +189,14 @@ const insertImage = async () => {
   const editorInstance = quillEditor.value?.__quill;
   const file = imageInput.value.files[0];
 
+  // const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+
   if (file && editorInstance) {
     const formData = new FormData();
     formData.append("image", file);
     try {
       const response = await fetch(
-        // "https://api.gaharuoutbound.com/api/upload",
-        "https://api.listrikaman.gaharuoutbound.com/api/uploads",
+        `${API_BASE_URL}/api/upload`,
         {
           method: "POST",
           body: formData,
@@ -243,7 +245,6 @@ const handleImageClick = (event) => {
 // 🟢 Handle submit form
 const handleSubmit = async () => {
   const id = articleData.value.id;
-  console.log(id);
 
   const editorInstance = quillEditor.value?.__quill;
   form.value.content = editorInstance ? editorInstance.root.innerHTML : "";
@@ -253,23 +254,22 @@ const handleSubmit = async () => {
   formData.append("author", form.value.author);
   formData.append("content", form.value.content);
 
-  // // Upload thumbnail jika ada
-  // if (form.value.thumbnail) {
-  //   formData.append("thumbnail", form.value.thumbnail);
-  // }
+  // Upload thumbnail jika ada
+  if (form.value.thumbnail) {
+    formData.append("thumbnail", form.value.thumbnail);
+  }
 
   files.value.forEach((file) => {
     formData.append("picture", file);
   });
 
-  // for (let pair of formData.entries()) {
-  //   console.log(pair[0] + ": " + pair[1]);
-  // }
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ": " + pair[1]);
+  }
 
   try {
     const response = await fetch(
-      // `https://api.gaharuoutbound.com/api/artikel/${id}`,
-      `https://api.listrikaman.gaharuoutbound.com/api/artikels/${id}`,
+      `${API_BASE_URL}/api/artikels/${id}`,
       {
         method: "PUT",
         body: formData,

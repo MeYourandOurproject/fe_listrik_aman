@@ -135,6 +135,8 @@ const handleFileChange = () => {
   files.value = [...files.value, ...inputFiles];
 };
 
+const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+
 // 🟢 Fungsi untuk memasukkan gambar ke konten Quill
 const insertImage = async () => {
   const editorInstance = quillEditor.value?.__quill;
@@ -145,8 +147,7 @@ const insertImage = async () => {
     formData.append("image", file);
     try {
       const response = await fetch(
-        // "https://api.gaharuoutbound.com/api/upload",
-        "https://api.listrikaman.gaharuoutbound.com/api/upload",
+        `${API_BASE_URL}/api/upload`,
         {
           method: "POST",
           body: formData,
@@ -207,9 +208,11 @@ const handleSubmit = async () => {
     formData.append("picture", file);
   });
 
+  const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+
   try {
     const response = await fetch(
-      "https://api.listrikaman.gaharuoutbound.com/api/artikels/create",
+      `${API_BASE_URL}/api/artikels/create`,
       {
         method: "POST",
         body: formData,

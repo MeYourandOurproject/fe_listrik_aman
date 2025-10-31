@@ -35,6 +35,8 @@ export default {
     const article = ref(null);
     const loading = ref(false);
 
+    const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+
     // Fungsi mengambil data artikel berdasarkan slug
     const fetchData = async (slug) => {
       loading.value = true;
@@ -42,8 +44,7 @@ export default {
 
       try {
         const response = await fetch(
-          // `https://api.gaharuoutbound.com/api/artikel/${slug}`
-          `https://api.listrikaman.gaharuoutbound.com/api/artikels/${slug}`
+          `${API_BASE_URL}/api/artikels/${slug}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");

@@ -3,7 +3,7 @@
     :class="[
       'container-fluid ',
       'fixed-top',
-      navbarScrolled ? 'bg-white shadow-sm' : 'bg-warning',
+      navbarScrolled ? 'bg-white shadow-sm' : 'bg-light',
     ]"
   >
     <div :class="['container', navbarScrolled ? 'my-2' : 'my-3']">
@@ -55,7 +55,7 @@
             <li class="nav-item">
               <div class="d-flex align-items-center">
                 <a
-                  href="https://wa.me/6285924333088"
+                  href="https://www.youtube.com/@rulyabdulrasyid"
                   class="text-decoration-none me-2"
                 >
                   <i class="bi bi-youtube text-dark fs-2"></i>
@@ -66,7 +66,7 @@
             <li class="nav-item">
               <div class="d-flex align-items-center">
                 <a
-                  href="https://www.instagram.com/listrikamanidn"
+                  href="https://www.instagram.com/rulyabdulrasyid/"
                   class="text-decoration-none me-2"
                 >
                   <i class="bi bi-instagram text-dark fs-3"></i>
@@ -88,7 +88,7 @@
             <li class="nav-item">
               <div class="d-flex align-items-center">
                 <a
-                  href="https://wa.me/6285924333088"
+                  href="https://www.tiktok.com/@rrulyabdulrasyid"
                   class="text-decoration-none me-2"
                 >
                   <i class="bi bi-tiktok text-dark fs-3"></i>
@@ -174,15 +174,15 @@ html {
 }
 
 /* Navbar Transparan */
-.bg-warning .nav-link {
+.bg-light .nav-link {
   color: black !important; /* Pastikan teks putih */
 }
 
-.bg-warning .navbar-brand img {
+.bg-light .navbar-brand img {
   filter: brightness(100) invert(1); /* Logo jadi putih */
 }
 
-.bg-warning .navbar-toggler i {
+.bg-light .navbar-toggler i {
   color: black !important; /* Ikon hamburger putih */
 }
 
@@ -199,9 +199,22 @@ html {
   color: black !important; /* Ikon hamburger hitam */
 }
 
-/* Efek Hover */
+.nav-link {
+  transition: transform 0.2s ease, text-shadow 0.2s ease;
+}
+
 .nav-link:hover {
-  color: rgb(255, 255, 255) !important; /* Warna oranye saat hover */
+  transform: scale(1.1);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.nav-item{
+  transition: transform 0.2s ease, text-shadow 0.2s ease;
+}
+
+.nav-item:hover {
+  transform: scale(1.1);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* Transisi Halus */

@@ -45,23 +45,23 @@
                   class="position-absolute bottom-0 start-0 end-0 p-4 bg-dark bg-opacity-50 text-white"
                   style="backdrop-filter: blur(4px)"
                 >
-                  <h5 class="mb-2">{{ artikel.title }}</h5>
+                  <h4 class="mb-2">{{ artikel.title }}</h4>
                   <p class="penulis mb-2">
-                    {{ artikel.author }}, {{ formatDate(artikel.updatedAt) }}
+                    {{ artikel.author }} - {{ formatDate(artikel.updatedAt) }}
                   </p>
-                  <div
+                  <!-- <div
                     v-html="
                       artikel.content.split(' ').slice(0, 25).join(' ') + '...'
                     "
                     class="isi my-3"
-                  ></div>
+                  ></div> -->
                   <router-link
                     :to="`/artikel/${artikel.slug}`"
                     class="text-decoration-none mt-auto"
                   >
                     <button
                       type="button"
-                      class="btn btn-primary justify-content-end"
+                      class="btn btn-sm btn-primary justify-content-end fst-italic"
                     >
                       Selengkapnya<i
                         class="bi bi-arrow-right-circle-fill ms-2"
@@ -113,7 +113,7 @@
           >
             <h6 class="mb-1">{{ artikel.title }}</h6>
             <p class="penulis mb-2">
-              {{ artikel.author }}, {{ formatDate(artikel.updatedAt) }}
+              {{ artikel.author }} - {{ formatDate(artikel.updatedAt) }}
             </p>
             <router-link
               :to="`/artikel/${artikel.slug}`"
@@ -121,7 +121,7 @@
             >
               <button
                 type="button"
-                class="btn btn-primary btn-sm justify-content-end"
+                class="btn btn-primary btn-sm justify-content-end fst-italic"
               >
                 Selengkapnya<i class="bi bi-arrow-right-circle-fill ms-2"></i>
               </button>
@@ -149,7 +149,7 @@
           >
             <h6 class="mb-1">{{ artikel.title }}</h6>
             <p class="penulis mb-2">
-              {{ artikel.author }}, {{ formatDate(artikel.updatedAt) }}
+              {{ artikel.author }} - {{ formatDate(artikel.updatedAt) }}
             </p>
             <router-link
               :to="`/artikel/${artikel.slug}`"
@@ -157,7 +157,7 @@
             >
               <button
                 type="button"
-                class="btn btn-primary btn-sm justify-content-end"
+                class="btn btn-primary btn-sm justify-content-end fst-italic"
               >
                 Selengkapnya<i class="bi bi-arrow-right-circle-fill ms-2"></i>
               </button>
@@ -176,12 +176,11 @@ export default {
   setup() {
     const articles = ref([]);
 
+    const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+
     const fetchData = async () => {
       try {
-        // const response = await fetch("http://localhost:3001/api/artikels"); // Local
-        const response = await fetch(
-          "https://api.listrikaman.gaharuoutbound.com/api/artikels"
-        );
+        const response = await fetch(`${API_BASE_URL}/api/artikels`);
 
         if (!response.ok) throw new Error("Failed to fetch data");
 

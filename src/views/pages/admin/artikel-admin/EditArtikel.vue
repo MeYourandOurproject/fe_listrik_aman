@@ -255,17 +255,19 @@ const handleSubmit = async () => {
   formData.append("content", form.value.content);
 
   // Upload thumbnail jika ada
-  if (form.value.thumbnail) {
-    formData.append("thumbnail", form.value.thumbnail);
-  }
+  // if (form.value.thumbnail) {
+  //   formData.append("thumbnail", form.value.thumbnail);
+  // }
 
   files.value.forEach((file) => {
     formData.append("picture", file);
   });
 
-  for (let pair of formData.entries()) {
-    console.log(pair[0] + ": " + pair[1]);
-  }
+  // for (let pair of formData.entries()) {
+  //   console.log(pair[0] + ": " + pair[1]);
+  // }
+
+  // console.log(token)
 
   try {
     const response = await fetch(

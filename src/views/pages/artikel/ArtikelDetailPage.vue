@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid artikel-detail-heroes"></div>
   <div class="container-fluid page">
-    <div class="container mt-5 mb-5">
+    <div class="container pt-5 pb-5">
       <div class="row d-flex flex-column flex-md-row">
         <!-- Artikel Utama -->
         <div class="col-12 col-md-7 order-1 order-md-2">
@@ -15,10 +15,12 @@
             v-else-if="article"
             class="row align-items-start justify-content-start"
           >
-            <h1 class="text-start fw-bold">{{ article.title }}</h1>
-            <p class="text-start fst-italic">✍️ {{ article.author }} - {{formateDate(article.updatedAt)}}</p>
-            <img :src="article.thumbnail" alt="" class="thumbnail mb-3" />
-            
+            <img :src="article.thumbnail" alt="" class="" />
+            <h1 class="text-start fw-bold mt-3">{{ article.title }}</h1>
+            <p class="text-start fst-italic">
+              ✍️ {{ article.author }} - {{ formateDate(article.updatedAt) }}
+            </p>
+
             <div
               v-html="article.content"
               class="col text-justify formatted-content"
@@ -31,61 +33,60 @@
         </div>
 
         <!-- Artikel Terkait -->
-        <div class="col-12 col-md-2 order-2 order-md-1 articles mt-3 mt-md-0">
+        <div class="col-12 col-md-2 order-3 order-md-1 articles mt-3 mt-md-0">
+          <h4 class="fw-bold bg-dark text-light text-center rounded p-2">Artikel Terkait</h4>
           <div
             v-for="(artikel, index) in articles"
             :key="index"
             class="text-start"
           >
-            <div class="card m-1 shadow-sm">
+            <div class="card mb-1 shadow-sm">
               <div class="card-body m-0 p-2">
                 <img
                   :src="artikel.thumbnail"
                   alt=""
                   class="img-articles rounded"
                 />
-
-                <!-- Router Link untuk Navigasi -->
                 <router-link
                   :to="`/artikel/${artikel.slug}`"
                   class="fs-7 mt-2 text-decoration-none d-block artikel-link"
                 >
                   {{ artikel.title }}
                 </router-link>
-                <!-- <div
-                  v-html="artikel.content.split(' ').slice(0, 10).join(' ')"
-                  class="col formatted-content"
-                ></div> -->
-                <!-- <p class="mb-0">
-                  {{ artikel.content.split(" ").slice(0, 10).join(" ") }}...
-                </p> -->
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Fun Activity -->
-        <div class="col-12 col-md-3 order-1 order-md-3">
+        <!-- Artikel Kategori -->
+        <div class="col-12 col-md-3 order-2 order-md-2">
           <div class="toc p-2 border rounded shadow-sm bg-light">
-            <!-- <h6 class="fw-bold">Daftar Isi</h6> -->
+            <h4 class="fw-bold bg-dark text-light text-center rounded p-2">Artikel Kategori</h4>
+
             <div
-              v-for="(kategori, index) in tocItems"
+              v-for="(category, index) in categories"
               :key="index"
-              class="mb-3"
+              class="text-start mb-3"
             >
-              <p class="fw-semibold mb-1">{{ kategori.kategori }}</p>
-              <ul class="list-unstyled small ps-2">
+              <div class="fw-semibold mb-1">{{ category.name }}</div>
+              <ul class="small ps-3">
                 <li
-                  v-for="(item, subIndex) in kategori.items"
-                  :key="subIndex"
+                  v-for="(artikel, aIndex) in category.Artikels"
+                  :key="aIndex"
                   class="mb-1"
                 >
-                  <a href="#" class="text-decoration-none">{{ item }}</a>
+                  <router-link
+                    :to="`/artikel/${artikel.slug}`"
+                    class="text-decoration-none td-block artikel-link"
+                  >
+                    {{ artikel.title }}
+                  </router-link>
                 </li>
               </ul>
             </div>
           </div>
         </div>
+        
       </div>
     </div>
   </div>
@@ -144,11 +145,11 @@
   overflow-y: auto;
 }
 
-.artikel-link{
+.artikel-link {
   color: black;
 }
 
-.artikel-link:hover{
+.artikel-link:hover {
   color: blue;
 }
 </style>
@@ -162,16 +163,15 @@ export default {
     const route = useRoute();
     const article = ref(null);
     const articles = ref([]);
+    const categories = ref([]);
     const loading = ref(false);
 
-    const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+    const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
     // Fungsi mengambil daftar artikel
     const fetchArticles = async () => {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/artikels`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/artikels`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -192,9 +192,7 @@ export default {
       article.value = null;
 
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/artikels/${slug}`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/artikels/${slug}`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -208,58 +206,37 @@ export default {
       }
     };
 
-    const tocItems = ref([
-      {
-        kategori: "Listrik",
-        items: [
-          "Dasar-dasar Kelistrikan",
-          "Hukum Ohm",
-          "Jenis Rangkaian Listrik",
-          "Instalasi Listrik Rumah Tangga",
-          "Panel Listrik dan Komponennya",
-          "Pengaman Listrik: MCB & ELCB",
-          "Motor Listrik dan Aplikasinya",
-          "Teknik Pengukuran Listrik",
-          "Perawatan Sistem Kelistrikan",
-          "Keselamatan Kerja Listrik",
-        ],
-      },
-      {
-        kategori: "Website Development",
-        items: [
-          "Pengenalan HTML & CSS",
-          "Dasar JavaScript",
-          "Struktur Proyek Web Modern",
-          "Responsive Web Design",
-          "Framework CSS (Bootstrap, Tailwind)",
-          "Routing Frontend (Vue Router)",
-          "API dan AJAX Request",
-          "Form Handling dan Validasi",
-          "Deployment Website",
-          "Optimasi Kecepatan Website",
-        ],
-      },
-      {
-        kategori: "IoT Development",
-        items: [
-          "Apa itu IoT?",
-          "Platform IoT Populer",
-          "Sensor dan Aktuator",
-          "Komunikasi IoT (WiFi, MQTT, ESP-NOW)",
-          "Mikrokontroler ESP32",
-          "Web Dashboard untuk IoT",
-          "Integrasi Node-RED",
-          "Penyimpanan Data IoT",
-          "Keamanan IoT Dasar",
-          "Contoh Proyek IoT Sederhana",
-        ],
-      },
-    ]);
+    const fetchCategoryArtikel = async (id) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/categories/${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error(`Error fetching category ${id}:`, error);
+        return null;
+      }
+    };
 
-    const formateDate =(dataString)=>{
+    // 🔹 Ambil beberapa kategori (misal id 1,2,3)
+    const fetchAllCategories = async () => {
+      const ids = [1, 2, 3];
+      const results = [];
+
+      for (const id of ids) {
+        const category = await fetchCategoryArtikel(id);
+        if (category) results.push(category);
+      }
+
+      categories.value = results;
+    };
+
+    const formateDate = (dataString) => {
       const date = new Date(dataString);
-      return date.toLocaleString('id-ID',{ month: 'short', year: 'numeric' })
-    }
+      return date.toLocaleString("id-ID", { month: "short", year: "numeric" });
+    };
 
     // Pantau perubahan slug dan perbarui data tanpa refresh
     watch(
@@ -269,17 +246,19 @@ export default {
       }
     );
 
-    onMounted(() => {
+    onMounted(async() => {
       fetchData(route.params.slug);
       fetchArticles();
+      await fetchAllCategories();
     });
 
     return {
       article,
       articles,
       loading,
-      tocItems,
-      formateDate
+      // tocItems,
+      formateDate,
+      categories,
     };
   },
 };

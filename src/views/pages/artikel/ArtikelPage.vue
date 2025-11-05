@@ -9,7 +9,7 @@
   </div>
 
   <!-- UTAMA -->
-  <div class="container my-5">
+  <div class="my-5 ps-5 pe-5">
     <div class="row g-3">
       <!-- CAROUSEL (3 artikel terbaru) -->
       <div class="col-md-8">

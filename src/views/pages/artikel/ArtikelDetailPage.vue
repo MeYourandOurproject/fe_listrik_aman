@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid artikel-detail-heroes"></div>
   <div class="container-fluid page">
-    <div class="container pt-5 pb-5">
+    <div class="pt-5 pb-5">
       <div class="row d-flex flex-column flex-md-row">
         <!-- Artikel Utama -->
         <div class="col-12 col-md-7 order-1 order-md-2">
@@ -33,28 +33,31 @@
         </div>
 
         <!-- Artikel Terkait -->
-        <div class="col-12 col-md-2 order-3 order-md-1 articles mt-3 mt-md-0">
-          <h4 class="fw-bold bg-dark text-light text-center rounded p-2">Artikel Terkait</h4>
-          <div
-            v-for="(artikel, index) in articles"
-            :key="index"
-            class="text-start"
-          >
-            <div class="card mb-1 shadow-sm">
-              <div class="card-body m-0 p-2">
-                <img
-                  :src="artikel.thumbnail"
-                  alt=""
-                  class="img-articles rounded"
-                />
-                <router-link
-                  :to="`/artikel/${artikel.slug}`"
-                  class="fs-7 mt-2 text-decoration-none d-block artikel-link"
-                >
-                  {{ artikel.title }}
-                </router-link>
+        <div class="col-12 col-md-2 order-3 order-md-1 articles">
+          <div class="toc p-2 border rounded shadow-sm bg-light">
+            <h4 class="fw-bold bg-dark text-light text-center rounded p-2">Artikel Terkait</h4>
+            <div
+              v-for="(artikel, index) in articles"
+              :key="index"
+              class="text-start"
+            >
+              <div class="card mb-1 shadow-sm">
+                <div class="card-body m-0 p-2">
+                  <img
+                    :src="artikel.thumbnail"
+                    alt=""
+                    class="img-articles rounded"
+                  />
+                  <router-link
+                    :to="`/artikel/${artikel.slug}`"
+                    class="fs-7 mt-2 text-decoration-none d-block artikel-link"
+                  >
+                    {{ artikel.title }}
+                  </router-link>
+                </div>
               </div>
             </div>
+            
           </div>
         </div>
 
@@ -63,30 +66,53 @@
           <div class="toc p-2 border rounded shadow-sm bg-light">
             <h4 class="fw-bold bg-dark text-light text-center rounded p-2">Artikel Kategori</h4>
 
-            <div
-              v-for="(category, index) in categories"
-              :key="index"
-              class="text-start mb-3"
-            >
-              <div class="fw-semibold mb-1">{{ category.name }}</div>
-              <ul class="small ps-3">
-                <li
-                  v-for="(artikel, aIndex) in category.Artikels"
-                  :key="aIndex"
-                  class="mb-1"
-                >
-                  <router-link
-                    :to="`/artikel/${artikel.slug}`"
-                    class="text-decoration-none td-block artikel-link"
+            <div class="accordion" id="accordionKategori">
+              <div
+                class="accordion-item"
+                v-for="(category, index) in categories"
+                :key="index"
+              >
+                <h2 class="accordion-header" :id="`heading-${index}`">
+                  <button
+                    class="accordion-button fst-italic"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    :data-bs-target="`#collapse-${index}`"
+                    :aria-controls="`collapse-${index}`"
+                    :aria-expanded="index === 0 ? 'true' : 'false'"
+                    :class="{ collapsed: index !== 0 }"
                   >
-                    {{ artikel.title }}
-                  </router-link>
-                </li>
-              </ul>
+                    {{ category.name }}
+                  </button>
+                </h2>
+                <div
+                  :id="`collapse-${index}`"
+                  class="accordion-collapse collapse"
+                  :class="{ show: index === 0 }"
+                  :aria-labelledby="`heading-${index}`"
+                >
+                  <div class="accordion-body">
+                    <ul class="list-unstyled small ps-2 mb-0">
+                      <li
+                        v-for="(artikel, aIndex) in category.Artikels"
+                        :key="aIndex"
+                        class="mb-1"
+                      >
+                        <router-link
+                          :to="`/artikel/${artikel.slug}`"
+                          class="text-decoration-none artikel-link"
+                        >
+                          {{ artikel.title }}
+                        </router-link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        
+
       </div>
     </div>
   </div>
@@ -146,12 +172,27 @@
 }
 
 .artikel-link {
-  color: black;
+  display: block;
+  padding: 4px 0;
+  color: #333;
+  transition: all 0.2s ease;
 }
 
 .artikel-link:hover {
-  color: blue;
+  transform: translateX(3px);
+  color: #0d6efd; /* biru Bootstrap */
 }
+
+.accordion-body li {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.accordion-body li:last-child {
+  border-bottom: none; /* hilangkan garis di akhir */
+}
+
 </style>
 
 <script>

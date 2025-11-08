@@ -13,6 +13,7 @@
               required
             />
           </div>
+          
           <div class="col-md-4">
             <label class="form-label">Penulis</label>
             <input
@@ -29,10 +30,10 @@
           <div class="col-md-4">
             <label class="form-label">Preview</label>
             <div v-for="(img, index) in previewImages" :key="index">
-              <img :src="img" class="img-thumbnail" />
+                <img :src="img" class="img-thumbnail" />
             </div>
           </div>
-          <div class="col-md-8">
+          <div class="col-md-4">
             <label class="form-label">Thumbnail</label>
             <input
               ref="fileInput"
@@ -42,6 +43,25 @@
               accept="image/*"
               @change="handleFileChange"
             />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Category</label>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle text-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ selectedCategoryName || "Pilih Kategori" }}
+              </button>
+              <ul class="dropdown-menu">
+                <li v-for="(category, index) in categories" :key="index">
+                  <a 
+                    class="dropdown-item" 
+                    href="#" 
+                    @click.prevent="selectCategory(category)"
+                  >
+                    {{category.name}}
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="row mt-3 mb-3">
@@ -125,6 +145,14 @@ const imageInput = ref(null);
 const previewImages = ref([]);
 const quillEditor = ref(null);
 const files = ref([]);
+const categories = ref([]);
+
+const selectedCategoryName = ref(null);
+
+const selectCategory = (category) => {
+  form.value.category_id = category.id;
+  selectedCategoryName.value = category.name;
+}
 
 // 🟢 Fungsi untuk menghandle gambar unggahan di form (bukan di konten)
 const handleFileChange = () => {
@@ -136,6 +164,18 @@ const handleFileChange = () => {
 };
 
 const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+
+const fetchCategory = async () => {
+  try{
+    const response = await fetch(`${API_BASE_URL}/api/categories`);
+    if(!response.ok) throw new Error('Failed to fetch data');
+    const data = await response.json();
+    categories.value = data;
+
+  } catch (error){
+    console.error("Error fetching article:", error);
+  } 
+}
 
 // 🟢 Fungsi untuk memasukkan gambar ke konten Quill
 const insertImage = async () => {
@@ -203,6 +243,7 @@ const handleSubmit = async () => {
   formData.append("title", form.value.title);
   formData.append("author", form.value.author);
   formData.append("content", form.value.content);
+  formData.append("category_id", form.value.category_id);
 
   files.value.forEach((file) => {
     formData.append("picture", file);
@@ -247,6 +288,7 @@ const handleSubmit = async () => {
 };
 
 onMounted(() => {
+  fetchCategory();
   if (quillEditor.value) {
     const editor = new Quill(quillEditor.value, {
       theme: "snow",
@@ -267,5 +309,9 @@ onMounted(() => {
 
 .addimagetocontent {
   padding-top: 100px;
+}
+
+.form-label{
+  font-weight: bold;
 }
 </style>

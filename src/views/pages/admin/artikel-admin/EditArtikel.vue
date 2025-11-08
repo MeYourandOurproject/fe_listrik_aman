@@ -32,7 +32,7 @@
               <img :src="img" class="img-thumbnail" />
             </div>
           </div>
-          <div class="col-md-8">
+          <div class="col-md-4">
             <label class="form-label">Thumbnail</label>
             <input
               ref="fileInput"
@@ -41,6 +41,25 @@
               accept="image/*"
               @change="handleFileChange"
             />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Category</label>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle text-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ selectedCategoryName || "Pilih Kategori" }}
+              </button>
+              <ul class="dropdown-menu">
+                <li v-for="(category, index) in categories" :key="index">
+                  <a 
+                    class="dropdown-item" 
+                    href="#" 
+                    @click.prevent="selectCategory(category)"
+                  >
+                    {{category.name}}
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -131,6 +150,9 @@ const quillEditor = ref(null);
 const files = ref([]);
 const loading = ref(false);
 
+const categories =  ref([]);
+const selectedCategoryName = ref(null);
+
 const articleData = ref({
   title: "",
   author: "",
@@ -170,6 +192,31 @@ const fetchArticle = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const fetchCategory = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/categories`);
+    if (!response.ok) throw new Error("Gagal memuat kategori");
+
+    const data = await response.json();
+    categories.value = data;
+
+    // Jika artikel sudah memiliki kategori, tampilkan nama kategorinya
+    if (articleData.value.category_id) {
+      const currentCategory = data.find(
+        (cat) => cat.id === articleData.value.category_id
+      );
+      if (currentCategory) selectedCategoryName.value = currentCategory.name;
+    }
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+  }
+};
+
+const selectCategory = (category) => {
+  form.value.category_id = category.id;
+  selectedCategoryName.value = category.name;
 };
 
 // 🟢 Handle perubahan file thumbnail
@@ -253,6 +300,7 @@ const handleSubmit = async () => {
   formData.append("title", form.value.title);
   formData.append("author", form.value.author);
   formData.append("content", form.value.content);
+  formData.append("category_id", form.value.category_id);
 
   // Upload thumbnail jika ada
   // if (form.value.thumbnail) {
@@ -298,18 +346,27 @@ const handleSubmit = async () => {
   }
 };
 
-onMounted(() => {
-  fetchArticle();
-  if (quillEditor.value) {
-    const editor = new Quill(quillEditor.value, {
-      theme: "snow",
-      placeholder: "Tulis konten artikel di sini...",
-    });
-    quillEditor.value.__quill = editor;
+onMounted(async () => {
+  // 1️⃣ Buat Quill editor dulu
+  const editor = new Quill(quillEditor.value, {
+    theme: "snow",
+    placeholder: "Tulis konten artikel di sini...",
+  });
+  quillEditor.value.__quill = editor;
 
-    // 🟢 Tambah event listener pada Quill Editor untuk klik gambar
-    quillEditor.value.addEventListener("click", handleImageClick);
+  // Tambah listener hapus gambar
+  quillEditor.value.addEventListener("click", handleImageClick);
+
+  // 2️⃣ Setelah editor siap, baru ambil data artikel
+  await fetchArticle();
+
+  // 3️⃣ Isi editor dengan konten dari artikel
+  if (articleData.value.content) {
+    editor.clipboard.dangerouslyPasteHTML(articleData.value.content);
   }
+
+  // 4️⃣ Ambil data kategori
+  await fetchCategory();
 });
 </script>
 

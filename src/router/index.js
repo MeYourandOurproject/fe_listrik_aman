@@ -6,6 +6,7 @@ import ArtikelLayout from "@/views/layouts/artikel/ArtikelLayout.vue";
 import MainPage from "@/views/pages/main/MainPage.vue";
 import ArtikelPage from "@/views/pages/artikel/ArtikelPage.vue";
 import ArtikelDetailPage from "@/views/pages/artikel/ArtikelDetailPage.vue";
+import ArtikelPageCategory from "@/views/pages/artikel/ArtikelPageCategory.vue";
 
 import LoginPage from "@/views/pages/admin/LoginPage.vue";
 
@@ -17,6 +18,7 @@ import ArtikelAdmin from "@/views/pages/admin/artikel-admin/ArtikelAdmin.vue";
 import CreateArtikel from "@/views/pages/admin/artikel-admin/CreateArtikel.vue";
 import EditArtikel from "@/views/pages/admin/artikel-admin/EditArtikel.vue";
 import ReadArtikel from "@/views/pages/admin/artikel-admin/ReadArtikel.vue";
+
 
 const routes = [
   { path: "/bio", component: BioPage, meta: { title: "Bio" } },
@@ -47,6 +49,12 @@ const routes = [
         name: "ArtikelDetail",
         component: ArtikelDetailPage,
         meta: { title: "ArtikelDetail" },
+      },
+      {
+        path: "kategori/:slug",
+        name: "ArtikelPageCategory",
+        component: ArtikelPageCategory,
+        meta: {title: "ArtikelPageCategory"},
       },
     ],
   },

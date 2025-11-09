@@ -1,7 +1,7 @@
 <template>
   <!-- HERO -->
   <div
-    class="container-fluid artikel-heroes d-flex align-items-end justify-content-center text-center pb-5"
+    class="container-fluid artikel-heroes d-flex align-items-end justify-content-center text-center py-5 "
   >
     <h1 class="title-artikel-page fw-bold text-white">
       Belajar Listrik, Website dan IoT
@@ -9,8 +9,29 @@
   </div>
 
   <!-- UTAMA -->
-  <div class="my-5 ps-5 pe-5">
-    <div class="row g-3">
+  <div class="pt-4 p-4">
+    <div class="row mb-3">
+      <div class="col-12">
+        <!-- Tombol Home -->
+        <router-link
+          to="/artikel"
+          class="btn btn-outline-dark fs-6 m-2"
+        >
+          Home
+        </router-link>
+
+        <!-- Tombol Kategori -->
+        <router-link
+          v-for="(category, index) in categories"
+          :key="index"
+          :to="`/artikel/kategori/${category.slug}`"
+          class="btn btn-outline-dark fs-6 m-2"
+        >
+          {{ category.name }}
+        </router-link>
+      </div>
+    </div>
+    <div class="row pt-3">
       <!-- CAROUSEL (3 artikel terbaru) -->
       <div class="col-md-8">
         <div
@@ -175,6 +196,7 @@ import { ref, onMounted, computed } from "vue";
 export default {
   setup() {
     const articles = ref([]);
+    const categories = ref([])
 
     const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
 
@@ -194,6 +216,18 @@ export default {
       }
     };
 
+    const fetchCategory = async () => {
+      try {
+        const response =  await fetch(`${API_BASE_URL}/api/categories`);
+        if (!response.ok) throw new Error("Failed to fetch data category");
+
+        const data = await response.json();
+        categories.value = data;
+      } catch (error) {
+        console.log("Error fetching category data:", error);
+      }
+    }
+
     const formatDate = (dateString) => {
       const date = new Date(dateString);
       return new Intl.DateTimeFormat("id-ID", {
@@ -210,6 +244,7 @@ export default {
 
     onMounted(() => {
       fetchData();
+      fetchCategory();
     });
 
     return {
@@ -218,6 +253,7 @@ export default {
       sideArticles,
       otherArticles,
       formatDate,
+      categories,
     };
   },
 };
@@ -225,8 +261,8 @@ export default {
 
 <style>
 .artikel-heroes {
-  min-height: 40vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+  height: 45vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
   display: flex;
@@ -234,10 +270,15 @@ export default {
 
 .title-artikel-page {
   letter-spacing: 0px;
-  margin: 0px;
+  /* margin-top: 0px; */
   font-size: 50px;
   font-weight: bold;
-  max-height: 3em;
+  /* max-height: 3em; */
+}
+
+.artikel-bg{
+  background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
+    url("../../../assets/hero-img.jpg");
 }
 
 .penulis {
@@ -261,6 +302,9 @@ export default {
 }
 
 @media (max-width: 767px) {
+  .artikel-heroes{
+    height: 35vh;
+  }
   .title-artikel-page {
     font-size: 40px;
   }

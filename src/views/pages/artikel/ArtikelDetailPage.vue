@@ -249,7 +249,7 @@ export default {
 
     const fetchCategoryArtikel = async (id) => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/categories/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/categories/category/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -263,15 +263,25 @@ export default {
 
     // 🔹 Ambil beberapa kategori (misal id 1,2,3)
     const fetchAllCategories = async () => {
-      const ids = [1, 2, 3];
-      const results = [];
+      try {
+        // 🔹 1. Ambil semua kategori dulu (tanpa artikelnya)
+        const response = await fetch(`${API_BASE_URL}/api/categories`);
+        if (!response.ok) throw new Error("Failed to fetch category list");
 
-      for (const id of ids) {
-        const category = await fetchCategoryArtikel(id);
-        if (category) results.push(category);
+        const data = await response.json();
+
+        // 🔹 2. Ambil detail setiap kategori beserta artikelnya
+        const results = [];
+        for (const category of data) {
+          const categoryDetail = await fetchCategoryArtikel(category.id);
+          if (categoryDetail) results.push(categoryDetail);
+        }
+
+        // 🔹 3. Simpan hasilnya ke state
+        categories.value = results;
+      } catch (error) {
+        console.error("Error fetching all categories:", error);
       }
-
-      categories.value = results;
     };
 
     const formateDate = (dataString) => {

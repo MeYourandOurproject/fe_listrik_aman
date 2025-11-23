@@ -24,13 +24,25 @@ const routes = [
   { path: "/bio", component: BioPage, meta: { title: "Bio" } },
   {
     path: "/",
-    component: MainLayout,
+    component: ArtikelLayout,
     children: [
       {
         path: "",
         name: "Home",
-        component: MainPage,
+        component: ArtikelPage,
         meta: { title: "Home" },
+      },
+    ],
+  },
+  {
+    path: "/services",
+    component: MainLayout,
+    children: [
+      {
+        path: "",
+        name: "Services",
+        component: MainPage,
+        meta: { title: "Services" },
       },
     ],
   },

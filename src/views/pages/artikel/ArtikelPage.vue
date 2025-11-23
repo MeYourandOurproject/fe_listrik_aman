@@ -1,10 +1,10 @@
 <template>
   <!-- HERO -->
   <div
-    class="container-fluid artikel-heroes d-flex align-items-end justify-content-center text-center py-5 "
+    class="container-fluid artikel-heroes d-flex align-items-end justify-content-center text-center pb-4"
   >
     <h1 class="title-artikel-page fw-bold text-white">
-      Belajar Listrik, Website dan IoT
+      Learn Electrical and IoT for <br>Smart Home Applications 
     </h1>
   </div>
 

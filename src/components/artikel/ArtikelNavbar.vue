@@ -11,7 +11,7 @@
         <!-- Logo Brand -->
         <div class="col-2 text-center">
           <!-- <div class="text-white fs-1">Jurnal of</div> -->
-          <a class="navbar-brand" href="/artikel">
+          <a class="navbar-brand" href="/">
             <img src="../../assets/logobrand.png" alt="" class="logo-brand" />
           </a>
         </div>

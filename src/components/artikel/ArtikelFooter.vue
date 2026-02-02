@@ -1,21 +1,21 @@
 <template>
-  <div class="container-fluid footer-layout">
+  <div class="container-fluid footer-layout py-5">
     <div
-      class="container d-flex align-items-center justify-content-start text-start"
+      class="container-fluid d-flex align-items-center justify-content-start text-start p-4"
     >
       <a class="footer-brand" href="#">
         <img
           src="../../assets/logobrand.png"
           alt=""
-          class="footer-logo-brand mt-5 mb-3"
+          class="footer-logo-brand  mb-3"
         />
       </a>
     </div>
-    <div class="container">
+    <div class="container-fluid">
       <div class="row d-flex align-items-end justify-content-between">
-        <div class="col-8 text-start mb-0">
+        <div class="col text-start mb-0">
           <div class="row display-6 ms-0 text-white mb-3">
-            Layanan Jasa Instalasi Listrik
+            Learn Electrical and IoT for Smart Home Applications
           </div>
           <div class="row text-white display-6 fs-6">
             <div class="col-auto">
@@ -41,17 +41,19 @@
             </div>
           </div>
         </div>
-        <div class="col-4 text-end display-5 text-white align-items-end mb-2 \">
+        <div class="col-4 text-end text-white align-items-end mb-2">
           Contact <br />and Follow us at.
         </div>
       </div>
       <div class="row border-dot"></div>
       <div
-        class="row display-6 fs-6 mt-3 text-white justify-content-between pb-5"
+        class="row display-6 fs-6 mt-3 text-white justify-content-between"
       >
         <div class="col text-start">2025 - All Right Reserved @ Copyright</div>
+        
         <div class="col text-end">
           <div class="row fs-5 d-flex justify-content-end">
+            <!-- <div class="col text-start">Contact and Follow us at.</div> -->
             <div class="col-auto">
               <a
                 href="https://wa.me/6285924333088"
@@ -83,7 +85,7 @@
 <style>
 .footer-layout {
   /* background-color: rgb(73, 73, 73); */
-  min-height: 50vh;
+  min-height: 40vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)),
     url("../../assets/hero-img.jpg");
   background-size: cover;
@@ -114,5 +116,16 @@
 
 .icon-hover:hover {
   transform: scale(1.2) rotate(-5deg); /* Zoom dan goyang */
+}
+
+@media (max-width: 767px) { 
+  .footer-logo-brand{
+    height: 50px;
+    transition: filter 0.5s ease-in-out;
+  }
+  .footer-layout {
+    min-height: 10vh;
+  }
+  
 }
 </style>

@@ -15,11 +15,19 @@
             v-else-if="article"
             class="row align-items-start justify-content-start"
           >
-            <img :src="article.thumbnail" alt="" class="" />
-            <h1 class="text-start fw-bold mt-3">{{ article.title }}</h1>
-            <p class="text-start fst-italic">
-              ✍️ {{ article.author }} - {{ formateDate(article.updatedAt) }}
-            </p>
+            <img
+              :src="article.thumbnail"
+              class="w-100"
+              style="object-fit: cover; height: 480px"
+            />  
+            <span class="mt-3">
+              <h1 class="text-start fw-bold mb-3">{{ article.title }} </h1>
+              <p class="text-start bg-light p-1 ps-2 rounded-1 border">
+                <i class="bi bi-pen me-1"></i> Writen by : {{ article.author }}<i class="bi bi-calendar-check me-1 ms-3"></i> Last update : {{ formateDate(article.updatedAt) }} <i class="bi bi-bookmarks me-1 ms-3"></i> Category : {{ article.Category_Artikel.name }}
+              </p>
+              <p class="border-bottom border-1 border-dark"></p>
+            </span>
+            
 
             <div
               v-html="article.content"
@@ -193,6 +201,15 @@
   border-bottom: none; /* hilangkan garis di akhir */
 }
 
+@media (max-width: 767px) { 
+  .artikel-heroes{ 
+    height: 35vh; 
+  } 
+
+  .title-artikel-page { 
+    font-size: 40px; 
+  } 
+}
 </style>
 
 <script>
@@ -286,7 +303,7 @@ export default {
 
     const formateDate = (dataString) => {
       const date = new Date(dataString);
-      return date.toLocaleString("id-ID", { month: "short", year: "numeric" });
+      return date.toLocaleString("id-ID");
     };
 
     // Pantau perubahan slug dan perbarui data tanpa refresh

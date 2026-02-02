@@ -126,6 +126,7 @@
 import { ref, onMounted } from "vue";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+// import { useRoute} from "vue-router";
 import { useRoute, useRouter } from "vue-router";
 
 const showSuccessAlert = ref(false);
@@ -178,6 +179,7 @@ const fetchArticle = async () => {
     // Isi form dengan data artikel
     form.value.title = data.title;
     form.value.author = data.author;
+    form.value.category_id = data.category_id;
 
     if (quillEditor.value?.__quill) {
       quillEditor.value.__quill.clipboard.dangerouslyPasteHTML(data.content);
@@ -311,9 +313,9 @@ const handleSubmit = async () => {
     formData.append("picture", file);
   });
 
-  // for (let pair of formData.entries()) {
-  //   console.log(pair[0] + ": " + pair[1]);
-  // }
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ": " + pair[1]);
+  }
 
   // console.log(token)
 
@@ -329,8 +331,8 @@ const handleSubmit = async () => {
       }
     );
 
-    // const result = await response.json();
-    // console.log("Response from server:", result);
+    const result = await response.json();
+    console.log("Response from server:", result);
 
     if (response.ok) {
       showSuccessAlert.value = true;
@@ -357,6 +359,9 @@ onMounted(async () => {
   // Tambah listener hapus gambar
   quillEditor.value.addEventListener("click", handleImageClick);
 
+  // 4️⃣ Ambil data kategori
+  await fetchCategory();
+
   // 2️⃣ Setelah editor siap, baru ambil data artikel
   await fetchArticle();
 
@@ -364,9 +369,6 @@ onMounted(async () => {
   if (articleData.value.content) {
     editor.clipboard.dangerouslyPasteHTML(articleData.value.content);
   }
-
-  // 4️⃣ Ambil data kategori
-  await fetchCategory();
 });
 </script>
 

@@ -12,42 +12,55 @@
   <div class="p-4">
     <div class="row mb-3">
       <div class="col-12">
-        <!-- Tombol Home -->
-        <router-link
-          to="/artikel"
-          class="btn btn-outline-dark fs-6 m-2"
-        >
-          Home
-        </router-link>
+         <div class="category-wrap">
 
-        <!-- Tombol Kategori -->
-        <router-link
-          v-for="(category, index) in categories"
-          :key="index"
-          :to="`/artikel/kategori/${category.slug}`"
-          class="btn btn-outline-dark fs-6 m-2"
-        >
-          {{ category.name }}
-        </router-link>
+      <!-- Home -->
+      <router-link
+        to="/artikel"
+        class="category-pill"
+        :class="{ active: $route.path === '/artikel' }"
+      >
+        Home
+      </router-link>
+
+      <!-- Category -->
+      <router-link
+        v-for="category in categories"
+        :key="category.slug"
+        :to="`/artikel/kategori/${category.slug}`"
+        class="category-pill"
+        :class="{ active: $route.params.slug === category.slug }"
+      >
+        {{ category.name }}
+      </router-link>
+
+    </div>
       </div>
     </div>
     <div class="row p-2">
       <div
-        class="col-md-3 mb-4"
+        class="col-md-4 mb-4"
         v-for="artikel in category.Artikels"
         :key="artikel.id"
       >
-        <div class="card h-100 shadow-sm">
-          <div class="card-body d-flex flex-column gap-2">
-            <img :src="artikel.thumbnail" alt="" class="w-100 rounded" style="object-fit: cover; height: 100px">
-            <h7 class="card-title fst-italic text-center">{{ artikel.title }}</h7>
-            <router-link
-              :to="`/artikel/${artikel.slug}`"
-              class="btn btn-sm btn-outline-dark"
-            >
-              Selengkapnya...
-            </router-link>
+        <div class="artikel-card artikel-card-md">
+          <img :src="artikel.thumbnail" class="artikel-img" />
+
+          <div class="artikel-info p-3 text-white">
+            <h6 class="mb-1">{{ artikel.title }}</h6>
+            <!-- <p class="penulis mb-0">
+              <i class="bi bi-pen me-1"></i> {{ artikel.author }}
+                    <i class="bi bi-calendar-check me-1 ms-3"></i>
+                    {{ formatDate(artikel.updatedAt) }}
+            </p> -->
           </div>
+
+          <router-link
+            :to="`/artikel/${artikel.slug}`"
+            class="artikel-overlay"
+          >
+            <span class="see-more-text">See More</span>
+          </router-link>
         </div>
       </div>
     </div>
@@ -108,7 +121,7 @@ export default {
 
 <style>
 .artikel-heroes {
-  height: 45vh;
+  /* height: 45vh; */
   background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
@@ -127,5 +140,63 @@ export default {
   .title-artikel-page {
     font-size: 40px;
   }
+}
+
+/* CATEGORY WRAPPER */
+.category-wrap {
+  display: flex;
+  flex-wrap: wrap;           /* 🔥 turun ke baris bawah */
+  gap: 10px;
+  justify-content: center;   /* tengah desktop */
+}
+
+/* PILL STYLE */
+.category-pill {
+  padding: 8px 18px;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  color: #333;
+  font-size: 14px;
+  white-space: nowrap;
+  text-decoration: none;
+  background: #fff;
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.category-pill:hover {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+/* Active */
+.category-pill.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  font-weight: 600;
+}
+
+/* MOBILE OPTIMIZATION */
+@media (max-width: 576px) {
+  .category-wrap {
+    justify-content: flex-start; /* kiri di HP */
+  }
+
+  .category-pill {
+    font-size: 13px;
+    padding: 7px 14px;
+  }
+}
+
+@media (max-width: 767px) { 
+  .artikel-heroes{ 
+    height: 24vh; 
+  } 
+
+  .title-artikel-page { 
+    font-size: 25px; 
+  } 
 }
 </style>

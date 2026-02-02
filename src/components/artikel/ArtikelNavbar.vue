@@ -88,7 +88,7 @@
             <li class="nav-item">
               <div class="d-flex align-items-center">
                 <a
-                  href="https://www.tiktok.com/@rrulyabdulrasyid"
+                  href="https://www.tiktok.com/@rulyabdulrasyid"
                   class="text-decoration-none me-2"
                 >
                   <i class="bi bi-tiktok text-dark fs-3"></i>
@@ -260,5 +260,12 @@ html {
 
 .humberger-icon:hover {
   transform: scale(1.2);
+}
+
+@media (max-width: 767px) { 
+  .logo-brand {
+    height: 35px;
+    transition: filter 0.5s ease-in-out;
+  }
 }
 </style>

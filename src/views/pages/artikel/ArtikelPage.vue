@@ -1,189 +1,157 @@
 <template>
   <!-- HERO -->
-  <div
-    class="container-fluid artikel-heroes d-flex align-items-end justify-content-center text-center pb-4"
-  >
+  <div class="container-fluid artikel-heroes d-flex align-items-end justify-content-center text-center pb-4">
     <h1 class="title-artikel-page fw-bold text-white">
-      Learn Electrical and IoT for <br>Smart Home Applications 
+      Learn Electrical and IoT for <br />Smart Home Applications
     </h1>
   </div>
 
-  <!-- UTAMA -->
   <div class="pt-4 p-4">
-    <div class="row mb-3">
-      <div class="col-12">
-        <!-- Tombol Home -->
-        <router-link
-          to="/artikel"
-          class="btn btn-outline-dark fs-6 m-2"
-        >
-          Home
-        </router-link>
+    <!-- KATEGORI -->
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="category-wrap">
 
-        <!-- Tombol Kategori -->
-        <router-link
-          v-for="(category, index) in categories"
-          :key="index"
-          :to="`/artikel/kategori/${category.slug}`"
-          class="btn btn-outline-dark fs-6 m-2"
-        >
-          {{ category.name }}
-        </router-link>
-      </div>
+      <!-- Home -->
+      <router-link
+        to="/artikel"
+        class="category-pill"
+        :class="{ active: $route.path === '/artikel' }"
+      >
+        Home
+      </router-link>
+
+      <!-- Category -->
+      <router-link
+        v-for="category in categories"
+        :key="category.slug"
+        :to="`/artikel/kategori/${category.slug}`"
+        class="category-pill"
+        :class="{ active: $route.params.slug === category.slug }"
+      >
+        {{ category.name }}
+      </router-link>
+
     </div>
+  </div>
+<!-- </div> -->
+
+
+    </div>
+
     <div class="row pt-3">
-      <!-- CAROUSEL (3 artikel terbaru) -->
-      <div class="col-md-8">
+      <!-- CAROUSEL -->
+      <div class="col-md-8 mb-3">
         <div
-          v-if="carouselArticles.length > 0"
+          v-if="carouselArticles.length"
           id="mainCarousel"
           class="carousel slide"
           data-bs-ride="carousel"
         >
-          <div
-            class="carousel-inner rounded shadow carousel-fixed-height bg-warning"
-          >
+          <div class="carousel-inner rounded shadow">
             <div
-              class="carousel-item"
               v-for="(artikel, index) in carouselArticles"
               :key="artikel.slug"
+              class="carousel-item"
               :class="{ active: index === 0 }"
             >
-              <div class="position-relative w-100" style="height: 100%">
-                <!-- Label "New" -->
-                <span
-                  class="badge bg-danger position-absolute top-0 start-0 m-3 px-3 py-2 z-1"
-                >
+              <div class="artikel-card artikel-card-lg">
+                <img :src="artikel.thumbnail" class="artikel-img" />
+
+                <span class="badge bg-danger position-absolute top-0 start-0 m-3 z-3">
                   Terbaru
                 </span>
 
-                <img
-                  :src="artikel.thumbnail"
-                  class="w-100"
-                  style="object-fit: cover; height: 480px"
-                />
-                <div
-                  class="position-absolute bottom-0 start-0 end-0 p-4 bg-dark bg-opacity-50 text-white"
-                  style="backdrop-filter: blur(4px)"
-                >
-                  <h4 class="mb-2">{{ artikel.title }}</h4>
-                  <p class="penulis mb-2">
-                    {{ artikel.author }} - {{ formatDate(artikel.updatedAt) }}
+                <div class="artikel-info py-4 ps-4 text-white">
+                  <h2 class="fw-bold mb-1">{{ artikel.title }}</h2>
+                  <p class="penulis mb-0">
+                    <i class="bi bi-pen me-1"></i> {{ artikel.author }}
+                    <i class="bi bi-calendar-check ms-3 me-1"></i>
+                    {{ formatDate(artikel.updatedAt) }}
                   </p>
-                  <!-- <div
-                    v-html="
-                      artikel.content.split(' ').slice(0, 25).join(' ') + '...'
-                    "
-                    class="isi my-3"
-                  ></div> -->
-                  <router-link
-                    :to="`/artikel/${artikel.slug}`"
-                    class="text-decoration-none mt-auto"
-                  >
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-primary justify-content-end fst-italic"
-                    >
-                      Selengkapnya<i
-                        class="bi bi-arrow-right-circle-fill ms-2"
-                      ></i>
-                    </button>
-                  </router-link>
                 </div>
+
+                <!-- OVERLAY -->
+                <router-link
+                  :to="`/artikel/${artikel.slug}`"
+                  class="artikel-overlay"
+                >
+                  <span class="see-more-text">See More</span>
+                </router-link>
               </div>
             </div>
           </div>
 
-          <!-- Tombol Navigasi Carousel -->
+          <!-- CONTROLS -->
           <button
             class="carousel-control-prev"
             type="button"
             data-bs-target="#mainCarousel"
             data-bs-slide="prev"
           >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="carousel-control-prev-icon"></span>
           </button>
+
           <button
             class="carousel-control-next"
             type="button"
             data-bs-target="#mainCarousel"
             data-bs-slide="next"
           >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="carousel-control-next-icon"></span>
           </button>
         </div>
       </div>
 
-      <!-- 2 Artikel di Samping -->
+      <!-- SIDE ARTICLES -->
       <div class="col-md-4 d-flex flex-column gap-3">
         <div
           v-for="artikel in sideArticles"
           :key="artikel.slug"
-          class="position-relative overflow-hidden rounded shadow-sm side-card-equal-height"
+          class="artikel-card artikel-card-sm"
         >
-          <img
-            :src="artikel.thumbnail"
-            class="w-100 h-100"
-            style="object-fit: cover"
-          />
-          <div
-            class="position-absolute bottom-0 start-0 end-0 p-2 bg-dark bg-opacity-50 text-white"
-            style="backdrop-filter: blur(4px)"
-          >
+          <img :src="artikel.thumbnail" class="artikel-img" />
+
+          <div class="artikel-info p-3 text-white">
             <h6 class="mb-1">{{ artikel.title }}</h6>
-            <p class="penulis mb-2">
-              {{ artikel.author }} - {{ formatDate(artikel.updatedAt) }}
+            <p class="penulis mb-0">
+              <i class="bi bi-pen me-1"></i> {{ artikel.author }}
+                    <i class="bi bi-calendar-check me-1 ms-3"></i>
+                    {{ formatDate(artikel.updatedAt) }}
             </p>
-            <router-link
-              :to="`/artikel/${artikel.slug}`"
-              class="text-decoration-none"
-            >
-              <button
-                type="button"
-                class="btn btn-primary btn-sm justify-content-end fst-italic"
-              >
-                Selengkapnya<i class="bi bi-arrow-right-circle-fill ms-2"></i>
-              </button>
-            </router-link>
           </div>
+
+          <router-link
+            :to="`/artikel/${artikel.slug}`"
+            class="artikel-overlay"
+          >
+            <span class="see-more-text">See More</span>
+          </router-link>
         </div>
       </div>
     </div>
 
-    <!-- Artikel Lainnya -->
+    <!-- OTHER ARTICLES -->
     <div class="row row-cols-1 row-cols-md-3 g-3 mt-4">
       <div v-for="artikel in otherArticles" :key="artikel.slug" class="col">
-        <div
-          class="position-relative overflow-hidden rounded shadow-sm"
-          style="height: 260px"
-        >
-          <img
-            :src="artikel.thumbnail"
-            class="w-100 h-100"
-            style="object-fit: cover"
-          />
-          <div
-            class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-50 text-white d-flex flex-column justify-content-end"
-            style="backdrop-filter: blur(4px)"
-          >
+        <div class="artikel-card artikel-card-md">
+          <img :src="artikel.thumbnail" class="artikel-img" />
+
+          <div class="artikel-info p-3 text-white">
             <h6 class="mb-1">{{ artikel.title }}</h6>
-            <p class="penulis mb-2">
-              {{ artikel.author }} - {{ formatDate(artikel.updatedAt) }}
+            <p class="penulis mb-0">
+              <i class="bi bi-pen me-1"></i> {{ artikel.author }}
+                    <i class="bi bi-calendar-check me-1 ms-3"></i>
+                    {{ formatDate(artikel.updatedAt) }}
             </p>
-            <router-link
-              :to="`/artikel/${artikel.slug}`"
-              class="text-decoration-none"
-            >
-              <button
-                type="button"
-                class="btn btn-primary btn-sm justify-content-end fst-italic"
-              >
-                Selengkapnya<i class="bi bi-arrow-right-circle-fill ms-2"></i>
-              </button>
-            </router-link>
           </div>
+
+          <router-link
+            :to="`/artikel/${artikel.slug}`"
+            class="artikel-overlay"
+          >
+            <span class="see-more-text">See More</span>
+          </router-link>
         </div>
       </div>
     </div>
@@ -196,46 +164,25 @@ import { ref, onMounted, computed } from "vue";
 export default {
   setup() {
     const articles = ref([]);
-    const categories = ref([])
+    const categories = ref([]);
+    const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
-    const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/artikels`);
-
-        if (!response.ok) throw new Error("Failed to fetch data");
-
-        let data = await response.json();
-        data = data.sort(
-          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
-        );
-        articles.value = data;
-      } catch (error) {
-        console.log("Error fetching data:", error);
-      }
+    const fetchArticles = async () => {
+      const res = await fetch(`${API_BASE_URL}/api/artikels`);
+      const data = await res.json();
+      articles.value = data.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
     };
 
-    const fetchCategory = async () => {
-      try {
-        const response =  await fetch(`${API_BASE_URL}/api/categories`);
-        if (!response.ok) throw new Error("Failed to fetch data category");
+    const fetchCategories = async () => {
+      const res = await fetch(`${API_BASE_URL}/api/categories`);
+      categories.value = await res.json();
+    };
 
-        const data = await response.json();
-        categories.value = data;
-      } catch (error) {
-        console.log("Error fetching category data:", error);
-      }
-    }
-
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      return new Intl.DateTimeFormat("id-ID", {
-        month: "short",
-        year: "numeric",
-      })
-        .format(date)
-        .replace(".", "");
+    const formatDate = (dataString) => {
+      const date = new Date(dataString);
+      return date.toLocaleString("id-ID");
     };
 
     const carouselArticles = computed(() => articles.value.slice(0, 3));
@@ -243,70 +190,169 @@ export default {
     const otherArticles = computed(() => articles.value.slice(5));
 
     onMounted(() => {
-      fetchData();
-      fetchCategory();
+      fetchArticles();
+      fetchCategories();
     });
 
     return {
-      articles,
+      categories,
       carouselArticles,
       sideArticles,
       otherArticles,
       formatDate,
-      categories,
     };
   },
 };
 </script>
 
 <style>
+/* HERO */
 .artikel-heroes {
-  height: 45vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
+  height: 270px;
+  background-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.8)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
-  display: flex;
 }
 
 .title-artikel-page {
-  letter-spacing: 0px;
-  /* margin-top: 0px; */
   font-size: 50px;
+}
+
+/* CARD */
+.artikel-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.artikel-card-lg { height: 480px; }
+.artikel-card-md { height: 260px; }
+.artikel-card-sm { height: 232px; }
+
+.artikel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* INFO */
+.artikel-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+/* OVERLAY */
+.artikel-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none; /* 🔥 INI KUNCINYA */
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  text-decoration: none;
+}
+
+.see-more-text {
+  color: #fff;
+  font-size: 20px;
   font-weight: bold;
-  /* max-height: 3em; */
+  padding: 5px 50px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
-.artikel-bg{
-  background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
-    url("../../../assets/hero-img.jpg");
+/* HOVER */
+.artikel-card:hover .artikel-overlay {
+  opacity: 1;
+  pointer-events: auto; /* aktif hanya saat hover */
 }
 
+.artikel-card:hover .artikel-img {
+  transform: scale(1.05);
+}
+
+.artikel-card:hover .see-more-text {
+  background: #fff;
+  color: #000;
+}
+
+/* FIX CAROUSEL */
+.carousel-control-prev,
+.carousel-control-next {
+  z-index: 10;
+}
+
+/* TEXT */
 .penulis {
-  font-size: 12px; /* Increase font size */
-  font-weight: lighter;
+  font-size: 12px;
 }
 
-.isi {
-  font-size: 16px; /* Increase font size */
-  font-weight: lighter;
-  text-align: justify;
-  flex-grow: 1;
+/* CATEGORY WRAPPER */
+.category-wrap {
+  display: flex;
+  flex-wrap: wrap;           /* 🔥 turun ke baris bawah */
+  gap: 10px;
+  justify-content: center;   /* tengah desktop */
 }
 
-.carousel-fixed-height {
-  height: 480px;
+/* PILL STYLE */
+.category-pill {
+  padding: 8px 18px;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  color: #333;
+  font-size: 14px;
+  white-space: nowrap;
+  text-decoration: none;
+  background: #fff;
+  transition: all 0.25s ease;
 }
 
-.side-card-equal-height {
-  height: 232px;
+/* Hover */
+.category-pill:hover {
+  background: #111;
+  color: #fff;
+  border-color: #111;
 }
 
-@media (max-width: 767px) {
-  .artikel-heroes{
-    height: 35vh;
+/* Active */
+.category-pill.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  font-weight: 600;
+}
+
+/* MOBILE OPTIMIZATION */
+@media (max-width: 576px) {
+  .category-wrap {
+    justify-content: flex-start; /* kiri di HP */
   }
-  .title-artikel-page {
-    font-size: 40px;
+
+  .category-pill {
+    font-size: 13px;
+    padding: 7px 14px;
   }
+}
+
+@media (max-width: 767px) { 
+  .artikel-heroes{ 
+    height: 30vh; 
+  } 
+
+  .title-artikel-page { 
+    font-size: 30px; 
+  } 
 }
 </style>

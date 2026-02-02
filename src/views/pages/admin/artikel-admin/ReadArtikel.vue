@@ -7,7 +7,9 @@
       >
         <div class="col-lg-3 keterangan">
           <h3>{{ article.title }}</h3>
+          <h4 class="text-danger">Article Category: {{ article.Category_Artikel.name }}</h4>
           <p>{{ article.author }}</p>
+
         </div>
         <div class="col-lg-7 gambar">
           <img

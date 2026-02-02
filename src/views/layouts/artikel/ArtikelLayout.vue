@@ -1,7 +1,9 @@
 <template>
   <div>
     <ArtikelNavbar />
-    <router-view />
+    <div class="layout">
+      <router-view />
+    </div>
     <ArtikelFooter />
   </div>
 </template>
@@ -18,3 +20,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.layout{
+  min-height: 100vh;
+}
+</style>

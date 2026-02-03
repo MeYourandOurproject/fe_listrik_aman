@@ -221,7 +221,7 @@ export default {
   } 
 
   .title-artikel-category-page { 
-    font-size: 30px; 
+    font-size: 35px; 
   } 
 }
 </style>

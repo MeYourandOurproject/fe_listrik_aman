@@ -5,7 +5,7 @@
 
       <!-- TITLE -->
       <h1 class="title-artikel-category-page fw-bold text-white mb-md-4 mb-3">
-        {{ category.name }} <br> <span class="text-warning">Category</span>
+        {{ category.name }}  <span class="text-warning">Category</span>
       </h1>
 
       <!-- SEARCH -->

@@ -220,7 +220,7 @@ export default {
     height: 32vh; 
   } 
 
-  .artikel-category-heroes { 
+  .title-artikel-category-page { 
     font-size: 25px; 
   } 
 }

@@ -5,7 +5,7 @@
 
       <!-- TITLE -->
       <h1 class="title-artikel-category-page fw-bold text-white mb-md-4 mb-3">
-        {{ category.name }}  <span class="text-warning">Category</span>
+        {{ category.name }}<br><span class="text-warning">Category</span>
       </h1>
 
       <!-- SEARCH -->
@@ -217,11 +217,11 @@ export default {
 
 @media (max-width: 767px) { 
   .artikel-category-heroes{ 
-    height: 32vh; 
+    height: 35vh; 
   } 
 
   .title-artikel-category-page { 
-    font-size: 35px; 
+    font-size: 32px; 
   } 
 }
 </style>

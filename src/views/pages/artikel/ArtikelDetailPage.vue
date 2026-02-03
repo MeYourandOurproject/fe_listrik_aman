@@ -200,16 +200,6 @@
 .accordion-body li:last-child {
   border-bottom: none; /* hilangkan garis di akhir */
 }
-
-@media (max-width: 767px) { 
-  .artikel-heroes{ 
-    height: 35vh; 
-  } 
-
-  .title-artikel-page { 
-    font-size: 40px; 
-  } 
-}
 </style>
 
 <script>

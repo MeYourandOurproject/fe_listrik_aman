@@ -1,45 +1,78 @@
 <template>
   <!-- HERO -->
-  <div class="container-fluid artikel-heroes d-flex align-items-end justify-content-center text-center pb-4">
-    <h1 class="title-artikel-page fw-bold text-white">
-      Learn Electrical and IoT for <br />Smart Home Applications
-    </h1>
+  <div class="container-fluid artikel-home-heroes d-flex align-items-end justify-content-center text-center py-4">
+    <div class="hero-content w-100">
+
+      <!-- TITLE -->
+      <h1 class="title-artikel-home-page fw-bold text-white mb-md-5 mb-3">
+        Learn Electrical and IoT for <br />Smart Home Applications
+      </h1>
+
+      <!-- SEARCH -->
+      <div class="row justify-content-center g-2 align-items-center mb-md-5 mb-2">
+
+        <!-- Input search -->
+        <div class="col-6 col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Cari artikel..."
+          />
+        </div>
+
+        <!-- Filter kategori -->
+        <div class="col-4 col-md-2">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Filter kategori"
+          />
+        </div>
+
+        <!-- Search Button -->
+        <div class="col-auto">
+          <router-link
+            to="/artikel"
+            class="search-btn"
+          >
+            <i class="bi bi-search"></i>
+          </router-link>
+        </div>
+
+      </div>
+    </div>
   </div>
 
+  <!-- MAIN PAGE -->
   <div class="pt-4 p-4">
-    <!-- KATEGORI -->
-<div class="row mb-3">
-  <div class="col-12">
-    <div class="category-wrap">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="category-wrap">
 
-      <!-- Home -->
-      <router-link
-        to="/artikel"
-        class="category-pill"
-        :class="{ active: $route.path === '/artikel' }"
-      >
-        Home
-      </router-link>
+          <!-- Home -->
+          <router-link
+            to="/artikel"
+            class="category-pill"
+            :class="{ active: $route.path === '/artikel' }"
+          >
+            Home
+          </router-link>
 
-      <!-- Category -->
-      <router-link
-        v-for="category in categories"
-        :key="category.slug"
-        :to="`/artikel/kategori/${category.slug}`"
-        class="category-pill"
-        :class="{ active: $route.params.slug === category.slug }"
-      >
-        {{ category.name }}
-      </router-link>
+          <!-- Category -->
+          <router-link
+            v-for="category in categories"
+            :key="category.slug"
+            :to="`/artikel/kategori/${category.slug}`"
+            class="category-pill"
+            :class="{ active: $route.params.slug === category.slug }"
+          >
+            {{ category.name }}
+          </router-link>
 
+        </div>
+      </div>
     </div>
-  </div>
-<!-- </div> -->
-
-
-    </div>
-
-    <div class="row pt-3">
+    <div class="row py-3">
       <!-- CAROUSEL -->
       <div class="col-md-8 mb-3">
         <div
@@ -169,10 +202,11 @@ export default {
 
     const fetchArticles = async () => {
       const res = await fetch(`${API_BASE_URL}/api/artikels`);
-      const data = await res.json();
-      articles.value = data.sort(
-        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
-      );
+      const result = await res.json();
+      // articles.value = result.sort(
+      //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      // );
+      articles.value = result.data;
     };
 
     const fetchCategories = async () => {
@@ -207,14 +241,14 @@ export default {
 
 <style>
 /* HERO */
-.artikel-heroes {
-  height: 270px;
+.artikel-home-heroes {
+  height: 420px;
   background-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.8)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
 }
 
-.title-artikel-page {
+.title-artikel-home-page {
   font-size: 50px;
 }
 
@@ -337,7 +371,7 @@ export default {
 /* MOBILE OPTIMIZATION */
 @media (max-width: 576px) {
   .category-wrap {
-    justify-content: flex-start; /* kiri di HP */
+    justify-content: flex-center; /* kiri di HP */
   }
 
   .category-pill {
@@ -346,13 +380,38 @@ export default {
   }
 }
 
+.search-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 20%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(6px);
+}
+
+.search-btn:hover {
+  background: #ffc107;
+  color: #000;
+  transform: scale(1.1) ;
+}
+
+.search-btn:active {
+  transform: scale(0.95);
+}
+
 @media (max-width: 767px) { 
-  .artikel-heroes{ 
-    height: 30vh; 
+  .artikel-home-heroes{ 
+    height: 32vh; 
   } 
 
-  .title-artikel-page { 
-    font-size: 30px; 
+  .title-artikel-home-page { 
+    font-size: 25px; 
   } 
 }
 </style>

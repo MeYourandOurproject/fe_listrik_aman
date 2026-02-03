@@ -1,15 +1,50 @@
 <template>
   <!-- HERO -->
-  <div
-    class="container-fluid artikel-heroes d-flex align-items-end justify-content-center text-center py-5"
-  >
-   <h1 class="title-artikel-page fw-bold text-white">
-     {{ category.name }}
-   </h1>
+  <div class="container-fluid artikel-category-heroes d-flex align-items-end justify-content-center text-center py-4">
+    <div class="hero-content w-100">
+
+      <!-- TITLE -->
+      <h1 class="title-artikel-category-page fw-bold text-white mb-md-4 mb-3">
+        {{ category.name }} <span class="text-warning">Category</span>
+      </h1>
+
+      <!-- SEARCH -->
+      <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
+
+        <!-- Input search -->
+        <div class="col-6 col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Cari artikel..."
+          />
+        </div>
+
+        <!-- Filter kategori -->
+        <div class="col-4 col-md-2">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Filter kategori"
+          />
+        </div>
+
+        <!-- Search Button -->
+        <div class="col-auto">
+          <router-link
+            to="/artikel"
+            class="search-btn"
+          >
+            <i class="bi bi-search"></i>
+          </router-link>
+        </div>
+
+      </div>
+    </div>
   </div>
 
-  <!-- DAFTAR ARTIKEL -->
-  <div class="p-4">
+  <!-- MAIN PAGE -->
+  <div class="p-4 pt-4">
     <div class="row mb-3">
       <div class="col-12">
          <div class="category-wrap">
@@ -37,7 +72,7 @@
     </div>
       </div>
     </div>
-    <div class="row p-2">
+    <div class="row pt-3">
       <div
         class="col-md-4 mb-4"
         v-for="artikel in category.Artikels"
@@ -120,26 +155,16 @@ export default {
 </script>
 
 <style>
-.artikel-heroes {
-  /* height: 45vh; */
+.artikel-category-heroes {
+  height: 50vh;
   background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
-  display: flex;
+  /* display: flex; */
 }
 
-.title-artikel-page {
+.title-artikel-category-page {
   font-size: 50px;
-  font-weight: bold;
-}
-
-@media (max-width: 767px) {
-  .artikel-heroes {
-    height: 35vh;
-  }
-  .title-artikel-page {
-    font-size: 40px;
-  }
 }
 
 /* CATEGORY WRAPPER */
@@ -181,7 +206,7 @@ export default {
 /* MOBILE OPTIMIZATION */
 @media (max-width: 576px) {
   .category-wrap {
-    justify-content: flex-start; /* kiri di HP */
+    justify-content: flex-center; /* kiri di HP */
   }
 
   .category-pill {
@@ -191,11 +216,11 @@ export default {
 }
 
 @media (max-width: 767px) { 
-  .artikel-heroes{ 
-    height: 24vh; 
+  .artikel-category-heroes{ 
+    height: 32vh; 
   } 
 
-  .title-artikel-page { 
+  .artikel-category-heroes { 
     font-size: 25px; 
   } 
 }

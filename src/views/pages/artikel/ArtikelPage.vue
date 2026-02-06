@@ -25,7 +25,7 @@
         <!-- Filter kategori -->
         <div class="col-4 col-md-2">
           <select
-            class="form-control"
+            class="form-select"
             v-model="selectedCategory"
           >
             <option value="">Semua kategori</option>
@@ -48,7 +48,6 @@
             <i class="bi bi-search"></i>
           </button>
         </div>
-
       </div>
     </div>
   </div>
@@ -217,9 +216,6 @@ export default {
     const fetchArticles = async () => {
       const res = await fetch(`${API_BASE_URL}/api/artikels`);
       const result = await res.json();
-      // articles.value = result.sort(
-      //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      // );
       articles.value = result.data;
     };
 

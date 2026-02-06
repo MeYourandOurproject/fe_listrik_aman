@@ -1,14 +1,15 @@
 <template>
   <!-- HERO -->
-  <div class="container-fluid artikel-category-heroes d-flex align-items-end justify-content-center text-center py-4">
+  <div class="container-fluid artikel-search-heroes d-flex align-items-end justify-content-center text-center py-4">
     <div class="hero-content w-100">
 
       <!-- SEARCH -->
       <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
-
         <!-- Input search -->
         <div class="col-6 col-md-4">
           <input
+            v-model="searchInput"
+            @keyup.enter="goToSearch"
             type="text"
             class="form-control"
             placeholder="Cari artikel..."
@@ -17,23 +18,30 @@
 
         <!-- Filter kategori -->
         <div class="col-4 col-md-2">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Filter kategori"
-          />
+          <select
+            class="form-select"
+            v-model="selectedCategory"
+          >
+            <option value="">Semua kategori</option>
+            <option
+              v-for="cat in categories"
+              :key="cat.id"
+              :value="cat.id"
+            >
+              {{ cat.name }}
+            </option>
+          </select>
         </div>
 
         <!-- Search Button -->
         <div class="col-auto">
-          <router-link
-            to="/artikel"
-            class="search-btn"
+          <button
+            class="search-btn border-0"
+            @click="goToSearch"
           >
             <i class="bi bi-search"></i>
-          </router-link>
+          </button>
         </div>
-
       </div>
     </div>
   </div>
@@ -43,162 +51,247 @@
 
     <h4 class="mb-3">
       Hasil pencarian untuk:
-      <span class="text-warning">"{{ searchQuery }}"</span>
+      <span v-if="searchQuery" class="text-warning">
+        {{ searchQuery }}
+      </span>
     </h4>
 
-    <div v-if="isLoading" class="text-center py-5">
-      <div class="spinner-border text-warning"></div>
+    <p class="text-muted mb-4" v-if="total > 0">
+      {{ total }} artikel ditemukan
+    </p>
+
+    <!-- LOADING -->
+    <div v-if="loading" class="text-center py-5">
+      <div class="spinner-border"></div>
     </div>
 
-    <div v-else-if="articles.length === 0" class="text-center py-5">
-      <p>Tidak ada artikel ditemukan 😢</p>
+    <!-- EMPTY -->
+    <div v-else-if="!articles.length" class="text-center py-5 text-muted">
+      Artikel tidak ditemukan 😥
     </div>
 
+    <!-- RESULT -->
     <div v-else class="row row-cols-1 row-cols-md-3 g-3">
-      <div v-for="artikel in articles" :key="artikel.slug" class="col">
-        <div class="artikel-card artikel-card-md">
-          <img :src="artikel.thumbnail" class="artikel-img" />
+      <div v-for="artikel in articles" :key="artikel.id" class="col">
+        <div class="artikel-search-card">
 
-          <div class="artikel-info p-3 text-white">
+          <img :src="artikel.thumbnail" class="artikel-search-img" />
+
+          <div class="artikel-search-info p-3 text-white">
             <h6 class="mb-1">{{ artikel.title }}</h6>
             <p class="penulis mb-0">
               <i class="bi bi-pen me-1"></i> {{ artikel.author }}
+              <i class="bi bi-calendar-check ms-2"></i>
+              {{ formatDate(artikel.createdAt) }}
             </p>
           </div>
 
+          <!-- OVERLAY -->
           <router-link
             :to="`/artikel/${artikel.slug}`"
             class="artikel-overlay"
           >
             <span class="see-more-text">See More</span>
           </router-link>
+
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
 import { ref, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   setup() {
     const route = useRoute();
-    const articles = ref([]);
-    const isLoading = ref(false);
+    const router = useRouter();
     const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
-    const searchQuery = ref(route.query.q || "");
+    const articles = ref([]);
+    const categories = ref([]);
+    const total = ref(0);
+    const loading = ref(false);
 
-    const fetchSearchResult = async () => {
-      if (!searchQuery.value) return;
+    // dari URL
+    const searchQuery = ref(route.query.search || "");
+    const categoryId = ref(route.query.category_id || "");
 
-      try {
-        isLoading.value = true;
+    // input form
+    const searchInput = ref(searchQuery.value);
+    const selectedCategory = ref(categoryId.value);
 
-        const res = await fetch(
-          `${API_BASE_URL}/api/artikels?search=${searchQuery.value}`
-        );
-        const result = await res.json();
-
-        articles.value = result.data;
-      } catch (err) {
-        console.error("Search error:", err);
-      } finally {
-        isLoading.value = false;
-      }
+    const fetchCategories = async () => {
+      const res = await fetch(`${API_BASE_URL}/api/categories`);
+      categories.value = await res.json();
     };
 
-    onMounted(fetchSearchResult);
+    const fetchSearchResult = async () => {
+      loading.value = true;
+
+      const params = new URLSearchParams();
+      if (searchQuery.value) params.append("search", searchQuery.value);
+      if (categoryId.value) params.append("category_id", categoryId.value);
+
+      const res = await fetch(
+        `${API_BASE_URL}/api/artikels?${params.toString()}`
+      );
+      const result = await res.json();
+
+      articles.value = result.data || [];
+      total.value = result.total || 0;
+      loading.value = false;
+    };
+
+    const goToSearch = () => {
+      if (!searchInput.value && !selectedCategory.value) return;
+
+      router.push({
+        path: "/artikel/search",
+        query: {
+          search: searchInput.value || undefined,
+          category_id: selectedCategory.value || undefined
+        }
+      });
+    };
+
+    onMounted(() => {
+      fetchCategories();
+      fetchSearchResult();
+    });
 
     watch(
-      () => route.query.q,
-      (val) => {
-        searchQuery.value = val;
+      () => route.query,
+      (q) => {
+        searchQuery.value = q.search || "";
+        categoryId.value = q.category_id || "";
+
+        searchInput.value = searchQuery.value;
+        selectedCategory.value = categoryId.value;
+
         fetchSearchResult();
       }
     );
 
+    const formatDate = (dateString) =>
+      new Date(dateString).toLocaleDateString("id-ID");
+
     return {
       articles,
-      isLoading,
-      searchQuery
+      categories,
+      total,
+      loading,
+      searchQuery,
+      searchInput,
+      selectedCategory,
+      goToSearch,
+      formatDate
     };
   }
 };
 </script>
 
-
 <style>
-.artikel-category-heroes {
-  height: 50vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
+/* HERO */
+.artikel-search-heroes {
+  height: 270px;
+  background-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.8)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
-  /* display: flex; */
 }
 
-.title-artikel-category-page {
-  font-size: 50px;
+/* CARD */
+.artikel-search-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  height: 260px;
 }
 
-/* CATEGORY WRAPPER */
-.category-wrap {
+.artikel-search-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* INFO */
+.artikel-search-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+/* OVERLAY */
+.artikel-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
   display: flex;
-  flex-wrap: wrap;           /* 🔥 turun ke baris bawah */
-  gap: 10px;
-  justify-content: center;   /* tengah desktop */
-}
-
-/* PILL STYLE */
-.category-pill {
-  padding: 8px 18px;
-  border-radius: 50px;
-  border: 1px solid #ccc;
-  color: #333;
-  font-size: 14px;
-  white-space: nowrap;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none; /* 🔥 KUNCI */
+  transition: opacity 0.3s ease;
+  z-index: 3;
   text-decoration: none;
+}
+
+/* BUTTON */
+.see-more-text {
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 6px 36px;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.artikel-search-card:hover .artikel-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.artikel-search-card:hover .artikel-search-img {
+  transform: scale(1.05);
+}
+
+.artikel-search-card:hover .see-more-text {
   background: #fff;
-  transition: all 0.25s ease;
+  color: #000;
 }
 
-/* Hover */
-.category-pill:hover {
-  background: #111;
+/* TEXT */
+.penulis {
+  font-size: 12px;
+}
+
+/* SEARCH BUTTON */
+.search-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 20%;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
-  border-color: #111;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(6px);
 }
 
-/* Active */
-.category-pill.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  font-weight: 600;
-}
-
-/* MOBILE OPTIMIZATION */
-@media (max-width: 576px) {
-  .category-wrap {
-    justify-content: flex-center; /* kiri di HP */
-  }
-
-  .category-pill {
-    font-size: 13px;
-    padding: 7px 14px;
-  }
-}
-
-@media (max-width: 767px) { 
-  .artikel-category-heroes{ 
-    height: 32vh; 
-  } 
-
-  .title-artikel-category-page { 
-    font-size: 25px; 
-  } 
+.search-btn:hover {
+  background: #ffc107;
+  color: #000;
+  transform: scale(1.1);
 }
 </style>

@@ -128,11 +128,11 @@
 
 <style>
 .artikel-detail-heroes {
-  min-height: 30vh;
+  height: 30vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
-  display: flex;
+  /* display: flex; */
 }
 
 .page {
@@ -224,11 +224,8 @@ export default {
           throw new Error("Failed to fetch data");
         }
 
-        let data = await response.json();
-        data = data.sort(
-          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
-        );
-        articles.value = data;
+        const result = await response.json();
+        articles.value = result.data;
       } catch (error) {
         console.error("Error fetching articles:", error);
       }

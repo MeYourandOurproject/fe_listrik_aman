@@ -17,26 +17,36 @@
             type="text"
             class="form-control"
             placeholder="Cari artikel..."
+            v-model="searchQuery"
+            @keyup.enter="goToSearch"
           />
         </div>
 
         <!-- Filter kategori -->
         <div class="col-4 col-md-2">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Filter kategori"
-          />
+          <select
+            class="form-select"
+            v-model="selectedCategory"
+          >
+            <option value="">Semua kategori</option>
+            <option
+              v-for="cat in categories"
+              :key="cat.id"
+              :value="cat.id"
+            >
+              {{ cat.name }}
+            </option>
+          </select>
         </div>
 
         <!-- Search Button -->
         <div class="col-auto">
-          <router-link
-            to="/artikel"
-            class="search-btn"
+          <button
+            class="search-btn border-0"
+            @click="goToSearch"
           >
             <i class="bi bi-search"></i>
-          </router-link>
+          </button>
         </div>
 
       </div>
@@ -104,7 +114,7 @@
 
 <script>
 import { ref, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -112,6 +122,10 @@ export default {
     const category = ref({});
     const categories = ref([]);
     const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+
+    const router = useRouter();
+    const searchQuery = ref("");
+    const selectedCategory = ref("");
 
     const fetchCategory = async (slug) => {
       try {
@@ -125,17 +139,22 @@ export default {
       }
     };
 
-    const fecthCategories = async () => {
-      try {
-        const response =  await fetch(`${API_BASE_URL}/api/categories`);
-        if(!response.ok) throw new Error("Failed to fetch categories");
+    const fetchCategories = async () => {
+      const res = await fetch(`${API_BASE_URL}/api/categories`);
+      categories.value = await res.json();
+    };
 
-        const data = await response.json();
-        categories.value = data;
-      } catch (error) {
-        console.error("Error fetching category:", error);
-      }
-    } 
+    const goToSearch = () => {
+      if (!searchQuery.value && !selectedCategory.value) return;
+
+      router.push({
+        path: "/artikel/search",
+        query: {
+          search: searchQuery.value || undefined,
+          category_id: selectedCategory.value || undefined
+        }
+      });
+    };
 
     watch(
       () => route.params.slug,
@@ -146,10 +165,16 @@ export default {
 
     onMounted(() => {
       fetchCategory(route.params.slug);
-      fecthCategories();
+      fetchCategories();
     });
 
-    return { category, categories };
+    return { 
+      category, 
+      categories,
+      searchQuery,       
+      selectedCategory,  
+      goToSearch 
+    };
   },
 };
 </script>
@@ -221,7 +246,7 @@ export default {
   } 
 
   .title-artikel-category-page { 
-    font-size: 32px; 
+    font-size: 25px; 
   } 
 }
 </style>

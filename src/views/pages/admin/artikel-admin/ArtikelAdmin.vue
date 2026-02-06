@@ -171,9 +171,9 @@ export default {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
-        let data = await response.json();
-        datas.value = data;
-        totalPages.value = Math.ceil(data.length / itemsPerPage.value);
+        const result = await response.json();
+        datas.value = result.data;
+        totalPages.value = Math.ceil(result.length / itemsPerPage.value);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

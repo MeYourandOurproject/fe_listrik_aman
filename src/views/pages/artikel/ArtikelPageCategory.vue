@@ -242,7 +242,7 @@ export default {
 
 @media (max-width: 767px) { 
   .artikel-category-heroes{ 
-    height: 32vh; 
+    height: 35vh; 
   } 
 
   .title-artikel-category-page { 

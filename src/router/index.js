@@ -7,6 +7,7 @@ import MainPage from "@/views/pages/main/MainPage.vue";
 import ArtikelPage from "@/views/pages/artikel/ArtikelPage.vue";
 import ArtikelDetailPage from "@/views/pages/artikel/ArtikelDetailPage.vue";
 import ArtikelPageCategory from "@/views/pages/artikel/ArtikelPageCategory.vue";
+import ArtikelSearchPage from "@/views/pages/artikel/ArtikelSearchPage.vue";
 
 import LoginPage from "@/views/pages/admin/LoginPage.vue";
 
@@ -66,8 +67,14 @@ const routes = [
         path: "kategori/:slug",
         name: "ArtikelPageCategory",
         component: ArtikelPageCategory,
-        meta: {title: "ArtikelPageCategory"},
+        meta: { title: "ArtikelPageCategory" },
       },
+      {
+        path: "search",
+        name: "ArtikelSearchPage",
+        component: ArtikelSearchPage,
+        meta: { title: "ArtikelSearchPage" },
+      }
     ],
   },
   { path: "/admin-login", name: LoginPage, component: LoginPage },

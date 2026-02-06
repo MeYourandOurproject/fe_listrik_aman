@@ -17,26 +17,36 @@
             type="text"
             class="form-control"
             placeholder="Cari artikel..."
+            v-model="searchQuery"
+            @keyup.enter="goToSearch"
           />
         </div>
 
         <!-- Filter kategori -->
         <div class="col-4 col-md-2">
-          <input
-            type="text"
+          <select
             class="form-control"
-            placeholder="Filter kategori"
-          />
+            v-model="selectedCategory"
+          >
+            <option value="">Semua kategori</option>
+            <option
+              v-for="cat in categories"
+              :key="cat.id"
+              :value="cat.id"
+            >
+              {{ cat.name }}
+            </option>
+          </select>
         </div>
 
         <!-- Search Button -->
         <div class="col-auto">
-          <router-link
-            to="/artikel"
-            class="search-btn"
+          <button
+            class="search-btn border-0"
+            @click="goToSearch"
           >
             <i class="bi bi-search"></i>
-          </router-link>
+          </button>
         </div>
 
       </div>
@@ -193,12 +203,16 @@
 
 <script>
 import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const articles = ref([]);
     const categories = ref([]);
     const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+    const router = useRouter();
+    const searchQuery = ref("");
+    const selectedCategory = ref("");
 
     const fetchArticles = async () => {
       const res = await fetch(`${API_BASE_URL}/api/artikels`);
@@ -219,6 +233,18 @@ export default {
       return date.toLocaleString("id-ID");
     };
 
+    const goToSearch = () => {
+      if (!searchQuery.value && !selectedCategory.value) return;
+
+      router.push({
+        path: "/artikel/search",
+        query: {
+          search: searchQuery.value || undefined,
+          category_id: selectedCategory.value || undefined
+        }
+      });
+    };
+
     const carouselArticles = computed(() => articles.value.slice(0, 3));
     const sideArticles = computed(() => articles.value.slice(3, 5));
     const otherArticles = computed(() => articles.value.slice(5));
@@ -234,6 +260,9 @@ export default {
       sideArticles,
       otherArticles,
       formatDate,
+      searchQuery,
+      selectedCategory,
+      goToSearch
     };
   },
 };

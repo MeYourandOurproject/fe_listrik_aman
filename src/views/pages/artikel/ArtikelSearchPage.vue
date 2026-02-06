@@ -3,11 +3,6 @@
   <div class="container-fluid artikel-category-heroes d-flex align-items-end justify-content-center text-center py-4">
     <div class="hero-content w-100">
 
-      <!-- TITLE -->
-      <h1 class="title-artikel-category-page fw-bold text-white mb-md-4 mb-3">
-        {{ category.name }} <span class="text-warning">Category</span>
-      </h1>
-
       <!-- SEARCH -->
       <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
 
@@ -44,50 +39,31 @@
   </div>
 
   <!-- MAIN PAGE -->
-  <div class="p-4 pt-4">
-    <div class="row mb-3">
-      <div class="col-12">
-         <div class="category-wrap">
+  <div class="container py-4">
 
-      <!-- Home -->
-      <router-link
-        to="/artikel"
-        class="category-pill"
-        :class="{ active: $route.path === '/artikel' }"
-      >
-        Home
-      </router-link>
+    <h4 class="mb-3">
+      Hasil pencarian untuk:
+      <span class="text-warning">"{{ searchQuery }}"</span>
+    </h4>
 
-      <!-- Category -->
-      <router-link
-        v-for="category in categories"
-        :key="category.slug"
-        :to="`/artikel/kategori/${category.slug}`"
-        class="category-pill"
-        :class="{ active: $route.params.slug === category.slug }"
-      >
-        {{ category.name }}
-      </router-link>
-
+    <div v-if="isLoading" class="text-center py-5">
+      <div class="spinner-border text-warning"></div>
     </div>
-      </div>
+
+    <div v-else-if="articles.length === 0" class="text-center py-5">
+      <p>Tidak ada artikel ditemukan 😢</p>
     </div>
-    <div class="row pt-3">
-      <div
-        class="col-md-4 mb-4"
-        v-for="artikel in category.Artikels"
-        :key="artikel.id"
-      >
+
+    <div v-else class="row row-cols-1 row-cols-md-3 g-3">
+      <div v-for="artikel in articles" :key="artikel.slug" class="col">
         <div class="artikel-card artikel-card-md">
           <img :src="artikel.thumbnail" class="artikel-img" />
 
           <div class="artikel-info p-3 text-white">
             <h6 class="mb-1">{{ artikel.title }}</h6>
-            <!-- <p class="penulis mb-0">
+            <p class="penulis mb-0">
               <i class="bi bi-pen me-1"></i> {{ artikel.author }}
-                    <i class="bi bi-calendar-check me-1 ms-3"></i>
-                    {{ formatDate(artikel.updatedAt) }}
-            </p> -->
+            </p>
           </div>
 
           <router-link
@@ -100,6 +76,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -109,50 +86,50 @@ import { useRoute } from "vue-router";
 export default {
   setup() {
     const route = useRoute();
-    const category = ref({});
-    const categories = ref([]);
+    const articles = ref([]);
+    const isLoading = ref(false);
     const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
-    const fetchCategory = async (slug) => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/categories/${slug}`);
-        if (!response.ok) throw new Error("Failed to fetch data");
+    const searchQuery = ref(route.query.q || "");
 
-        const data = await response.json();
-        category.value = data;
-      } catch (error) {
-        console.error("Error fetching category:", error);
+    const fetchSearchResult = async () => {
+      if (!searchQuery.value) return;
+
+      try {
+        isLoading.value = true;
+
+        const res = await fetch(
+          `${API_BASE_URL}/api/artikels?search=${searchQuery.value}`
+        );
+        const result = await res.json();
+
+        articles.value = result.data;
+      } catch (err) {
+        console.error("Search error:", err);
+      } finally {
+        isLoading.value = false;
       }
     };
 
-    const fecthCategories = async () => {
-      try {
-        const response =  await fetch(`${API_BASE_URL}/api/categories`);
-        if(!response.ok) throw new Error("Failed to fetch categories");
-
-        const data = await response.json();
-        categories.value = data;
-      } catch (error) {
-        console.error("Error fetching category:", error);
-      }
-    } 
+    onMounted(fetchSearchResult);
 
     watch(
-      () => route.params.slug,
-      (newSlug) => {
-        fetchCategory(newSlug);
+      () => route.query.q,
+      (val) => {
+        searchQuery.value = val;
+        fetchSearchResult();
       }
     );
 
-    onMounted(() => {
-      fetchCategory(route.params.slug);
-      fecthCategories();
-    });
-
-    return { category, categories };
-  },
+    return {
+      articles,
+      isLoading,
+      searchQuery
+    };
+  }
 };
 </script>
+
 
 <style>
 .artikel-category-heroes {

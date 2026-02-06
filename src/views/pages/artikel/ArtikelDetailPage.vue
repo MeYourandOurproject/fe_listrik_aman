@@ -128,11 +128,11 @@
 
 <style>
 .artikel-detail-heroes {
-  min-height: 30vh;
+  height: 30vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
-  display: flex;
+  /* display: flex; */
 }
 
 .page {

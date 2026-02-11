@@ -1,15 +1,15 @@
 <template>
   <!-- HERO -->
-  <div class="container-fluid artikel-category-heroes d-flex align-items-end justify-content-center text-center py-4">
+  <div class="container-fluid artikel-home-heroes d-flex align-items-end justify-content-center text-center py-4">
     <div class="hero-content w-100">
 
       <!-- TITLE -->
-      <h1 class="title-artikel-category-page fw-bold text-white mb-md-4 mb-3">
+      <h1 class="title-artikel-home-page fw-bold text-white mb-md-5 mb-3">
         {{ category.name }} <span class="text-warning">Category</span>
       </h1>
 
       <!-- SEARCH -->
-      <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
+      <div class="row justify-content-center g-2 align-items-center mb-md-5 mb-2">
 
         <!-- Input search -->
         <div class="col-6 col-md-4">
@@ -48,7 +48,6 @@
             <i class="bi bi-search"></i>
           </button>
         </div>
-
       </div>
     </div>
   </div>

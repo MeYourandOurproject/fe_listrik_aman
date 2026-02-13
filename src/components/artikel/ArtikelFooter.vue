@@ -1,131 +1,169 @@
 <template>
-  <div class="container-fluid footer-layout py-5">
-    <div
-      class="container-fluid d-flex align-items-center justify-content-start text-start p-4"
-    >
-      <a class="footer-brand" href="#">
-        <img
-          src="../../assets/logobrand.png"
-          alt=""
-          class="footer-logo-brand  mb-3"
-        />
-      </a>
-    </div>
-    <div class="container-fluid">
-      <div class="row d-flex align-items-end justify-content-between">
-        <div class="col text-start mb-0">
-          <div class="row display-6 ms-0 text-white mb-3">
-            Learn Electrical and IoT for Smart Home Applications
+  <footer class="clean-footer">
+    <div class="footer-container">
+
+      <div class="row gy-4">
+
+        <!-- BRAND -->
+        <div class="col-lg-4 col-md-6">
+          <div class="brand-wrapper">
+            <img
+              src="../../assets/logobrand.png"
+              alt="Listrik Aman"
+              class="footer-logo"
+            />
+            <!-- <h5 class="brand-name">Listrik Aman</h5> -->
           </div>
-          <div class="row text-white display-6 fs-6">
-            <div class="col-auto">
-              <ul class="list-unstyled">
-                <li><i class="bi bi-tools me-2"></i>Perbaikan</li>
-                <li><i class="bi bi-stars me-2"></i>Peremajaan</li>
-              </ul>
-            </div>
-            <div class="col-auto">
-              <ul class="list-unstyled">
-                <li><i class="bi bi-plugin me-2"></i>Pemasangan Baru</li>
-                <li><i class="bi bi-arrows-move me-2"></i>Penambahan</li>
-              </ul>
-            </div>
-            <div class="col-auto">
-              <ul class="list-unstyled">
-                <li><i class="bi bi-router-fill me-2"></i>Perangkat IoT</li>
-                <li>
-                  <i class="bi bi-shop me-2"></i>Toko Listrik dan Komponen
-                  Elektronik
-                </li>
-              </ul>
-            </div>
+
+          <p class="brand-desc">
+            Platform edukasi kelistrikan dan IoT untuk Smart Home,
+            menyediakan artikel pembelajaran, ebook, dan toko online
+            komponen listrik & elektronik.
+          </p>
+        </div>
+
+        <!-- LAYANAN -->
+        <div class="col-lg-3 col-md-6">
+          <h6 class="footer-title">Layanan</h6>
+          <ul class="footer-links">
+            <li><router-link to="/artikel">Edukasi</router-link></li>
+            <li><router-link to="/ebook">Ebook</router-link></li>
+            <li><router-link to="/toko">Toko Online</router-link></li>
+          </ul>
+        </div>
+
+        <!-- NAVIGASI -->
+        <div class="col-lg-3 col-md-6">
+          <h6 class="footer-title">Navigasi</h6>
+          <ul class="footer-links">
+            <li><router-link to="/tentang">Tentang</router-link></li>
+            <li><router-link to="/kontak">Kontak</router-link></li>
+            <li><router-link to="/kebijakan">Kebijakan Privasi</router-link></li>
+          </ul>
+        </div>
+
+        <!-- SOCIAL -->
+        <div class="col-lg-2 col-md-6">
+          <h6 class="footer-title">Terhubung</h6>
+          <div class="social-icons">
+            <a href="https://wa.me/6285924333088" target="_blank">
+              <i class="bi bi-whatsapp"></i>
+            </a>
+            <a href="https://instagram.com/rulyabdulrasyid" target="_blank">
+              <i class="bi bi-instagram"></i>
+            </a>
+            <a href="https://youtube.com/@rulyabdulrasyid2693" target="_blank">
+              <i class="bi bi-youtube"></i>
+            </a>
           </div>
         </div>
-        <div class="col-4 text-end text-white align-items-end mb-2">
-          Contact <br />and Follow us at.
-        </div>
+
       </div>
-      <div class="row border-dot"></div>
-      <div
-        class="row display-6 fs-6 mt-3 text-white justify-content-between"
-      >
-        <div class="col text-start">2025 - All Right Reserved @ Copyright</div>
-        
-        <div class="col text-end">
-          <div class="row fs-5 d-flex justify-content-end">
-            <!-- <div class="col text-start">Contact and Follow us at.</div> -->
-            <div class="col-auto">
-              <a
-                href="https://wa.me/6285924333088"
-                class="text-decoration-none icon-hover"
-                ><i class="bi bi-whatsapp text-white fs-3"></i
-              ></a>
-            </div>
-            <div class="col-auto">
-              <a
-                href="https://www.instagram.com/rulyabdulrasyid?utm_source=qr&igsh=MTR4YW5veThzd3B0cw=="
-                class="text-decoration-none icon-hover"
-                ><i class="bi bi-instagram text-white fs-3"></i
-              ></a>
-            </div>
-            <div class="col-auto">
-              <a
-                href="https://youtube.com/@rulyabdulrasyid2693?si=Fo-g9cUNUsTeV1gz"
-                class="text-decoration-none icon-hover"
-                ><i class="bi bi-youtube text-white fs-3"></i
-              ></a>
-            </div>
-          </div>
-        </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 Listrik Aman. All rights reserved.</span>
       </div>
+
     </div>
-  </div>
+  </footer>
 </template>
 
 <style>
-.footer-layout {
-  /* background-color: rgb(73, 73, 73); */
-  min-height: 40vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)),
-    url("../../assets/hero-img.jpg");
-  background-size: cover;
+.clean-footer {
+  background: #ffffff;
+  padding: 60px 0 30px;
+  border-top: 1px solid #eaeaea;
 }
 
-.footer-buttom {
-  background-color: black;
+.footer-container {
+  max-width: 1320px;
+  margin: auto;
+  padding: 0 20px;
 }
 
-.footer-brand img {
-  color: #fff !important; /* Teks Putih */
-  filter: brightness(0) invert(1); /* Logo Putih */
+.brand-name {
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #111;
 }
 
-.footer-logo-brand {
-  height: 70px;
-  transition: filter 0.5s ease-in-out;
+.brand-desc {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
 }
 
-.border-dot {
-  border-top: 1px solid #ffffff; /* Warna dan ketebalan bisa disesuaikan */
+.footer-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #111;
 }
 
-.icon-hover {
-  display: inline-block;
-  transition: transform 0.3s ease, rotate 0.2s ease;
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.icon-hover:hover {
-  transform: scale(1.2) rotate(-5deg); /* Zoom dan goyang */
+.footer-links li {
+  margin-bottom: 10px;
 }
 
-@media (max-width: 767px) { 
-  .footer-logo-brand{
-    height: 50px;
-    transition: filter 0.5s ease-in-out;
+.footer-links a {
+  font-size: 14px;
+  color: #555;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #000;
+}
+
+.social-icons a {
+  font-size: 18px;
+  margin-right: 12px;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.social-icons a:hover {
+  color: #000;
+}
+
+.footer-bottom {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  font-size: 13px;
+  color: #888;
+  text-align: center;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.footer-logo {
+  height: 45px;
+  width: auto;
+}
+
+.brand-name {
+  font-weight: 600;
+  margin: 0;
+  color: #111;
+}
+
+@media (max-width: 768px) {
+  .clean-footer {
+    padding: 40px 0 20px;
   }
-  .footer-layout {
-    min-height: 10vh;
-  }
-  
 }
 </style>

@@ -1,53 +1,54 @@
 <template>
   <!-- HERO -->
   <div class="container-fluid artikel-search-heroes d-flex align-items-end justify-content-center text-center py-4">
-    <div class="hero-content w-100">
+    <div class="container-xxl">
+      <div class="hero-content w-100">
+        <!-- SEARCH -->
+        <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
+          <!-- Input search -->
+          <div class="col-6 col-md-4">
+            <input
+              v-model="searchInput"
+              @keyup.enter="goToSearch"
+              type="text"
+              class="form-control"
+              placeholder="Cari artikel..."
+            />
+          </div>
 
-      <!-- SEARCH -->
-      <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
-        <!-- Input search -->
-        <div class="col-6 col-md-4">
-          <input
-            v-model="searchInput"
-            @keyup.enter="goToSearch"
-            type="text"
-            class="form-control"
-            placeholder="Cari artikel..."
-          />
-        </div>
-
-        <!-- Filter kategori -->
-        <div class="col-4 col-md-2">
-          <select
-            class="form-select"
-            v-model="selectedCategory"
-          >
-            <option value="">Semua kategori</option>
-            <option
-              v-for="cat in categories"
-              :key="cat.id"
-              :value="cat.id"
+          <!-- Filter kategori -->
+          <div class="col-4 col-md-2">
+            <select
+              class="form-select"
+              v-model="selectedCategory"
             >
-              {{ cat.name }}
-            </option>
-          </select>
-        </div>
+              <option value="">Semua kategori</option>
+              <option
+                v-for="cat in categories"
+                :key="cat.id"
+                :value="cat.id"
+              >
+                {{ cat.name }}
+              </option>
+            </select>
+          </div>
 
-        <!-- Search Button -->
-        <div class="col-auto">
-          <button
-            class="search-btn border-0"
-            @click="goToSearch"
-          >
-            <i class="bi bi-search"></i>
-          </button>
+          <!-- Search Button -->
+          <div class="col-auto">
+            <button
+              class="search-btn border-0"
+              @click="goToSearch"
+            >
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- MAIN PAGE -->
-  <div class="container py-4">
+  <div class="container-xxl py-4">
 
     <h4 class="mb-3">
       Hasil pencarian untuk:

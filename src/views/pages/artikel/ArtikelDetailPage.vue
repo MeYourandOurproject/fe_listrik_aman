@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid artikel-detail-heroes"></div>
-  <div class="container-fluid page">
+  <div class="container-xxl page">
     <div class="pt-5 pb-5">
       <div class="row d-flex flex-column flex-md-row">
         <!-- Artikel Utama -->
@@ -128,7 +128,7 @@
 
 <style>
 .artikel-detail-heroes {
-  height: 30vh;
+  min-height: 250px;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
@@ -253,7 +253,7 @@ export default {
 
     const fetchCategoryArtikel = async (id) => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/categories/category/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/categories/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

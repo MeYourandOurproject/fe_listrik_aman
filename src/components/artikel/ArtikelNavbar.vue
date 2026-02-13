@@ -6,7 +6,7 @@
       navbarScrolled ? 'bg-white shadow-sm' : 'bg-light',
     ]"
   >
-    <div :class="['container', navbarScrolled ? 'my-2' : 'my-3']">
+    <div :class="['container-xxl', navbarScrolled ? 'my-2' : 'my-3']">
       <div class="row align-items-center">
         <!-- Logo Brand -->
         <div class="col-2 text-center">

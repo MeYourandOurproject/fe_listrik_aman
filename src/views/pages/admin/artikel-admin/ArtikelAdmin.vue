@@ -43,7 +43,7 @@
   <div class="container mb-5">
     <div>
       <table class="table table-striped table-hover">
-        <thead>
+        <thead class="text-center">
           <tr>
             <th>No</th>
             <th>Title</th>
@@ -58,23 +58,25 @@
               ></i>
             </th>
             <th>Action</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in paginatedData" :key="item.id">
             <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
             <td class="text-start align-items-center">{{ item.title }}</td>
-            <td class="text-start">{{ item.author }}</td>
+            <td class="text-center">{{ item.author }}</td>
             <td>{{ formatDate(item.createdAt) }}</td>
             <td>
               <div
                 class="d-flex gap-2 align-items-center justify-content-center"
               >
-                <router-link :to="`/admin/artikel/read/${item.slug}`">
-                  <div class="btn btn-info pt-1 pb-1 m-0 p-0">
-                    <span><i class="bi bi-eye p-2 rounded-2"></i></span>
-                  </div>
-                </router-link>
+                <a
+                  :href="`/admin/artikel/read/${item.slug}`"
+                  class="btn btn-info pt-1 pb-1 m-0 p-0"
+                >
+                  <i class="bi bi-eye p-2 rounded-2"></i>
+                </a>
                 <router-link :to="`/admin/artikel/edit/${item.slug}`">
                   <div class="btn btn-warning pt-1 pb-1 m-0 p-0">
                     <span
@@ -89,6 +91,14 @@
                   <span><i class="bi bi-x-circle p-2 rounded-2"></i></span>
                 </button>
               </div>
+            </td>
+            <td class="text-center">
+              <span
+                class="badge text-uppercase"
+                :class="getStatusClass(item.status)"
+              >
+                {{ item.status }}
+              </span>
             </td>
           </tr>
         </tbody>
@@ -163,10 +173,18 @@ export default {
 
     const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
 
+    const token = localStorage.getItem("token")
+
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/artikels`
+          `${API_BASE_URL}/api/artikels/admin`, 
+          {
+            method:"GET", 
+            headers:{
+              Authorization:`Bearer ${token}`,
+            }
+          }
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -188,7 +206,7 @@ export default {
       if (!confirmation) return;
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/artikels/${id}`,
+          `${API_BASE_URL}/api/artikels/admin/${id}`,
           {
             method: "DELETE",
             headers: {
@@ -275,6 +293,14 @@ export default {
       sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
     };
 
+    const getStatusClass = (status) => {
+      if (status === "idea") return "bg-primary py-2 px-4"
+      if (status === "draft") return "bg-warning py-2 px-4"
+      if (status === "publish") return "bg-success py-2 px-4"
+      return "bg-secondary"
+    }
+
+
     onMounted(() => {
       fetchData();
     });
@@ -300,6 +326,7 @@ export default {
       deleteData,
       showSuccessAlert,
       showErrorAlert,
+      getStatusClass 
     };
   },
 };

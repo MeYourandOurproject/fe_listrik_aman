@@ -54,7 +54,7 @@
       Hasil pencarian untuk:
       <span v-if="searchQuery" class="text-warning">
         {{ searchQuery }}
-      </span>
+      </span> 
     </h4>
 
     <p class="text-muted mb-4" v-if="total > 0">

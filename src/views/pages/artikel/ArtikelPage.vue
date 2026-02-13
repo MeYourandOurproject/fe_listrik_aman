@@ -1,59 +1,61 @@
 <template>
   <!-- HERO -->
   <div class="container-fluid artikel-home-heroes d-flex align-items-end justify-content-center text-center py-4">
-    <div class="hero-content w-100">
+    <div class="container-xxl">
+      <div class="hero-content w-100">
 
-      <!-- TITLE -->
-      <h1 class="title-artikel-home-page fw-bold text-white mb-md-5 mb-3">
-        Learn Electrical and IoT for <br />Smart Home Applications
-      </h1>
+        <!-- TITLE -->
+        <h1 class="title-artikel-home-page fw-bold text-white mb-md-5 mb-3">
+          Learn Electrical and IoT for <br />Smart Home Applications
+        </h1>
 
-      <!-- SEARCH -->
-      <div class="row justify-content-center g-2 align-items-center mb-md-5 mb-2">
+        <!-- SEARCH -->
+        <div class="row justify-content-center g-2 align-items-center mb-md-5 mb-2">
 
-        <!-- Input search -->
-        <div class="col-6 col-md-4">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Cari artikel..."
-            v-model="searchQuery"
-            @keyup.enter="goToSearch"
-          />
-        </div>
+          <!-- Input search -->
+          <div class="col-6 col-md-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Cari artikel..."
+              v-model="searchQuery"
+              @keyup.enter="goToSearch"
+            />
+          </div>
 
-        <!-- Filter kategori -->
-        <div class="col-4 col-md-2">
-          <select
-            class="form-select"
-            v-model="selectedCategory"
-          >
-            <option value="">Semua kategori</option>
-            <option
-              v-for="cat in categories"
-              :key="cat.id"
-              :value="cat.id"
+          <!-- Filter kategori -->
+          <div class="col-4 col-md-2">
+            <select
+              class="form-select"
+              v-model="selectedCategory"
             >
-              {{ cat.name }}
-            </option>
-          </select>
-        </div>
+              <option value="">Semua kategori</option>
+              <option
+                v-for="cat in categories"
+                :key="cat.id"
+                :value="cat.id"
+              >
+                {{ cat.name }}
+              </option>
+            </select>
+          </div>
 
-        <!-- Search Button -->
-        <div class="col-auto">
-          <button
-            class="search-btn border-0"
-            @click="goToSearch"
-          >
-            <i class="bi bi-search"></i>
-          </button>
+          <!-- Search Button -->
+          <div class="col-auto">
+            <button
+              class="search-btn border-0"
+              @click="goToSearch"
+            >
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- MAIN PAGE -->
-  <div class="pt-4 p-4">
+  <div class="container-xxl pt-4 p-4">
     <div class="row mb-3">
       <div class="col-12">
         <div class="category-wrap">

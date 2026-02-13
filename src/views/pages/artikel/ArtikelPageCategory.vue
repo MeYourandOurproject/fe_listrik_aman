@@ -1,59 +1,62 @@
 <template>
   <!-- HERO -->
-  <div class="container-fluid artikel-home-heroes d-flex align-items-end justify-content-center text-center py-4">
-    <div class="hero-content w-100">
+  <div class="container-fluid artikel-category-heroes d-flex align-items-end justify-content-center text-center py-4">
+    <div class="container-xxl">
+      <div class="hero-content w-100">
 
-      <!-- TITLE -->
-      <h1 class="title-artikel-home-page fw-bold text-white mb-md-5 mb-3">
-        {{ category.name }} <span class="text-warning">Category</span>
-      </h1>
+        <!-- TITLE -->
+        <h1 class="title-artikel-category-page fw-bold text-white mb-md-4 mb-3">
+          {{ category.name }} <span class="text-warning">Category</span>
+        </h1>
 
-      <!-- SEARCH -->
-      <div class="row justify-content-center g-2 align-items-center mb-md-5 mb-2">
+        <!-- SEARCH -->
+        <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
 
-        <!-- Input search -->
-        <div class="col-6 col-md-4">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Cari artikel..."
-            v-model="searchQuery"
-            @keyup.enter="goToSearch"
-          />
-        </div>
+          <!-- Input search -->
+          <div class="col-6 col-md-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Cari artikel..."
+              v-model="searchQuery"
+              @keyup.enter="goToSearch"
+            />
+          </div>
 
-        <!-- Filter kategori -->
-        <div class="col-4 col-md-2">
-          <select
-            class="form-select"
-            v-model="selectedCategory"
-          >
-            <option value="">Semua kategori</option>
-            <option
-              v-for="cat in categories"
-              :key="cat.id"
-              :value="cat.id"
+          <!-- Filter kategori -->
+          <div class="col-4 col-md-2">
+            <select
+              class="form-select"
+              v-model="selectedCategory"
             >
-              {{ cat.name }}
-            </option>
-          </select>
-        </div>
+              <option value="">Semua kategori</option>
+              <option
+                v-for="cat in categories"
+                :key="cat.id"
+                :value="cat.id"
+              >
+                {{ cat.name }}
+              </option>
+            </select>
+          </div>
 
-        <!-- Search Button -->
-        <div class="col-auto">
-          <button
-            class="search-btn border-0"
-            @click="goToSearch"
-          >
-            <i class="bi bi-search"></i>
-          </button>
+          <!-- Search Button -->
+          <div class="col-auto">
+            <button
+              class="search-btn border-0"
+              @click="goToSearch"
+            >
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 
   <!-- MAIN PAGE -->
-  <div class="p-4 pt-4">
+  <div class="container-xxl p-4 pt-4">
     <div class="row mb-3">
       <div class="col-12">
          <div class="category-wrap">
@@ -128,7 +131,7 @@ export default {
 
     const fetchCategory = async (slug) => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/categories/${slug}`);
+        const response = await fetch(`${API_BASE_URL}/api/categories/category/${slug}`);
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const data = await response.json();
@@ -180,7 +183,7 @@ export default {
 
 <style>
 .artikel-category-heroes {
-  height: 50vh;
+  height: 350px;
   background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
     url("../../../assets/hero-img.jpg");
   background-size: cover;
@@ -227,17 +230,6 @@ export default {
   font-weight: 600;
 }
 
-/* MOBILE OPTIMIZATION */
-@media (max-width: 576px) {
-  .category-wrap {
-    justify-content: flex-center; /* kiri di HP */
-  }
-
-  .category-pill {
-    font-size: 13px;
-    padding: 7px 14px;
-  }
-}
 
 @media (max-width: 767px) { 
   .artikel-category-heroes{ 

@@ -28,20 +28,19 @@
 
         <div class="row mt-3 mb-3">
           <div class="col-md-4">
-            <label class="form-label">Preview</label>
-            <div v-for="(img, index) in previewImages" :key="index">
-                <img :src="img" class="img-thumbnail" />
+            <label class="form-label">Preview Thumbnail</label>
+            <div v-if="previewImage">
+              <img :src="previewImage" class="img-thumbnail" />
             </div>
           </div>
           <div class="col-md-4">
             <label class="form-label">Thumbnail</label>
             <input
-              ref="fileInput"
+              ref="thumbnailInput"
               type="file"
               class="form-control"
-              multiple
               accept="image/*"
-              @change="handleFileChange"
+              @change="handleThumbnailChange"
             />
           </div>
           <div class="col-md-4">
@@ -50,14 +49,14 @@
               <button class="btn btn-secondary dropdown-toggle text-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ selectedCategoryName || "Pilih Kategori" }}
               </button>
-              <ul class="dropdown-menu">
-                <li v-for="(category, index) in categories" :key="index">
-                  <a 
-                    class="dropdown-item" 
-                    href="#" 
+              <ul class="dropdown-menu w-100">
+                <li v-for="category in categories" :key="category.id">
+                  <a
+                    class="dropdown-item"
+                    href="#"
                     @click.prevent="selectCategory(category)"
                   >
-                    {{category.name}}
+                    {{ category.name }}
                   </a>
                 </li>
               </ul>
@@ -128,116 +127,107 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { useRouter } from "vue-router";
 
-const showSuccessAlert = ref(false);
-const showErrorAlert = ref(false);
 const router = useRouter();
+const token = localStorage.getItem("token");
+const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 const form = ref({
   title: "",
   author: "",
   content: "",
+  category_id: null,
 });
 
-const token = localStorage.getItem("token");
-
-const fileInput = ref(null);
-const imageInput = ref(null);
-const previewImages = ref([]);
-const quillEditor = ref(null);
-const files = ref([]);
 const categories = ref([]);
-
 const selectedCategoryName = ref(null);
+
+const previewImage = ref(null);
+const thumbnailFile = ref(null);
+const contentImages = ref([]);
+
+const quillEditor = ref(null);
+const imageInput = ref(null);
+const thumbnailInput = ref(null);
+
+const showSuccessAlert = ref(false);
+const showErrorAlert = ref(false);
+
+/* =========================
+   CATEGORY
+========================= */
+
+const fetchCategory = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/categories/admin`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+    categories.value = data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const selectCategory = (category) => {
   form.value.category_id = category.id;
   selectedCategoryName.value = category.name;
-}
-
-// 🟢 Fungsi untuk menghandle gambar unggahan di form (bukan di konten)
-const handleFileChange = () => {
-  const inputFiles = fileInput.value.files;
-  previewImages.value = Array.from(inputFiles).map((file) =>
-    URL.createObjectURL(file)
-  );
-  files.value = [...files.value, ...inputFiles];
 };
 
-const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+/* =========================
+   THUMBNAIL
+========================= */
 
-const fetchCategory = async () => {
-  try{
-    const response = await fetch(`${API_BASE_URL}/api/categories`);
-    if(!response.ok) throw new Error('Failed to fetch data');
-    const data = await response.json();
-    categories.value = data;
+const handleThumbnailChange = () => {
+  const file = thumbnailInput.value.files[0];
+  if (!file) return;
 
-  } catch (error){
-    console.error("Error fetching article:", error);
-  } 
-}
+  thumbnailFile.value = file;
+  previewImage.value = URL.createObjectURL(file);
+};
 
-// 🟢 Fungsi untuk memasukkan gambar ke konten Quill
+/* =========================
+   INSERT IMAGE TO QUILL
+========================= */
+
 const insertImage = async () => {
-  const editorInstance = quillEditor.value?.__quill;
   const file = imageInput.value.files[0];
+  if (!file) return;
 
-  if (file && editorInstance) {
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+  const formData = new FormData();
+  formData.append("image", file);
 
-      if (response.ok) {
-        const data = await response.json();
-        const imageUrl = data.url;
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/upload`, {
+      method: "POST",
+      body: formData,
+    });
 
-        const range = editorInstance.getSelection();
-        editorInstance.insertEmbed(range.index, "image", imageUrl);
-        files.value = [...files.value, file];
-      } else {
-        console.error("Gagal mengunggah gambar.");
-        alert("Gagal mengunggah gambar.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Terjadi kesalahan saat mengunggah gambar.");
-    } finally {
-      imageInput.value.value = null;
-    }
+    const data = await response.json();
+    const imageUrl = data.url;
+
+    const editor = quillEditor.value.__quill;
+    const range = editor.getSelection(true);
+    editor.insertEmbed(range.index, "image", imageUrl);
+
+    contentImages.value.push(file);
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    imageInput.value.value = null;
   }
 };
 
-// 🟢 Fungsi untuk menghapus gambar dari Quill Editor
-const deleteImage = (imageNode) => {
-  const editorInstance = quillEditor.value?.__quill;
-  if (editorInstance && imageNode) {
-    const index = editorInstance.getIndex(Quill.find(imageNode));
-    editorInstance.deleteText(index, 1);
-  }
-};
+/* =========================
+   SUBMIT
+========================= */
 
-// 🟢 Tambahkan event listener untuk gambar yang diklik
-const handleImageClick = (event) => {
-  if (event.target.tagName === "IMG") {
-    const confirmed = confirm("Hapus gambar ini?");
-    if (confirmed) {
-      deleteImage(event.target);
-    }
-  }
-};
-
-// 🟢 Fungsi untuk submit form
 const handleSubmit = async () => {
-  const editorInstance = quillEditor.value?.__quill;
-  const content = editorInstance ? editorInstance.root.innerHTML : "";
-  form.value.content = content;
+  const editor = quillEditor.value.__quill;
+  form.value.content = editor.root.innerHTML;
 
   const formData = new FormData();
   formData.append("title", form.value.title);
@@ -245,15 +235,17 @@ const handleSubmit = async () => {
   formData.append("content", form.value.content);
   formData.append("category_id", form.value.category_id);
 
-  files.value.forEach((file) => {
+  if (thumbnailFile.value) {
+    formData.append("thumbnail", thumbnailFile.value);
+  }
+
+  contentImages.value.forEach((file) => {
     formData.append("picture", file);
   });
 
-  const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
-
   try {
     const response = await fetch(
-      `${API_BASE_URL}/api/artikels/create`,
+      `${API_BASE_URL}/api/artikels/admin`,
       {
         method: "POST",
         body: formData,
@@ -268,50 +260,40 @@ const handleSubmit = async () => {
       showErrorAlert.value = false;
 
       setTimeout(() => {
-        showSuccessAlert.value = false;
-        showErrorAlert.value = false;
         router.push("/admin/artikel");
-      }, 3000);
+      }, 2000);
     } else {
       showSuccessAlert.value = false;
       showErrorAlert.value = true;
-
-      setTimeout(() => {
-        showSuccessAlert.value = false;
-        showErrorAlert.value = false;
-      }, 2000);
     }
   } catch (error) {
     console.error(error);
-    alert("Terjadi kesalahan saat membuat artikel.");
+    showErrorAlert.value = true;
   }
 };
 
+/* =========================
+   MOUNT
+========================= */
+
 onMounted(() => {
   fetchCategory();
-  if (quillEditor.value) {
-    const editor = new Quill(quillEditor.value, {
-      theme: "snow",
-      placeholder: "Tulis konten artikel di sini...",
-    });
-    quillEditor.value.__quill = editor;
 
-    // 🟢 Tambah event listener pada Quill Editor untuk klik gambar
-    quillEditor.value.addEventListener("click", handleImageClick);
-  }
+  const editor = new Quill(quillEditor.value, {
+    theme: "snow",
+    placeholder: "Tulis konten artikel di sini...",
+  });
+
+  quillEditor.value.__quill = editor;
 });
 </script>
 
 <style>
 .ql-container {
-  min-height: 100px;
+  min-height: 200px;
 }
 
-.addimagetocontent {
-  padding-top: 100px;
-}
-
-.form-label{
+.form-label {
   font-weight: bold;
 }
 </style>

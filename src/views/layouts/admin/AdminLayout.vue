@@ -3,7 +3,9 @@
     <AdminSidebar />
     <div class="main-content">
       <AdminNavbar />
-      <router-view />
+      <div class="page-content">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -24,10 +26,19 @@ export default {
 <style>
 .admin-layout {
   display: flex;
+  min-height: 100vh;
 }
 
 .main-content {
-  flex-grow: 1;
-  /* padding: 20px; */
+  flex: 1;
+  min-width: 0; /* 🔥 penting supaya tidak dorong sidebar */
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  padding: 20px;
+  overflow-x: hidden;
 }
 </style>

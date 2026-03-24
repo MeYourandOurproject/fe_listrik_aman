@@ -9,11 +9,11 @@
       >
         <!-- TEXT -->
         <div class="col-12 col-md-8">
-          <h1 class="hero-title fw-bold text-white shadow-text text-center text-md-start">
+          <div class="home-title fw-bold text-white shadow-text text-center text-md-start">
             Tempatnya Ngulik <span class="text-warning">Listrik</span>,
             <span class="text-warning">IoT</span>, &
             <span class="text-warning">Web Development</span>
-          </h1>
+          </div>
 
           <p class="hero-subtitle fs-4 text-white shadow-text mt-3">
             Berbagi materi, tutorial, dan pengalaman praktik dari seorang guru
@@ -307,7 +307,7 @@
 /* =========================
    TEXT
 ========================= */
-.hero-title {
+.home-title {
   font-size: 4rem;
   line-height: 1.2;
   letter-spacing: 1px;
@@ -400,7 +400,7 @@
     text-align: center;
   }
 
-  .hero-title {
+  .home-title {
     font-size: 2.2rem;
     line-height: 1.3;
     text-align: center;

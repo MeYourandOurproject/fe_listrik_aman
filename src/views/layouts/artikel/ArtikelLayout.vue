@@ -7,7 +7,7 @@
     <!-- FLOATING WHATSAPP -->
     <div class="d-flex flex-wrap d-none d-lg-block">
       <div class="wa-float">
-        <a href="https://wa.me/6285802956931" target="_blank" rel="noopener noreferrer">
+        <a href="https://wa.me/6287708972304" target="_blank" rel="noopener noreferrer">
           <i class="bi bi-whatsapp"></i>
         </a>
         <a href="https://www.instagram.com/rulyabdulrasyid/" target="_blank" rel="noopener noreferrer">

@@ -4,10 +4,19 @@ import MainLayout from "@/views/layouts/main/MainLayout.vue";
 import ArtikelLayout from "@/views/layouts/artikel/ArtikelLayout.vue";
 
 import MainPage from "@/views/pages/main/MainPage.vue";
+
+import HomePage from "@/views/pages/home/HomePage.vue";
+
 import ArtikelPage from "@/views/pages/artikel/ArtikelPage.vue";
 import ArtikelDetailPage from "@/views/pages/artikel/ArtikelDetailPage.vue";
 import ArtikelPageCategory from "@/views/pages/artikel/ArtikelPageCategory.vue";
 import ArtikelSearchPage from "@/views/pages/artikel/ArtikelSearchPage.vue";
+
+import ProjectPage from "@/views/pages/project/ProjectPage.vue";
+
+import EbookPage from "@/views/pages/ebook/EbookPage.vue";
+
+import AboutPage from "@/views/pages/about/AboutPage.vue";
 
 import LoginPage from "@/views/pages/admin/LoginPage.vue";
 
@@ -20,7 +29,6 @@ import CreateArtikel from "@/views/pages/admin/artikel-admin/CreateArtikel.vue";
 import EditArtikel from "@/views/pages/admin/artikel-admin/EditArtikel.vue";
 import ReadArtikel from "@/views/pages/admin/artikel-admin/ReadArtikel.vue";
 
-
 const routes = [
   { path: "/bio", component: BioPage, meta: { title: "Bio" } },
   {
@@ -30,7 +38,7 @@ const routes = [
       {
         path: "",
         name: "Home",
-        component: ArtikelPage,
+        component: HomePage,
         meta: { title: "Home" },
       },
     ],
@@ -74,7 +82,43 @@ const routes = [
         name: "ArtikelSearchPage",
         component: ArtikelSearchPage,
         meta: { title: "ArtikelSearchPage" },
-      }
+      },
+    ],
+  },
+  {
+    path: "/project",
+    component: ArtikelLayout,
+    children: [
+      {
+        path: "",
+        name: "Project",
+        component: ProjectPage,
+        meta: { title: "Project" },
+      },
+    ],
+  },
+  {
+    path: "/e-book",
+    component: ArtikelLayout,
+    children: [
+      {
+        path: "",
+        name: "Ebook",
+        component: EbookPage,
+        meta: { title: "Ebook" },
+      },
+    ],
+  },
+  {
+    path: "/about",
+    component: ArtikelLayout,
+    children: [
+      {
+        path: "",
+        name: "About",
+        component: AboutPage,
+        meta: { title: "About" },
+      },
     ],
   },
   { path: "/admin-login", name: LoginPage, component: LoginPage },
@@ -124,6 +168,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+
+  scrollBehavior(to, from, savedPosition) {
+    // kalau pakai tombol back browser
+    if (savedPosition) {
+      return savedPosition;
+    }
+    // setiap pindah halaman scroll ke atas
+    return { top: 0 };
+  },
 });
 
 export default router;

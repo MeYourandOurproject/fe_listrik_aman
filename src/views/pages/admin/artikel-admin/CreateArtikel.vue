@@ -68,7 +68,7 @@
             <label class="form-label">Konten</label>
             <div ref="quillEditor" class="border"></div>
           </div>
-          <div class="col-md-12 addimagetocontent">
+          <div class="col-md-12 addimagetocontent mt-5 pt-5">
             <label class="form-label">Tambahkan Gambar ke Konten</label>
             <input
               ref="imageInput"

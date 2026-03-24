@@ -1,55 +1,30 @@
 <template>
   <!-- HERO -->
-  <div class="container-fluid artikel-category-heroes d-flex align-items-end justify-content-center text-center py-4">
-    <div class="container-xxl">
+  <div
+    class="container-fluid artikel-category-heroes d-flex align-items-end justify-content-start text-start py-4"
+  >
+    <div class="container-xxl ">
       <div class="hero-content w-100">
-
-        <!-- TITLE -->
-        <h1 class="title-artikel-category-page fw-bold text-white mb-md-4 mb-3">
-          {{ category.name }} <span class="text-warning">Category</span>
-        </h1>
-
-        <!-- SEARCH -->
-        <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
-
-          <!-- Input search -->
-          <div class="col-6 col-md-4">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Cari artikel..."
-              v-model="searchQuery"
-              @keyup.enter="goToSearch"
+        <div class="row">
+          <div class="col-12 col-lg-8 d-flex align-items-center justify-content-start">
+            <!-- TITLE -->
+            <h1
+              class="title-artikel-category-page fw-bold text-white mb-md-4 mb-3"
+            >
+              <span class="text-warning"
+                >Category : </span>{{ category.name }} 
+              
+            </h1>
+          </div>
+          <div
+            class="col-4 col-md-4 text-center d-flex align-items-center justify-content-center d-none d-lg-block"
+          >
+            <img
+              src="../../../assets/guru_ngulik.png"
+              alt=""
+              style="height: 200px"
             />
           </div>
-
-          <!-- Filter kategori -->
-          <div class="col-4 col-md-2">
-            <select
-              class="form-select"
-              v-model="selectedCategory"
-            >
-              <option value="">Semua kategori</option>
-              <option
-                v-for="cat in categories"
-                :key="cat.id"
-                :value="cat.id"
-              >
-                {{ cat.name }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Search Button -->
-          <div class="col-auto">
-            <button
-              class="search-btn border-0"
-              @click="goToSearch"
-            >
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-
         </div>
       </div>
     </div>
@@ -59,29 +34,27 @@
   <div class="container-xxl p-4 pt-4">
     <div class="row mb-3">
       <div class="col-12">
-         <div class="category-wrap">
+        <div class="category-wrap mt-3">
+          <!-- Home -->
+          <router-link
+            to="/artikel"
+            class="category-pill"
+            :class="{ active: $route.path === '/artikel' }"
+          >
+            All Article
+          </router-link>
 
-      <!-- Home -->
-      <router-link
-        to="/artikel"
-        class="category-pill"
-        :class="{ active: $route.path === '/artikel' }"
-      >
-        Home
-      </router-link>
-
-      <!-- Category -->
-      <router-link
-        v-for="category in categories"
-        :key="category.slug"
-        :to="`/artikel/kategori/${category.slug}`"
-        class="category-pill"
-        :class="{ active: $route.params.slug === category.slug }"
-      >
-        {{ category.name }}
-      </router-link>
-
-    </div>
+          <!-- Category -->
+          <router-link
+            v-for="category in categories"
+            :key="category.slug"
+            :to="`/artikel/kategori/${category.slug}`"
+            class="category-pill"
+            :class="{ active: $route.params.slug === category.slug }"
+          >
+            {{ category.name }}
+          </router-link>
+        </div>
       </div>
     </div>
     <div class="row pt-3">
@@ -102,10 +75,7 @@
             </p> -->
           </div>
 
-          <router-link
-            :to="`/artikel/${artikel.slug}`"
-            class="artikel-overlay"
-          >
+          <router-link :to="`/artikel/${artikel.slug}`" class="artikel-overlay">
             <span class="see-more-text">See More</span>
           </router-link>
         </div>
@@ -131,7 +101,9 @@ export default {
 
     const fetchCategory = async (slug) => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/categories/category/${slug}`);
+        const response = await fetch(
+          `${API_BASE_URL}/api/categories/category/${slug}`,
+        );
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const data = await response.json();
@@ -153,8 +125,8 @@ export default {
         path: "/artikel/search",
         query: {
           search: searchQuery.value || undefined,
-          category_id: selectedCategory.value || undefined
-        }
+          category_id: selectedCategory.value || undefined,
+        },
       });
     };
 
@@ -162,7 +134,7 @@ export default {
       () => route.params.slug,
       (newSlug) => {
         fetchCategory(newSlug);
-      }
+      },
     );
 
     onMounted(() => {
@@ -170,12 +142,12 @@ export default {
       fetchCategories();
     });
 
-    return { 
-      category, 
+    return {
+      category,
       categories,
-      searchQuery,       
-      selectedCategory,  
-      goToSearch 
+      searchQuery,
+      selectedCategory,
+      goToSearch,
     };
   },
 };
@@ -183,61 +155,41 @@ export default {
 
 <style>
 .artikel-category-heroes {
-  height: 350px;
-  background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.8)),
-    url("../../../assets/hero-img.jpg");
+  height: 320px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)),
+    url("../../../assets/img_hero_all.PNG");
   background-size: cover;
-  /* display: flex; */
+  background-position: bottom;
+  position: relative;
+  z-index: 2;
 }
 
 .title-artikel-category-page {
   font-size: 50px;
 }
 
+.title-artikel-category-page .container-xxl {
+  position: relative;
+  z-index: 2;
+}
+
 /* CATEGORY WRAPPER */
 .category-wrap {
   display: flex;
-  flex-wrap: wrap;           /* 🔥 turun ke baris bawah */
+  flex-wrap: wrap; /* 🔥 turun ke baris bawah */
   gap: 10px;
-  justify-content: center;   /* tengah desktop */
+  justify-content: center; /* tengah desktop */
 }
 
 /* PILL STYLE */
-.category-pill {
-  padding: 8px 18px;
-  border-radius: 50px;
-  border: 1px solid #ccc;
-  color: #333;
-  font-size: 14px;
-  white-space: nowrap;
-  text-decoration: none;
-  background: #fff;
-  transition: all 0.25s ease;
-}
 
-/* Hover */
-.category-pill:hover {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
+@media (max-width: 767px) {
+  .artikel-category-heroes {
+    height: 30vh;
+  }
 
-/* Active */
-.category-pill.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  font-weight: 600;
-}
-
-
-@media (max-width: 767px) { 
-  .artikel-category-heroes{ 
-    height: 35vh; 
-  } 
-
-  .title-artikel-category-page { 
-    font-size: 25px; 
-  } 
+  .title-artikel-category-page {
+    font-size: 25px;
+  }
 }
 </style>

@@ -2,7 +2,6 @@
   <div class="container-fluid">
     <div class="container text-start">
       <form @submit.prevent>
-
         <!-- TITLE & AUTHOR -->
         <div class="row mt-3 mb-3">
           <div class="col-md-8">
@@ -83,7 +82,6 @@
         <!-- STATUS BUTTON -->
         <div class="row mt-5 mb-5 pt-5">
           <div class="col-12 d-flex gap-3">
-
             <button
               type="button"
               class="btn btn-secondary"
@@ -107,10 +105,8 @@
             >
               Publish Artikel
             </button>
-
           </div>
         </div>
-
       </form>
     </div>
 
@@ -128,20 +124,19 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import Quill from "quill"
-import "quill/dist/quill.snow.css"
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 
-const router = useRouter()
-const route = useRoute()
-const token = localStorage.getItem("token")
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
+const router = useRouter();
+const route = useRoute();
+const token = localStorage.getItem("token");
+const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 /* STATE */
 
@@ -151,139 +146,124 @@ const form = ref({
   content: "",
   category_id: null,
   thumbnail: null,
-  status: "draft"
-})
+  status: "draft",
+});
 
-const articleData = ref({})
-const categories = ref([])
-const selectedCategoryName = ref(null)
-const previewImage = ref(null)
-const quillEditor = ref(null)
-const fileInput = ref(null)
+const articleData = ref({});
+const categories = ref([]);
+const selectedCategoryName = ref(null);
+const previewImage = ref(null);
+const quillEditor = ref(null);
+const fileInput = ref(null);
 
-const showToast = ref(false)
-const toastMessage = ref("")
+const showToast = ref(false);
+const toastMessage = ref("");
 
 /* FETCH ARTICLE */
 
 const fetchArticle = async () => {
-  const slug = route.params.slug
+  const slug = route.params.slug;
 
-  const response = await fetch(
-    `${API_BASE_URL}/api/artikels/admin/${slug}`,
-    {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-  )
+  const response = await fetch(`${API_BASE_URL}/api/artikels/admin/${slug}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-  const data = await response.json()
-  articleData.value = data
+  const data = await response.json();
+  articleData.value = data;
 
-  form.value.title = data.title
-  form.value.author = data.author
-  form.value.category_id = data.category_id
+  form.value.title = data.title;
+  form.value.author = data.author;
+  form.value.category_id = data.category_id;
 
-  previewImage.value = data.thumbnail
+  previewImage.value = data.thumbnail;
 
   if (quillEditor.value?.__quill) {
-    quillEditor.value.__quill.clipboard.dangerouslyPasteHTML(
-      data.content
-    )
+    quillEditor.value.__quill.clipboard.dangerouslyPasteHTML(data.content);
   }
-}
+};
 
 /* FETCH CATEGORY */
 
 const fetchCategory = async () => {
-  const response = await fetch(`${API_BASE_URL}/api/categories`)
-  const data = await response.json()
-  categories.value = data
+  const response = await fetch(`${API_BASE_URL}/api/categories`);
+  const data = await response.json();
+  categories.value = data;
 
-  const current = data.find(
-    (c) => c.id === articleData.value.category_id
-  )
+  const current = data.find((c) => c.id === articleData.value.category_id);
 
   if (current) {
-    selectedCategoryName.value = current.name
+    selectedCategoryName.value = current.name;
   }
-}
+};
 
 /* SELECT CATEGORY */
 
 const selectCategory = (category) => {
-  form.value.category_id = category.id
-  selectedCategoryName.value = category.name
-}
+  form.value.category_id = category.id;
+  selectedCategoryName.value = category.name;
+};
 
 /* HANDLE THUMBNAIL */
 
 const handleFileChange = () => {
-  const file = fileInput.value.files[0]
-  if (!file) return
+  const file = fileInput.value.files[0];
+  if (!file) return;
 
-  form.value.thumbnail = file
-  previewImage.value = URL.createObjectURL(file)
-}
+  form.value.thumbnail = file;
+  previewImage.value = URL.createObjectURL(file);
+};
 
 /* HANDLE SUBMIT */
 
 const handleSubmit = async (statusValue) => {
+  form.value.status = statusValue;
 
-  form.value.status = statusValue
+  const editorInstance = quillEditor.value?.__quill;
+  form.value.content = editorInstance ? editorInstance.root.innerHTML : "";
 
-  const editorInstance = quillEditor.value?.__quill
-  form.value.content = editorInstance
-    ? editorInstance.root.innerHTML
-    : ""
-
-  const formData = new FormData()
-  formData.append("title", form.value.title)
-  formData.append("author", form.value.author)
-  formData.append("content", form.value.content)
-  formData.append("category_id", form.value.category_id)
-  formData.append("status", form.value.status)
+  const formData = new FormData();
+  formData.append("title", form.value.title);
+  formData.append("author", form.value.author);
+  formData.append("content", form.value.content);
+  formData.append("category_id", form.value.category_id);
+  formData.append("status", form.value.status);
 
   if (form.value.thumbnail) {
-    formData.append("thumbnail", form.value.thumbnail)
+    formData.append("thumbnail", form.value.thumbnail);
   }
 
-  const id = articleData.value.id
+  const id = articleData.value.id;
 
-  const response = await fetch(
-    `${API_BASE_URL}/api/artikels/admin/${id}`,
-    {
-      method: "PUT",
-      body: formData,
-      headers: { Authorization: `Bearer ${token}` }
-    }
-  )
+  const response = await fetch(`${API_BASE_URL}/api/artikels/admin/${id}`, {
+    method: "PUT",
+    body: formData,
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
   if (response.ok) {
-
-    toastMessage.value = `Artikel berhasil disimpan sebagai ${statusValue.toUpperCase()}`
-    showToast.value = true
+    toastMessage.value = `Artikel berhasil disimpan sebagai ${statusValue.toUpperCase()}`;
+    showToast.value = true;
 
     setTimeout(() => {
-      showToast.value = false
-      router.push("/admin/artikel")
-    }, 1500)
-
+      showToast.value = false;
+      router.push("/admin/artikel");
+    }, 1500);
   } else {
-    alert("Update gagal")
+    alert("Update gagal");
   }
-}
+};
 
 /* INIT */
 
 onMounted(() => {
   const editor = new Quill(quillEditor.value, {
-    theme: "snow"
-  })
-  quillEditor.value.__quill = editor
+    theme: "snow",
+  });
+  quillEditor.value.__quill = editor;
 
-  fetchArticle()
-  fetchCategory()
-})
+  fetchArticle();
+  fetchCategory();
+});
 </script>
 
 <style>

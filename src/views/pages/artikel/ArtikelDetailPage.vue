@@ -1,214 +1,124 @@
 <template>
-  <div class="container-fluid artikel-detail-heroes"></div>
-  <div class="container-xxl page">
-    <div class="pt-5 pb-5">
-      <div class="row d-flex flex-column flex-md-row">
-        <!-- Artikel Utama -->
-        <div class="col-12 col-md-7 order-1 order-md-2">
-          <div v-if="loading" class="text-center mt-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
+  <!-- HERO -->
+  <section class="article-hero bg-warning py-md-5 pb-5">
+    <div class="container-xxl hero-content pt-5 mt-5">
+      <div class="row">
+        <div class="col-8">
+          <div class="hero-category">
+            {{ article?.category?.name }}
           </div>
+
+          <h1 class="hero-title">
+            {{ article?.title }}
+          </h1>
+
+          <div class="hero-meta">
+            <span>
+              <i class="bi bi-person"></i>
+              {{ article?.author?.name }}
+            </span>
+
+            <span>
+              <i class="bi bi-calendar3"></i>
+              {{ formateDate(article?.updatedAt) }}
+            </span>
+
+            <span>
+              <i class="bi bi-eye"></i>
+              {{ article?.views }} views
+            </span>
+          </div>
+        </div>
+        <div
+          class="col-4 text-center d-flex align-items-center justify-content-center d-none d-md-block"
+        >
+          <img
+            src="../../../assets/guru_ngulik.png"
+            alt=""
+            style="height: 200px"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <div class="container-xxl article-page p-4">
+    <div
+      class="row py-5"
+      style="
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(6px);
+        /* border: 1px solid rgba(255, 255, 255, 0.15); */
+        border-radius: 18px;
+      "
+    >
+      <!-- MAIN -->
+      <div class="col-lg-8">
+        <div v-if="loading" class="text-center py-5">
+          <div class="spinner-grow text-warning"></div>
+          <div class="spinner-grow text-dark"></div>
+          <div class="spinner-grow text-warning"></div>
+          <div class="spinner-grow text-dark"></div>
+          <p class="mt-3">Memuat Artikel...</p>
+        </div>
+
+        <div v-else-if="article">
+          <!-- THUMBNAIL -->
+          <div class="article-thumbnail-wrapper">
+            <img
+              :src="fixImagePath(article.thumbnail)"
+              class="article-thumbnail"
+            />
+          </div>
+
+          <!-- CONTENT -->
+          <div v-html="article.content" class="article-content px-0"></div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="col-lg-4">
+        <div class="sidebar text-start">
+          <h5 class="sidebar-title">Artikel Lainnya</h5>
 
           <div
-            v-else-if="article"
-            class="row align-items-start justify-content-start"
+            v-for="(artikel, index) in filteredArticles.slice(0, 5)"
+            :key="index"
+            class="related-card"
           >
-            <img
-              :src="article.thumbnail"
-              class="w-100"
-              style="object-fit: cover; height: 480px"
-            />  
-            <span class="mt-3">
-              <h1 class="text-start fw-bold mb-3">{{ article.title }} </h1>
-              <p class="text-start bg-light p-1 ps-2 rounded-1 border">
-                <i class="bi bi-pen me-1"></i> Writen by : {{ article.author }}<i class="bi bi-calendar-check me-1 ms-3"></i> Last update : {{ formateDate(article.updatedAt) }} <i class="bi bi-bookmarks me-1 ms-3"></i> Category : {{ article.Category_Artikel.name }}
-              </p>
-              <p class="border-bottom border-1 border-dark"></p>
-            </span>
-            
+            <router-link :to="`/artikel/${artikel.slug}`" class="related-link">
+              <img :src="fixImagePath(artikel.thumbnail)" class="related-img" />
 
-            <div
-              v-html="article.content"
-              class="col text-justify formatted-content"
-            ></div>
-          </div>
+              <div class="related-body">
+                <div class="related-category">
+                  {{ artikel.category?.name }}
+                </div>
 
-          <div v-else class="text-center mt-5">
-            <p class="text-danger">Artikel tidak ditemukan.</p>
-          </div>
-        </div>
+                <div class="related-title">
+                  {{ artikel.title }}
+                </div>
 
-        <!-- Artikel Terkait -->
-        <div class="col-12 col-md-2 order-3 order-md-1 articles">
-          <div class="toc p-2 border rounded shadow-sm bg-light">
-            <h4 class="fw-bold bg-dark text-light text-center rounded p-2">Artikel Terkait</h4>
-            <div
-              v-for="(artikel, index) in articles"
-              :key="index"
-              class="text-start"
-            >
-              <div class="card mb-1 shadow-sm">
-                <div class="card-body m-0 p-2">
-                  <img
-                    :src="artikel.thumbnail"
-                    alt=""
-                    class="img-articles rounded"
-                  />
-                  <router-link
-                    :to="`/artikel/${artikel.slug}`"
-                    class="fs-7 mt-2 text-decoration-none d-block artikel-link"
-                  >
-                    {{ artikel.title }}
-                  </router-link>
+                <div class="related-date">
+                  {{ formateDate(artikel.updatedAt) }}
                 </div>
               </div>
-            </div>
-            
+            </router-link>
           </div>
         </div>
-
-        <!-- Artikel Kategori -->
-        <div class="col-12 col-md-3 order-2 order-md-2">
-          <div class="toc p-2 border rounded shadow-sm bg-light">
-            <h4 class="fw-bold bg-dark text-light text-center rounded p-2">Artikel Kategori</h4>
-
-            <div class="accordion" id="accordionKategori">
-              <div
-                class="accordion-item"
-                v-for="(category, index) in categories"
-                :key="index"
-              >
-                <h2 class="accordion-header" :id="`heading-${index}`">
-                  <button
-                    class="accordion-button fst-italic"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    :data-bs-target="`#collapse-${index}`"
-                    :aria-controls="`collapse-${index}`"
-                    :aria-expanded="index === 0 ? 'true' : 'false'"
-                    :class="{ collapsed: index !== 0 }"
-                  >
-                    {{ category.name }}
-                  </button>
-                </h2>
-                <div
-                  :id="`collapse-${index}`"
-                  class="accordion-collapse collapse"
-                  :class="{ show: index === 0 }"
-                  :aria-labelledby="`heading-${index}`"
-                >
-                  <div class="accordion-body">
-                    <ul class="list-unstyled small ps-2 mb-0">
-                      <li
-                        v-for="(artikel, aIndex) in category.Artikels"
-                        :key="aIndex"
-                        class="mb-1"
-                      >
-                        <router-link
-                          :to="`/artikel/${artikel.slug}`"
-                          class="text-decoration-none artikel-link"
-                        >
-                          {{ artikel.title }}
-                        </router-link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
 </template>
 
-<style>
-.artikel-detail-heroes {
-  min-height: 250px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
-    url("../../../assets/hero-img.jpg");
-  background-size: cover;
-  /* display: flex; */
-}
-
-.page {
-  min-height: 100vh;
-}
-
-.text-justify {
-  text-align: justify;
-}
-
-.articles {
-  font-size: 12px;
-}
-
-.img-articles {
-  width: 100%;
-  height: 70px;
-  object-fit: cover;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.thumbnail {
-  height: 250px;
-  width: 100%; /* Ubah jadi 100% supaya memenuhi kolom */
-  object-fit: cover; /* Biar gambar proporsional */
-}
-
-.formatted-content img {
-  max-width: 100%; /* Mengatur lebar maksimal gambar sesuai dengan parent */
-  height: auto; /* Menjaga rasio gambar */
-  border-radius: 8px; /* Opsional: membuat gambar memiliki sudut membulat */
-  margin: 10px 0; /* Opsional: memberi jarak atas dan bawah pada gambar */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Opsional: menambah efek bayangan */
-}
-
-.toc {
-  /* font-size: 13px; */
-  position: sticky;
-  top: 80px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.artikel-link {
-  display: block;
-  padding: 4px 0;
-  color: #333;
-  transition: all 0.2s ease;
-}
-
-.artikel-link:hover {
-  transform: translateX(3px);
-  color: #0d6efd; /* biru Bootstrap */
-}
-
-.accordion-body li {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 4px;
-  margin-bottom: 4px;
-}
-
-.accordion-body li:last-child {
-  border-bottom: none; /* hilangkan garis di akhir */
-}
-</style>
-
 <script>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 
 export default {
   setup() {
     const route = useRoute();
+
     const article = ref(null);
     const articles = ref([]);
     const categories = ref([]);
@@ -216,33 +126,51 @@ export default {
 
     const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
-    // Fungsi mengambil daftar artikel
+    // ========================
+    // FIX PATH WINDOWS "\"
+    // ========================
+    const fixImagePath = (path) => {
+      if (!path) return "";
+      return path.replace(/\\/g, "/");
+    };
+
+    // ========================
+    // FORMAT DATE
+    // ========================
+    const formateDate = (dataString) => {
+      const date = new Date(dataString);
+      return date.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+    };
+
+    // ========================
+    // FETCH ALL ARTICLES
+    // ========================
     const fetchArticles = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/artikels`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
         const result = await response.json();
+        await new Promise((resolve) => setTimeout(resolve, 1200));
         articles.value = result.data;
       } catch (error) {
         console.error("Error fetching articles:", error);
       }
     };
 
-    // Fungsi mengambil data artikel berdasarkan slug
+    // ========================
+    // FETCH DETAIL
+    // ========================
     const fetchData = async (slug) => {
       loading.value = true;
       article.value = null;
 
       try {
         const response = await fetch(`${API_BASE_URL}/api/artikels/${slug}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        let data = await response.json();
+        const data = await response.json();
+        await new Promise((resolve) => setTimeout(resolve, 500));
         article.value = data;
       } catch (error) {
         console.error("Error fetching article:", error);
@@ -251,70 +179,178 @@ export default {
       }
     };
 
-    const fetchCategoryArtikel = async (id) => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/categories/${id}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error(`Error fetching category ${id}:`, error);
-        return null;
-      }
-    };
+    // ========================
+    // FILTER RELATED (tidak tampilkan yg sedang dibuka)
+    // ========================
+    const filteredArticles = computed(() => {
+      if (!article.value) return articles.value;
+      return articles.value.filter((a) => a.slug !== article.value.slug);
+    });
 
-    // 🔹 Ambil beberapa kategori (misal id 1,2,3)
-    const fetchAllCategories = async () => {
-      try {
-        // 🔹 1. Ambil semua kategori dulu (tanpa artikelnya)
-        const response = await fetch(`${API_BASE_URL}/api/categories`);
-        if (!response.ok) throw new Error("Failed to fetch category list");
-
-        const data = await response.json();
-
-        // 🔹 2. Ambil detail setiap kategori beserta artikelnya
-        const results = [];
-        for (const category of data) {
-          const categoryDetail = await fetchCategoryArtikel(category.id);
-          if (categoryDetail) results.push(categoryDetail);
-        }
-
-        // 🔹 3. Simpan hasilnya ke state
-        categories.value = results;
-      } catch (error) {
-        console.error("Error fetching all categories:", error);
-      }
-    };
-
-    const formateDate = (dataString) => {
-      const date = new Date(dataString);
-      return date.toLocaleString("id-ID");
-    };
-
-    // Pantau perubahan slug dan perbarui data tanpa refresh
+    // ========================
+    // WATCH ROUTE
+    // ========================
     watch(
       () => route.params.slug,
       (newSlug) => {
         fetchData(newSlug);
-      }
+      },
     );
 
-    onMounted(async() => {
+    onMounted(() => {
       fetchData(route.params.slug);
       fetchArticles();
-      await fetchAllCategories();
     });
 
     return {
       article,
       articles,
-      loading,
-      // tocItems,
-      formateDate,
       categories,
+      loading,
+      formateDate,
+      fixImagePath,
+      filteredArticles,
     };
   },
 };
 </script>
+
+<style>
+/* HERO */
+
+.article-hero {
+  background: url("../../../assets/hero-img.webp") center/cover;
+  position: relative;
+  /* padding-top: 120px; */
+  text-align: left;
+}
+
+.hero-content {
+  color: white;
+  /* max-width:900px; */
+}
+
+.hero-category {
+  background: #41b83f;
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.hero-title {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.hero-meta {
+  margin-top: 15px;
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* PAGE */
+
+/* THUMBNAIL */
+
+.article-thumbnail-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  /* margin-bottom: 30px; */
+}
+
+.article-thumbnail {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
+
+/* CONTENT */
+
+.article-content {
+  font-size: 17px;
+  line-height: 1.9;
+  /* color: #333; */
+  text-align: justify;
+}
+
+.article-content h2 {
+  margin-top: 40px;
+}
+
+.article-content img {
+  width: 100%;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.sidebar-title {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* RELATED */
+
+.related-card {
+  margin-bottom: 18px;
+}
+
+.related-link {
+  display: flex;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.related-img {
+  width: 90px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.related-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.related-date {
+  font-size: 12px;
+  color: #777;
+}
+
+.related-category {
+  font-size: 11px;
+  color: #41b83f;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .article-hero {
+    background: url("../../../assets/hero-img.webp") center/cover;
+    position: relative;
+    /* padding-top: 120px; */
+    text-align: start;
+    min-height: 300px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: start;
+  }
+}
+</style>

@@ -198,8 +198,8 @@ export default {
 /* HERO */
 .artikel-search-heroes {
   height: 270px;
-  background-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.8)),
-    url("../../../assets/hero-img.jpg");
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.1)),
+    url("../../../assets/hero-img.webp");
   background-size: cover;
 }
 

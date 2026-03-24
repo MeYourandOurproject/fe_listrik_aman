@@ -1,6 +1,6 @@
 <template>
   <!-- HERO -->
-  <div class="container-fluid artikel-home-heroes d-flex align-items-end justify-content-center text-center py-4">
+  <div class="container-fluid artikel-home-heroes d-flex align-items-end justify-content-center text-center py-4" style="background-color: black;">
     <div class="container-xxl">
       <div class="hero-content w-100">
 
@@ -10,9 +10,9 @@
         </h1>
 
         <!-- SEARCH -->
-        <div class="row justify-content-center g-2 align-items-center mb-md-5 mb-2">
+        <!-- <div class="row justify-content-center g-2 align-items-center mb-md-5 mb-2">
 
-          <!-- Input search -->
+          
           <div class="col-6 col-md-4">
             <input
               type="text"
@@ -23,7 +23,7 @@
             />
           </div>
 
-          <!-- Filter kategori -->
+          
           <div class="col-4 col-md-2">
             <select
               class="form-select"
@@ -40,7 +40,6 @@
             </select>
           </div>
 
-          <!-- Search Button -->
           <div class="col-auto">
             <button
               class="search-btn border-0"
@@ -49,16 +48,18 @@
               <i class="bi bi-search"></i>
             </button>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 
+  
+
   <!-- MAIN PAGE -->
-  <div class="container-xxl pt-4 p-4">
+  <div class="container-xxl py-5">
     <div class="row mb-3">
       <div class="col-12">
-        <div class="category-wrap">
+        <div class="category-wrap mt-3">
 
           <!-- Home -->
           <router-link
@@ -66,7 +67,7 @@
             class="category-pill"
             :class="{ active: $route.path === '/artikel' }"
           >
-            Home
+            All Article
           </router-link>
 
           <!-- Category -->
@@ -269,15 +270,35 @@ export default {
 <style>
 /* HERO */
 .artikel-home-heroes {
-  height: 420px;
-  background-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.8)),
-    url("../../../assets/hero-img.jpg");
+  height: 320px;
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.1)),
+    url("../../../assets/img_hero_all.PNG");
   background-size: cover;
+  background-position: bottom;
+  position: relative;
+  z-index: 2;
 }
 
 .title-artikel-home-page {
   font-size: 50px;
 }
+
+.artikel-home-heroes .container-xxl {
+  position: relative;
+  /* z-index: 2; */
+}
+
+/* Gradasi penyambung */
+/* .artikel-home-heroes::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 85%);
+  z-index: 1;
+} */
 
 /* CARD */
 .artikel-card {
@@ -370,29 +391,32 @@ export default {
 /* PILL STYLE */
 .category-pill {
   padding: 8px 18px;
-  border-radius: 50px;
-  border: 1px solid #ccc;
-  color: #333;
+  border-radius: 10px;
   font-size: 14px;
   white-space: nowrap;
   text-decoration: none;
-  background: #fff;
   transition: all 0.25s ease;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  backdrop-filter: blur(6px);
+  /* border: 1px solid rgba(255, 255, 255, 0.15); */
 }
 
 /* Hover */
 .category-pill:hover {
-  background: #111;
-  color: #fff;
-  border-color: #111;
+ background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.6);
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.35);
 }
 
 /* Active */
 .category-pill.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
+  /* transform: translateY(-4px); */
+  background: #fff;
+  box-shadow: 0 0 28px rgba(255, 193, 7, 0.7);
   font-weight: 600;
+  color: #000000;
 }
 
 /* MOBILE OPTIMIZATION */
@@ -434,7 +458,7 @@ export default {
 
 @media (max-width: 767px) { 
   .artikel-home-heroes{ 
-    height: 32vh; 
+    height: 30vh; 
   } 
 
   .title-artikel-home-page { 

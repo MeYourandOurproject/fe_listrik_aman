@@ -9,7 +9,9 @@
       >
         <!-- TEXT -->
         <div class="col-12 col-md-8">
-          <div class="home-title fw-bold text-white shadow-text text-center text-md-start">
+          <div
+            class="home-title fw-bold text-white shadow-text text-center text-md-start"
+          >
             Tempatnya Ngulik <span class="text-warning">Listrik</span>,
             <span class="text-warning">IoT</span>, &
             <span class="text-warning">Web Development</span>
@@ -52,12 +54,12 @@
   <!-- TOPIK PILIHAN -->
   <div class="container-fluid py-5 topic-section">
     <div class="container-xxl">
-      <h2 class="topic-title text-white fw-bold text-center">
+      <h2 class="topic-title text-white fw-bold text-md-start text-center ms-lg-4">
         Topik <span class="text-warning">Pilihan</span>
       </h2>
 
       <div
-        class="row g-4 justify-content-center p-4 rounded-4 my-5"
+        class="row g-4 justify-content-center p-4 rounded-4 mb-5 mt-3"
         style="
           background: rgba(0, 0, 0, 0.08);
           backdrop-filter: blur(6px);
@@ -89,19 +91,19 @@
       </div>
 
       <!-- BUTTON -->
-      <div class="text-center my-5">
+      <!-- <div class="text-center my-5">
         <button class="btn-topic text-warning">
           Lihat Semua Topik
           <i class="bi bi-chevron-right ms-2"></i>
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 
   <div class="container-fluid py-5 artikel-populer">
-    <div class="container-xxl my-5">
+    <div class="container-xxl">
       <h2 class="topic-title text-white fw-bold text-center">
-        Project <span class="text-warning">Populer</span>
+        Project <span class="text-warning">Terbaru</span>
       </h2>
       <div class="row g-4 mt-4">
         <!-- CARD 1 -->
@@ -168,76 +170,52 @@
         </div>
       </div>
     </div>
+    <div class="text-center my-5">
+      <button class="btn-topic text-warning">
+        Lihat Semua Project
+        <i class="bi bi-chevron-right ms-2"></i>
+      </button>
+    </div>
 
     <!-- <div class="container-fluid py-5 artikel-populer"> -->
-    <div class="container-xxl py-5 my-5">
+    <div class="container-xxl pt-5 mt-5">
       <h2 class="topic-title text-white fw-bold text-center">
-        Artikel <span class="text-warning">Populer</span>
+        Artikel <span class="text-warning">Terbaru</span>
       </h2>
       <div class="row g-4 mt-4">
         <!-- CARD 1 -->
-        <div class="col-12 col-md-6 col-lg-4">
+        <div
+          v-for="artikel in newArticle"
+          :key="artikel.slug"
+          class="col-12 col-md-6 col-lg-4"
+        >
           <div class="article-card">
             <div class="article-img">
-              <img src="https://picsum.photos/600/400?1" alt="" />
-              <span class="article-badge">Internet of Things</span>
+              <img :src="artikel.thumbnail" alt="" />
+              <span class="article-badge">{{
+                artikel.Category_Artikel.name
+              }}</span>
             </div>
             <div class="article-content">
-              <h5>Mengenal ESP32 untuk Smart Home System</h5>
+              <h5>{{ artikel.title }}</h5>
               <p>
-                Belajar dasar penggunaan ESP32 untuk otomasi rumah berbasis IoT
-                dengan studi kasus nyata.
+                {{ artikel.excerpt }}
               </p>
               <div class="article-meta">
-                <span><i class="bi bi-eye"></i> 1.2k</span>
+                <span><i class="bi bi-eye"></i> {{ artikel.views }}</span>
                 <span><i class="bi bi-chat-dots"></i> 86</span>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- CARD 2 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="article-card">
-            <div class="article-img">
-              <img src="https://picsum.photos/600/400?2" alt="" />
-              <span class="article-badge">Electrical</span>
-            </div>
-            <div class="article-content">
-              <h5>Cara Instalasi Panel Listrik Rumah Aman</h5>
-              <p>
-                Panduan lengkap instalasi panel listrik rumah sesuai standar
-                PUIL dan keamanan.
-              </p>
-              <div class="article-meta">
-                <span><i class="bi bi-eye"></i> 980</span>
-                <span><i class="bi bi-chat-dots"></i> 54</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 3 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="article-card">
-            <div class="article-img">
-              <img src="https://picsum.photos/600/400?3" alt="" />
-              <span class="article-badge">Web Development</span>
-            </div>
-            <div class="article-content">
-              <h5>Membuat Dashboard Monitoring IoT dengan Vue</h5>
-              <p>
-                Tutorial membuat dashboard monitoring realtime berbasis Vue dan
-                integrasi API perangkat IoT.
-              </p>
-              <div class="article-meta">
-                <span><i class="bi bi-eye"></i> 2.4k</span>
-                <span><i class="bi bi-chat-dots"></i> 132</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
+    </div>
+
+    <div class="text-center my-5">
+      <button class="btn-topic text-warning">
+        Lihat Semua Artikel
+        <i class="bi bi-chevron-right ms-2"></i>
+      </button>
     </div>
 
     <!-- Free eBook -->
@@ -252,11 +230,17 @@
     >
       <div class="row g-4 align-items-center px-4">
         <div class="col-12 col-md-2 text-center">
-          <img src="../../../assets/ebook.png" alt="" class="floating-img" style="height: 250px;">
+          <img
+            src="../../../assets/ebook.png"
+            alt=""
+            class="floating-img"
+            style="height: 250px; width: auto"
+          />
         </div>
         <div class="col-12 col-md-10 text-center text-md-start">
           <h1 class="text-white fw-bold">
-            Dapatkan eBook Gratis: <br /> <span class="text-warning">Panduan Lengkap IoT untuk Pemula</span>
+            Dapatkan eBook Gratis: <br />
+            <span class="text-warning">Panduan Lengkap IoT untuk Pemula</span>
           </h1>
           <p class="fs-6 text-white">
             Pelajari dasar-dasar Internet of Things dengan eBook gratis kami
@@ -269,6 +253,12 @@
           </button>
         </div>
       </div>
+    </div>
+    <div class="text-center my-5">
+      <button class="btn-topic text-warning">
+        Dapatkan eBook Lainya
+        <i class="bi bi-chevron-right ms-2"></i>
+      </button>
     </div>
   </div>
 </template>
@@ -641,6 +631,7 @@
   color: white;
   font-weight: 700;
   margin-bottom: 10px;
+  text-align: left;
 }
 
 .article-content p {
@@ -670,3 +661,38 @@
   }
 }
 </style>
+
+<script>
+import { ref, computed, onMounted } from "vue";
+
+export default {
+  setup() {
+    const articles = ref([]);
+    const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/artikels`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch articles");
+        }
+        const result = await response.json();
+        articles.value = result.data;
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      }
+    };
+
+    const newArticle = computed(() => articles.value.slice(0, 3));
+
+    // Call the function to fetch articles when the component is mounted
+    onMounted(() => {
+      fetchArticles();
+    });
+
+    return {
+      newArticle,
+    };
+  },
+};
+</script>

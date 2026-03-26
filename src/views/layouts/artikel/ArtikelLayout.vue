@@ -62,11 +62,9 @@ export default {
   position: fixed;
   right: 20px;
   bottom: 35px;
-
   display: flex;
   /* flex-direction: column;   bikin urut ke atas */
   gap: 12px; /* jarak antar ikon */
-
   z-index: 10;
 }
 

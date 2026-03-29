@@ -35,12 +35,12 @@
       <div class="row d-flex justify-content-center align-items-center p-4">
         <div class="col-lg-4">
           <form @submit.prevent="handleSubmit">
-            <div class="d-flex flex-column mb-4 logos">
+            <div class="d-flex flex-column mb-4 logos text-center">
               <div>
                 <img
-                  src="../../../assets/logobrand.png"
+                  src="../../../assets/guru_ngulik_logo.png"
                   alt="Logo"
-                  width="120"
+                  width="200"
                 />
               </div>
               <!-- <div>
@@ -151,13 +151,13 @@ export default {
 <style>
 .login-page-heroes {
   height: 20vh;
-  background-image: url("../../../assets/hero-img.jpg");
+  background-image: url("../../../assets/hero-img.webp");
   background-size: cover;
   display: flex;
 }
 
 .logos {
-  background-image: url("../../../assets/hero-img.jpg");
+  background-image: url("../../../assets/hero-img.webp");
   padding: 20px;
   border-radius: 10px;
 }

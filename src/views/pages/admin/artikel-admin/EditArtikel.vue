@@ -132,13 +132,14 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import imageCompression from "browser-image-compression";
 
 const router = useRouter();
 const route = useRoute();
 const token = localStorage.getItem("token");
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
-/* STATE */
+/* ================= STATE ================= */
 
 const form = ref({
   title: "",
@@ -159,7 +160,29 @@ const fileInput = ref(null);
 const showToast = ref(false);
 const toastMessage = ref("");
 
-/* FETCH ARTICLE */
+/* ================= COMPRESS IMAGE ================= */
+
+const compressImage = async (file) => {
+  const options = {
+    maxSizeMB: 0.5,
+    maxWidthOrHeight: 1200,
+    useWebWorker: true,
+    fileType: "image/webp",
+    initialQuality: 0.8,
+  };
+
+  const compressed = await imageCompression(file, options);
+
+  return new File(
+    [compressed],
+    file.name.replace(/\.\w+$/, ".webp"),
+    {
+      type: "image/webp",
+    }
+  );
+};
+
+/* ================= FETCH ARTICLE ================= */
 
 const fetchArticle = async () => {
   const slug = route.params.slug;
@@ -182,7 +205,7 @@ const fetchArticle = async () => {
   }
 };
 
-/* FETCH CATEGORY */
+/* ================= FETCH CATEGORY ================= */
 
 const fetchCategory = async () => {
   const response = await fetch(`${API_BASE_URL}/api/categories`);
@@ -196,24 +219,43 @@ const fetchCategory = async () => {
   }
 };
 
-/* SELECT CATEGORY */
+/* ================= SELECT CATEGORY ================= */
 
 const selectCategory = (category) => {
   form.value.category_id = category.id;
   selectedCategoryName.value = category.name;
 };
 
-/* HANDLE THUMBNAIL */
+/* ================= HANDLE THUMBNAIL ================= */
 
-const handleFileChange = () => {
+const handleFileChange = async () => {
   const file = fileInput.value.files[0];
   if (!file) return;
 
-  form.value.thumbnail = file;
-  previewImage.value = URL.createObjectURL(file);
+  // validasi
+  if (!file.type.startsWith("image/")) {
+    alert("File harus berupa gambar!");
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Max file 5MB");
+    return;
+  }
+
+  try {
+    const compressedFile = await compressImage(file);
+
+    form.value.thumbnail = compressedFile;
+
+    // preview pakai hasil compress
+    previewImage.value = URL.createObjectURL(compressedFile);
+  } catch (err) {
+    console.error("❌ Compress error:", err);
+  }
 };
 
-/* HANDLE SUBMIT */
+/* ================= HANDLE SUBMIT ================= */
 
 const handleSubmit = async (statusValue) => {
   form.value.status = statusValue;
@@ -253,12 +295,13 @@ const handleSubmit = async (statusValue) => {
   }
 };
 
-/* INIT */
+/* ================= INIT ================= */
 
 onMounted(() => {
   const editor = new Quill(quillEditor.value, {
     theme: "snow",
   });
+
   quillEditor.value.__quill = editor;
 
   fetchArticle();

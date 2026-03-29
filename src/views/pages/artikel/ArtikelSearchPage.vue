@@ -1,10 +1,17 @@
 <template>
   <!-- HERO -->
-  <div class="container-fluid artikel-search-heroes d-flex align-items-end justify-content-center text-center py-4">
+  <div
+    class="container-fluid artikel-search-heroes d-flex align-items-end justify-content-center text-center py-4"
+  >
     <div class="container-xxl">
       <div class="hero-content w-100">
         <!-- SEARCH -->
-        <div class="row justify-content-center g-2 align-items-center mb-2 mb-md-5">
+        <h1 class="title-artikel-serach-page fw-bold text-white mb-md-5 mb-3">
+          Article Search Page
+        </h1>
+        <div
+          class="row justify-content-center g-2 align-items-center mb-2 mb-md-5"
+        >
           <!-- Input search -->
           <div class="col-6 col-md-4">
             <input
@@ -18,16 +25,9 @@
 
           <!-- Filter kategori -->
           <div class="col-4 col-md-2">
-            <select
-              class="form-select"
-              v-model="selectedCategory"
-            >
+            <select class="form-select" v-model="selectedCategory">
               <option value="">Semua kategori</option>
-              <option
-                v-for="cat in categories"
-                :key="cat.id"
-                :value="cat.id"
-              >
+              <option v-for="cat in categories" :key="cat.id" :value="cat.id">
                 {{ cat.name }}
               </option>
             </select>
@@ -35,10 +35,7 @@
 
           <!-- Search Button -->
           <div class="col-auto">
-            <button
-              class="search-btn border-0"
-              @click="goToSearch"
-            >
+            <button class="search-btn border-0" @click="goToSearch">
               <i class="bi bi-search"></i>
             </button>
           </div>
@@ -48,18 +45,18 @@
   </div>
 
   <!-- MAIN PAGE -->
-  <div class="container-xxl py-4">
-
-    <h4 class="mb-3">
+  <div class="container-xxl py-4 p-4 pb-5">
+    <h4 class="mb-3 mt-3">
       Hasil pencarian untuk:
       <span v-if="searchQuery" class="text-warning">
         {{ searchQuery }}
-      </span> 
+        <span class="fs-6 text-secondary">
+          <br />
+          ( {{ total }} Artikel Ditemukan )</span
+        >
+        <!-- </p> -->
+      </span>
     </h4>
-
-    <p class="text-muted mb-4" v-if="total > 0">
-      {{ total }} artikel ditemukan
-    </p>
 
     <!-- LOADING -->
     <div v-if="loading" class="text-center py-5">
@@ -72,30 +69,43 @@
     </div>
 
     <!-- RESULT -->
-    <div v-else class="row row-cols-1 row-cols-md-3 g-3">
+    <div v-else class="row row-cols-1 row-cols-md-3 g-4 py-5">
       <div v-for="artikel in articles" :key="artikel.id" class="col">
-        <div class="artikel-search-card">
+        <router-link
+          :to="`/artikel/${artikel.slug}`"
+          class="text-decoration-none"
+        >
+          <div class="article-card">
+            <!-- IMAGE -->
+            <div class="article-img">
+              <img :src="artikel.thumbnail" alt="" />
 
-          <img :src="artikel.thumbnail" class="artikel-search-img" />
+              <!-- BADGE -->
+              <div
+                :class="[
+                  'hero-category',
+                  getCategoryClass(artikel.Category_Artikel?.name),
+                ]"
+              >
+                {{ artikel.Category_Artikel?.name }}
+              </div>
+            </div>
 
-          <div class="artikel-search-info p-3 text-white">
-            <h6 class="mb-1">{{ artikel.title }}</h6>
-            <p class="penulis mb-0">
-              <i class="bi bi-pen me-1"></i> {{ artikel.author }}
-              <i class="bi bi-calendar-check ms-2"></i>
-              {{ formatDate(artikel.createdAt) }}
-            </p>
-          </div>
+            <!-- CONTENT -->
+            <div class="article-content">
+              <h5>{{ artikel.title }}</h5>
 
-          <!-- OVERLAY -->
-          <router-link
-            :to="`/artikel/${artikel.slug}`"
-            class="artikel-overlay"
-          >
-            <span class="see-more-text">See More</span>
-          </router-link>
+              <p>
+                {{ artikel.excerpt || "Artikel menarik, baca selengkapnya..." }}
+              </p>
 
-        </div>
+              <div class="article-meta">
+                <span><i class="bi bi-eye"></i> {{ artikel.views }}</span>
+                <span><i class="bi bi-chat-dots"></i> 86</span>
+              </div>
+            </div>
+          </div></router-link
+        >
       </div>
     </div>
   </div>
@@ -137,7 +147,7 @@ export default {
       if (categoryId.value) params.append("category_id", categoryId.value);
 
       const res = await fetch(
-        `${API_BASE_URL}/api/artikels?${params.toString()}`
+        `${API_BASE_URL}/api/artikels?${params.toString()}`,
       );
       const result = await res.json();
 
@@ -153,9 +163,21 @@ export default {
         path: "/artikel/search",
         query: {
           search: searchInput.value || undefined,
-          category_id: selectedCategory.value || undefined
-        }
+          category_id: selectedCategory.value || undefined,
+        },
       });
+    };
+
+    const getCategoryClass = (name) => {
+      if (!name) return "cat-default";
+
+      const map = {
+        "internet of thing (iot)": "cat-iot",
+        electrical: "cat-listrik",
+        "web development": "cat-webdev",
+      };
+
+      return map[name.toLowerCase()] || "cat-default";
     };
 
     onMounted(() => {
@@ -173,7 +195,7 @@ export default {
         selectedCategory.value = categoryId.value;
 
         fetchSearchResult();
-      }
+      },
     );
 
     const formatDate = (dateString) =>
@@ -188,17 +210,18 @@ export default {
       searchInput,
       selectedCategory,
       goToSearch,
-      formatDate
+      formatDate,
+      getCategoryClass,
     };
-  }
+  },
 };
 </script>
 
 <style>
 /* HERO */
 .artikel-search-heroes {
-  height: 270px;
-  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.1)),
+  height: 320px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)),
     url("../../../assets/hero-img.webp");
   background-size: cover;
 }
@@ -224,7 +247,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
   z-index: 2;
 }
@@ -233,7 +256,7 @@ export default {
 .artikel-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -280,7 +303,7 @@ export default {
   width: 42px;
   height: 42px;
   border-radius: 20%;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -294,5 +317,15 @@ export default {
   background: #ffc107;
   color: #000;
   transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .artikel-search-heroes {
+    height: 30vh;
+  }
+
+  .title-artikel-serach-page {
+    font-size: 25px;
+  }
 }
 </style>

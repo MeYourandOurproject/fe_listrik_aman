@@ -1,363 +1,243 @@
 <template>
   <div class="container">
-    <div class="row justify-content-start">
+
+    <!-- BUTTON TAMBAH -->
+    <div class="row justify-content-start mb-3">
       <div class="col-3">
-        <router-link to="/admin/artikel/create">
-          <div class="btn btn-success pt-1 pb-1">
-            <i class="bi bi-plus fs-5"></i></div></router-link
-        ><span class="fw-bold ms-2">TAMBAH ARTIKEL</span>
+        <button @click="toggleUpload" class="btn btn-success">
+          <i class="bi bi-plus"></i> TAMBAH ARTIKEL
+        </button>
       </div>
     </div>
-  </div>
-  <div class="container-fluid">
-    <div class="container">
-      <div class="row align-items-center justify-content-center">
-        <div class="col-lg-6">
-          <!-- Success Alert -->
-          <transition name="fade">
-            <div
-              v-if="showSuccessAlert"
-              class="alert alert-success d-flex align-items-center"
-              role="alert"
-            >
-              <i class="bi bi-check-circle-fill me-3 ms-3"></i>
-              <div>Article Has Been Deleted Successfully</div>
-            </div>
-          </transition>
 
-          <!-- Error Alert -->
-          <transition name="fade">
-            <div
-              v-if="showErrorAlert"
-              class="alert alert-danger d-flex align-items-center"
-              role="alert"
-            >
-              <i class="bi bi-x-circle-fill me-3 ms-3"></i>
-              <div>Delete Article failed! Please check the form.</div>
-            </div>
-          </transition>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container mb-5">
-    <div>
-      <table class="table table-striped table-hover">
-        <thead class="text-center">
-          <tr>
-            <th>No</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th @click="toggleSortOrder" style="cursor: pointer">
-              Created At
-              <i
-                :class="{
-                  'bi bi-arrow-down': sortOrder === 'desc',
-                  'bi bi-arrow-up': sortOrder === 'asc',
-                }"
-              ></i>
-            </th>
-            <th>Action</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in paginatedData" :key="item.id">
-            <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
-            <td class="text-start align-items-center">{{ item.title }}</td>
-            <td class="text-center">{{ item.author }}</td>
-            <td>{{ formatDate(item.createdAt) }}</td>
-            <td>
-              <div
-                class="d-flex gap-2 align-items-center justify-content-center"
-              >
-                <a
-                  :href="`/admin/artikel/read/${item.slug}`"
-                  class="btn btn-info pt-1 pb-1 m-0 p-0"
-                >
-                  <i class="bi bi-eye p-2 rounded-2"></i>
-                </a>
-                <router-link :to="`/admin/artikel/edit/${item.slug}`">
-                  <div class="btn btn-warning pt-1 pb-1 m-0 p-0">
-                    <span
-                      ><i class="bi bi-pencil-square p-2 rounded-2"></i
-                    ></span>
-                  </div>
-                </router-link>
-                <button
-                  @click="deleteData(item.id)"
-                  class="btn btn-danger pt-1 pb-1 m-0 p-0"
-                >
-                  <span><i class="bi bi-x-circle p-2 rounded-2"></i></span>
-                </button>
-              </div>
-            </td>
-            <td class="text-center">
-              <span
-                class="badge text-uppercase"
-                :class="getStatusClass(item.status)"
-              >
-                {{ item.status }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="input-group input-group-sm">
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">
-            Items Per Page:
-          </span>
+    <!-- UPLOAD WORD FORM -->
+    <div v-if="showUpload" class="card p-3 mb-4 shadow-sm">
+      <div class="row align-items-end">
+        <div class="col-md-6">
+          <label class="form-label">Upload Word (.docx)</label>
           <input
-            type="number"
+            ref="wordInput"
+            type="file"
             class="form-control"
-            v-model.number="itemsPerPage"
-            @input="updatePagination"
-            aria-label="Sizing example input"
-            aria-describedby="inputGroup-sizing-lg"
+            accept=".docx"
           />
         </div>
-      </div>
 
-      <div class="pagination">
-        <div class="justify-content-start gap-2">
-          <button
-            @click="goToFirstPage"
-            :disabled="currentPage === 1"
-            class="btn btn-secondary me-2"
-          >
-            First Page
-          </button>
-          <button
-            @click="prevPage"
-            :disabled="currentPage === 1"
-            class="btn btn-secondary ms-2"
-          >
-            Previous
+        <div class="col-md-3">
+          <button @click="handleUploadWord" class="btn btn-success w-100">
+            Upload
           </button>
         </div>
-        <span>Page {{ currentPage }} of {{ totalPages }}</span>
-        <div class="justify-content-end">
-          <button
-            @click="nextPage"
-            :disabled="currentPage === totalPages"
-            class="btn btn-secondary me-2"
-          >
-            Next</button
-          ><button
-            @click="goToLastPage"
-            :disabled="currentPage === totalPages"
-            class="btn btn-secondary ms-1"
-          >
-            Last Page
+
+        <div class="col-md-3">
+          <button @click="showUpload = false" class="btn btn-secondary w-100">
+            Batal
           </button>
         </div>
       </div>
     </div>
+
+    <!-- ALERT -->
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <transition name="fade">
+          <div v-if="showSuccessAlert" class="alert alert-success">
+            Artikel berhasil ditambahkan
+          </div>
+        </transition>
+
+        <transition name="fade">
+          <div v-if="showErrorAlert" class="alert alert-danger">
+            Upload gagal
+          </div>
+        </transition>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <table class="table table-striped table-hover">
+      <thead class="text-center">
+        <tr>
+          <th>No</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th @click="toggleSortOrder" style="cursor:pointer">
+            Created At
+            <i :class="sortOrder === 'desc' ? 'bi bi-arrow-down' : 'bi bi-arrow-up'"></i>
+          </th>
+          <th>Action</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="(item, index) in paginatedData" :key="item.id">
+          <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+          <td class="text-start">{{ item.title }}</td>
+          <td>{{ item.author }}</td>
+          <td>{{ formatDate(item.createdAt) }}</td>
+
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+              <a :href="`/admin/artikel/read/${item.slug}`" class="btn btn-info btn-sm">
+                <i class="bi bi-eye"></i>
+              </a>
+
+              <router-link :to="`/admin/artikel/edit/${item.slug}`">
+                <button class="btn btn-warning btn-sm">
+                  <i class="bi bi-pencil"></i>
+                </button>
+              </router-link>
+
+              <button @click="deleteData(item.id)" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+
+          <td>
+            <span class="badge text-uppercase" :class="getStatusClass(item.status)">
+              {{ item.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
 </template>
 
 <script>
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 
 export default {
   setup() {
     const datas = ref([]);
     const currentPage = ref(1);
-    const totalPages = ref(1);
     const itemsPerPage = ref(10);
     const sortOrder = ref("desc");
+
+    const showUpload = ref(false);
     const showSuccessAlert = ref(false);
     const showErrorAlert = ref(false);
 
-    const API_BASE_URL= process.env.VUE_APP_API_BASE_URL;
+    const wordInput = ref(null);
 
-    const token = localStorage.getItem("token")
+    const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+    const token = localStorage.getItem("token");
 
+    /* ================= FETCH ================= */
     const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/artikels/admin`, 
-          {
-            method:"GET", 
-            headers:{
-              Authorization:`Bearer ${token}`,
-            }
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const result = await response.json();
-        datas.value = result.data;
-        totalPages.value = Math.ceil(result.length / itemsPerPage.value);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      const res = await fetch(`${API_BASE_URL}/api/artikels/admin`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const result = await res.json();
+      datas.value = result.data;
     };
 
-    const deleteData = async (id) => {
-      const token = localStorage.getItem("token");
+    /* ================= TOGGLE ================= */
+    const toggleUpload = () => {
+      showUpload.value = !showUpload.value;
+    };
 
-      const confirmation = confirm(
-        "Are you sure you want to delete this item?"
-      );
-      if (!confirmation) return;
+    /* ================= UPLOAD WORD ================= */
+    const handleUploadWord = async () => {
+      const file = wordInput.value.files[0];
+      if (!file) return alert("Pilih file dulu!");
+
+      const formData = new FormData();
+      formData.append("file_word", file);
+
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/artikels/admin/${id}`,
+        const res = await fetch(
+          `${API_BASE_URL}/api/artikels/admin/import-word`,
           {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            method: "POST",
+            body: formData,
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-        if (!response.ok) {
-          throw new Error("Failed to delete data");
-        }
+
+        if (!res.ok) throw new Error("Upload gagal");
 
         showSuccessAlert.value = true;
         showErrorAlert.value = false;
 
         setTimeout(() => {
-          fetchData();
           showSuccessAlert.value = false;
-          showErrorAlert.value = false;
-        }, 2000);
-      } catch (error) {
-        console.error("Error deleting data:", error);
+          showUpload.value = false;
+          fetchData();
+        }, 1500);
+
+      } catch (err) {
+        showErrorAlert.value = true;
       }
     };
 
-    const sortData = () => {
-      return [...datas.value].sort((a, b) => {
-        if (sortOrder.value === "asc") {
-          return new Date(a.createdAt) - new Date(b.createdAt);
-        } else {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        }
+    /* ================= DELETE ================= */
+    const deleteData = async (id) => {
+      if (!confirm("Hapus artikel ini?")) return;
+
+      await fetch(`${API_BASE_URL}/api/artikels/admin/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
+
+      fetchData();
     };
+
+    /* ================= SORT ================= */
+    const sortedData = computed(() => {
+      return [...datas.value].sort((a, b) =>
+        sortOrder.value === "asc"
+          ? new Date(a.createdAt) - new Date(b.createdAt)
+          : new Date(b.createdAt) - new Date(a.createdAt)
+      );
+    });
 
     const paginatedData = computed(() => {
       const start = (currentPage.value - 1) * itemsPerPage.value;
-      const end = start + itemsPerPage.value;
-      return sortData().slice(start, end);
+      return sortedData.value.slice(start, start + itemsPerPage.value);
     });
-
-    const goToFirstPage = () => {
-      currentPage.value = 1;
-    };
-
-    const prevPage = () => {
-      if (currentPage.value > 1) {
-        currentPage.value--;
-      }
-    };
-
-    const nextPage = () => {
-      if (currentPage.value < totalPages.value) {
-        currentPage.value++;
-      }
-    };
-
-    const goToLastPage = () => {
-      currentPage.value = totalPages.value;
-    };
-
-    const formatDate = (dateString) => {
-      const options = {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      };
-      const date = new Date(dateString);
-      return date.toLocaleDateString("id-ID", options);
-    };
-
-    const updatePagination = () => {
-      currentPage.value = 1;
-      totalPages.value = Math.ceil(datas.value.length / itemsPerPage.value);
-    };
-
-    const updateSortOrder = () => {
-      currentPage.value = 1;
-      sortData();
-    };
 
     const toggleSortOrder = () => {
       sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
     };
 
+    /* ================= UTIL ================= */
+    const formatDate = (date) => {
+      return new Date(date).toLocaleString("id-ID");
+    };
+
     const getStatusClass = (status) => {
-      if (status === "idea") return "bg-primary py-2 px-4"
-      if (status === "draft") return "bg-warning py-2 px-4"
-      if (status === "publish") return "bg-success py-2 px-4"
-      return "bg-secondary"
-    }
+      if (status === "idea") return "bg-primary px-3 py-1";
+      if (status === "draft") return "bg-warning px-3 py-1";
+      if (status === "publish") return "bg-success px-3 py-1";
+      return "bg-secondary";
+    };
 
-
-    onMounted(() => {
-      fetchData();
-    });
-
-    watch(sortOrder, updateSortOrder);
-    watch(itemsPerPage, updatePagination);
+    onMounted(fetchData);
 
     return {
       datas,
+      paginatedData,
       currentPage,
-      totalPages,
       itemsPerPage,
       sortOrder,
-      paginatedData,
-      goToFirstPage,
-      prevPage,
-      nextPage,
-      goToLastPage,
-      formatDate,
-      updatePagination,
-      updateSortOrder,
       toggleSortOrder,
+      formatDate,
       deleteData,
+      getStatusClass,
+
+      showUpload,
+      toggleUpload,
+      handleUploadWord,
+      wordInput,
+
       showSuccessAlert,
       showErrorAlert,
-      getStatusClass 
     };
   },
 };
 </script>
-
-<style>
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  text-align: center;
-  padding: 8px;
-}
-
-.pagination {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.pagination button {
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.bi-arrow-up,
-.bi-arrow-down {
-  margin-left: 5px;
-}
-</style>

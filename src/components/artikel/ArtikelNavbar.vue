@@ -1,19 +1,19 @@
 <template>
   <div>
     <!-- NAVBAR -->
-    <div
+    <div ref="navbarRef"
       :class="[
         'container-fluid fixed-top custom-navbar',
-        navbarScrolled ? 'scrolled' : ''
+        navbarScrolled ? 'scrolled' : '',
       ]"
     >
       <div :class="['container-xxl', navbarScrolled ? 'py-2' : 'py-3']">
         <div class="row align-items-center">
           <!-- LOGO -->
-          <div class="col-4 col-lg-2">
+          <div class="col-8 col-lg-2" v-if="!showSearchMobile">
             <router-link
               to="/"
-              class="align-items-center justify-content-center d-flex"
+              class="align-items-center justify-content-start d-flex justify-content-md-center"
             >
               <img
                 src="../../assets/guru_ngulik_logo.png"
@@ -23,13 +23,49 @@
             </router-link>
           </div>
 
-          <!-- HAMBURGER MOBILE -->
-          <div class="col-8 d-lg-none text-end">
+          <!-- SEARCH MOBILE -->
+          <div class="col-10 mobile-search d-lg-none" v-if="showSearchMobile">
+            <div class="row align-items-center">
+              <div class="col-10">
+                <input
+                  type="text"
+                  class="form-control m-0"
+                  placeholder="Cari artikel..."
+                  v-model="searchQuery"
+                  @keyup.enter="goToSearch"
+                />
+              </div>
+              <div
+                class="col-2 d-flex justify-content-center align-items-center"
+              >
+                <button class="search-btn-mobile border-0" @click="goToSearch">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 🔍 SEARCH ICON -->
+          <div
+            class="col-2 d-lg-none d-flex justify-content-start align-items-center"
+          >
+            <button class="btn-search-mobile" @click.stop="toggleSearch">
+              <i
+                class="bi"
+                :class="showSearchMobile ? 'bi-x-lg' : 'bi-search'"
+              ></i>
+            </button>
+          </div>
+
+          <!-- ☰ HAMBURGER -->
+          <div
+            class="col-2 d-lg-none d-flex justify-content-end align-items-center"
+            v-if="!showSearchMobile"
+          >
             <button
-              class="navbar-toggler border-0"
+              class="navbar-toggler"
               type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
+              @click.stop="toggleMenu"
             >
               <i class="bi bi-list fs-1 text-warning humberger-icon"></i>
             </button>
@@ -60,9 +96,7 @@
                   >
                 </li>
                 <li class="nav-item">
-                  <router-link class="nav-link" to="/about"
-                    >About</router-link
-                  >
+                  <router-link class="nav-link" to="/about">About</router-link>
                 </li>
               </ul>
             </div>
@@ -98,7 +132,7 @@
 
               <!-- BUTTON -->
               <div class="col-auto">
-                <button class="search-btn border-0" @click="goToSearch">
+                <button class="search-btn-dekstop border-0" @click="goToSearch">
                   <i class="bi bi-search"></i>
                 </button>
               </div>
@@ -107,42 +141,29 @@
         </div>
 
         <!-- MOBILE MENU -->
-        <div class="collapse d-lg-none" id="navbarNav">
+        <div v-if="showMenuMobile" class="mobile-menu d-lg-none">
           <ul class="navbar-nav text-center gap-1 fw-bold text-white">
             <li class="nav-item">
               <router-link class="nav-link" to="/">Home</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/artikel"
-                >Artikel</router-link
-              >
+              <router-link class="nav-link" to="/artikel">Artikel</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/project"
-                >Project</router-link
-              >
+              <router-link class="nav-link" to="/project">Project</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/e-book"
-                >e-Book</router-link
-              >
+              <router-link class="nav-link" to="/e-book">e-Book</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/about"
-                >About</router-link
-              >
+              <router-link class="nav-link" to="/about">About</router-link>
             </li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- BACK TO TOP -->
-    <i
-      v-if="showBackToTop"
-      @click="scrollToTop"
-      class="bi bi-chevron-compact-up back-to-top"
-    ></i>
+    
   </div>
 </template>
 
@@ -150,28 +171,39 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 
-const navbarScrolled = ref(false);
-const showBackToTop = ref(false);
 const searchQuery = ref("");
 const selectedCategory = ref("");
 const categories = ref([]);
 
 const router = useRouter();
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+const showSearchMobile = ref(false);
+const showMenuMobile = ref(false);
+const navbarRef = ref(null);
 
-// SCROLL
-const handleScroll = () => {
-  navbarScrolled.value = window.scrollY > 50;
-  showBackToTop.value = window.scrollY > 500;
+
+
+// HANDLE CLICK OUTSIDE
+const handleClickOutside = (event) => {
+  if (!navbarRef.value) return;
+
+  if (!navbarRef.value.contains(event.target)) {
+    showSearchMobile.value = false;
+    showMenuMobile.value = false;
+  }
 };
 
-// BACK TO TOP
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+const toggleSearch = () => {
+  showSearchMobile.value = !showSearchMobile.value;
+  showMenuMobile.value = false; // tutup menu
 };
+
+const toggleMenu = () => {
+  showMenuMobile.value = !showMenuMobile.value;
+  showSearchMobile.value = false;
+};
+
+
 
 // FETCH CATEGORY
 const fetchCategories = async () => {
@@ -194,15 +226,21 @@ const goToSearch = () => {
       category_id: selectedCategory.value || undefined,
     },
   });
+  
+  // 🔥 AUTO CLOSE
+  showSearchMobile.value = false;
+  showMenuMobile.value = false;
 };
 
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
+  
+  document.addEventListener("click", handleClickOutside);
   fetchCategories();
 });
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
+  
+  document.removeEventListener("click", handleClickOutside);
 });
 </script>
 
@@ -260,7 +298,7 @@ html {
 }
 
 /* SEARCH BUTTON */
-.search-btn {
+.search-btn-dekstop {
   background: linear-gradient(45deg, #ffb300, #ffcc00);
   border-radius: 50%;
   width: 38px;
@@ -272,22 +310,30 @@ html {
   transition: 0.3s;
 }
 
-.search-btn:hover {
+.search-btn-mobile {
+  background: linear-gradient(45deg, #ffb300, #ffcc00);
+  border-radius: 10%;
+  padding: 5px 10px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  transition: 0.3s;
+}
+
+.search-btn-dekstop:hover {
   transform: scale(1.1);
   box-shadow: 0 0 10px rgba(255, 193, 7, 0.6);
 }
 
-/* BACK TO TOP */
-.back-to-top {
-  position: fixed;
-  bottom: 20px;
-  right: 50%;
-  z-index: 1000;
-  font-size: 40px;
-  color: #ffc107;
-  cursor: pointer;
-  animation: bounce 1.5s infinite;
+.search-btn-mobile:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.6);
 }
+
+
 
 @keyframes bounce {
   0%,
@@ -303,6 +349,42 @@ html {
 @media (max-width: 768px) {
   .logo-brand {
     height: 45px;
+  }
+}
+
+/* SEARCH BUTTON MOBILE */
+.btn-search-mobile {
+  background: rgba(255, 193, 7, 0.15);
+  border: none;
+  color: #ffc107;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.btn-search-mobile:hover {
+  background: #ffc107;
+  color: #000;
+  transform: scale(1.1);
+}
+
+/* MOBILE SEARCH BAR */
+.mobile-search {
+  animation: fadeSlide 0.3s ease;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

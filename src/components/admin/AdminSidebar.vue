@@ -10,7 +10,7 @@
           alt="Logo"
           height="60px"
           class="d-inline-block align-text-center me-2"
-          src="../../assets/logobrand.png"
+          src="../../assets/guru_ngulik_logo.png"
         />
       </router-link>
 

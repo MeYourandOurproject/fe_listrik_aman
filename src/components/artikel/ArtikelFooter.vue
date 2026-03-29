@@ -72,8 +72,45 @@
         </div>
       </div>
     </div>
+
+    <!-- BACK TO TOP -->
+    <i
+      v-if="showBackToTop"
+      @click="scrollToTop"
+      class="bi bi-chevron-compact-up back-to-top"
+    ></i>
   </footer>
 </template>
+
+<script setup>
+import {onMounted, onUnmounted, ref} from "vue"
+const navbarScrolled = ref(false);
+
+const showBackToTop = ref(false);
+
+// SCROLL
+const handleScroll = () => {
+  navbarScrolled.value = window.scrollY > 50;
+  showBackToTop.value = window.scrollY > 500;
+};
+
+// BACK TO TOP
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
+
+onMounted(()=>{
+  window.addEventListener("scroll", handleScroll);
+})
+
+onUnmounted(()=>{
+  window.removeEventListener("scroll", handleScroll);
+})
+
+</script>
 
 <style>
 .footer-wrapper {
@@ -190,5 +227,17 @@
   .footer-nav {
     margin-bottom: 10px;
   }
+}
+
+/* BACK TO TOP */
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 50%;
+  z-index: 1000;
+  font-size: 40px;
+  color: #ffc107;
+  cursor: pointer;
+  animation: bounce 1.5s infinite;
 }
 </style>

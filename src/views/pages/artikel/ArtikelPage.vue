@@ -1,137 +1,93 @@
 <template>
   <!-- HERO -->
-  <div class="container-fluid artikel-home-heroes d-flex align-items-end justify-content-center text-center py-4" style="background-color: black;">
+  <div
+    class="container-fluid artikel-home-heroes d-flex align-items-end justify-content-center text-center py-4"
+  >
     <div class="container-xxl">
-      <div class="hero-content w-100">
-
-        <!-- TITLE -->
-        <h1 class="title-artikel-home-page fw-bold text-white mb-md-5 mb-3">
-          Learn Electrical and IoT for <br />Smart Home Applications
-        </h1>
-
-        <!-- SEARCH -->
-        <!-- <div class="row justify-content-center g-2 align-items-center mb-md-5 mb-2">
-
-          
-          <div class="col-6 col-md-4">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Cari artikel..."
-              v-model="searchQuery"
-              @keyup.enter="goToSearch"
-            />
-          </div>
-
-          
-          <div class="col-4 col-md-2">
-            <select
-              class="form-select"
-              v-model="selectedCategory"
-            >
-              <option value="">Semua kategori</option>
-              <option
-                v-for="cat in categories"
-                :key="cat.id"
-                :value="cat.id"
-              >
-                {{ cat.name }}
-              </option>
-            </select>
-          </div>
-
-          <div class="col-auto">
-            <button
-              class="search-btn border-0"
-              @click="goToSearch"
-            >
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-        </div> -->
-      </div>
+      <h1 class="title-artikel-home-page fw-bold text-white mb-md-5 mb-3">
+        Learn Electrical and IoT for <br />Smart Home Applications
+      </h1>
     </div>
   </div>
 
-  
-
-  <!-- MAIN PAGE -->
-  <div class="container-xxl py-5">
+  <!-- MAIN -->
+  <div class="container-xxl p-4 py-4 pb-5">
+    <!-- CATEGORY NAV -->
     <div class="row mb-3">
       <div class="col-12">
         <div class="category-wrap mt-3">
-
-          <!-- Home -->
           <router-link
             to="/artikel"
             class="category-pill"
             :class="{ active: $route.path === '/artikel' }"
+            >All Article</router-link
           >
-            All Article
-          </router-link>
-
-          <!-- Category -->
           <router-link
-            v-for="category in categories"
-            :key="category.slug"
-            :to="`/artikel/kategori/${category.slug}`"
+            v-for="cat in categories"
+            :key="cat.slug"
+            :to="`/artikel/kategori/${cat.slug}`"
             class="category-pill"
-            :class="{ active: $route.params.slug === category.slug }"
           >
-            {{ category.name }}
+            {{ cat.name }}
           </router-link>
-
         </div>
       </div>
     </div>
-    <div class="row py-3">
+
+    <!-- 🔥 TOP SECTION -->
+    <div class="row mb-4 align-items-stretch pt-3 g-4">
       <!-- CAROUSEL -->
-      <div class="col-md-8 mb-3">
+      <div class="col-md-8 mb-3 py-2">
         <div
-          v-if="carouselArticles.length"
-          id="mainCarousel"
+          id="carouselArtikel"
           class="carousel slide"
           data-bs-ride="carousel"
         >
-          <div class="carousel-inner rounded shadow">
+          <div class="carousel-inner rounded overflow-hidden">
             <div
-              v-for="(artikel, index) in carouselArticles"
-              :key="artikel.slug"
+              v-for="(artikel, index) in popularArticles"
+              :key="artikel.id"
               class="carousel-item"
               :class="{ active: index === 0 }"
             >
-              <div class="artikel-card artikel-card-lg">
-                <img :src="artikel.thumbnail" class="artikel-img" />
+              <router-link
+                :to="`/artikel/${artikel.slug}`"
+                class="text-decoration-none"
+              >
+                <div class="article-card carousel-card">
+                  <div class="article-img">
+                    <img :src="artikel.thumbnail" />
 
-                <span class="badge bg-danger position-absolute top-0 start-0 m-3 z-3">
-                  Terbaru
-                </span>
+                    <div
+                      :class="[
+                        'hero-category',
+                        getCategoryClass(artikel.Category_Artikel?.name),
+                      ]"
+                    >
+                      {{ artikel.Category_Artikel?.name }}
+                    </div>
+                  </div>
 
-                <div class="artikel-info py-4 ps-4 text-white">
-                  <h2 class="fw-bold mb-1">{{ artikel.title }}</h2>
-                  <p class="penulis mb-0">
-                    <i class="bi bi-pen me-1"></i> {{ artikel.author }}
-                    <i class="bi bi-calendar-check ms-3 me-1"></i>
-                    {{ formatDate(artikel.updatedAt) }}
-                  </p>
-                </div>
+                  <div class="article-content">
+                    <h3>{{ artikel.title }}</h3>
+                    <p>{{ artikel.excerpt }}</p>
 
-                <!-- OVERLAY -->
-                <router-link
-                  :to="`/artikel/${artikel.slug}`"
-                  class="artikel-overlay"
-                >
-                  <span class="see-more-text">See More</span>
-                </router-link>
-              </div>
+                    <!-- 🔥 TAMBAH VIEWS -->
+                    <div class="article-meta">
+                      <span><i class="bi bi-eye"></i> {{ artikel.views }}</span>
+                      <span>{{ formatDate(artikel.updatedAt) }}</span>
+                    </div>
+                  </div>
+                </div></router-link
+              >
             </div>
           </div>
 
-          <!-- CONTROLS -->
+          <!-- BUTTON -->
           <button
             class="carousel-control-prev"
             type="button"
-            data-bs-target="#mainCarousel"
+            data-bs-target="#carouselArtikel"
             data-bs-slide="prev"
           >
             <span class="carousel-control-prev-icon"></span>
@@ -140,7 +96,7 @@
           <button
             class="carousel-control-next"
             type="button"
-            data-bs-target="#mainCarousel"
+            data-bs-target="#carouselArtikel"
             data-bs-slide="next"
           >
             <span class="carousel-control-next-icon"></span>
@@ -148,56 +104,70 @@
         </div>
       </div>
 
-      <!-- SIDE ARTICLES -->
-      <div class="col-md-4 d-flex flex-column gap-3">
+      <!-- 🔥 LATEST POSTS -->
+      <div class="col-md-4 d-flex flex-column gap-3 h-100">
+        <h2>Latest Posts</h2>
         <div
-          v-for="artikel in sideArticles"
-          :key="artikel.slug"
-          class="artikel-card artikel-card-sm"
+          v-for="artikel in latestArticles"
+          :key="artikel.id"
+          class="article-card-latest"
+          style="height: 110px"
         >
-          <img :src="artikel.thumbnail" class="artikel-img" />
-
-          <div class="artikel-info p-3 text-white">
-            <h6 class="mb-1">{{ artikel.title }}</h6>
-            <p class="penulis mb-0">
-              <i class="bi bi-pen me-1"></i> {{ artikel.author }}
-                    <i class="bi bi-calendar-check me-1 ms-3"></i>
-                    {{ formatDate(artikel.updatedAt) }}
-            </p>
-          </div>
-
           <router-link
             :to="`/artikel/${artikel.slug}`"
-            class="artikel-overlay"
+            class="text-decoration-none h-100"
           >
-            <span class="see-more-text">See More</span>
-          </router-link>
+            <div class="d-flex h-100">
+              <img
+                :src="artikel.thumbnail"
+                style="width: 120px; object-fit: cover; margin-right: 10px;"
+              />
+
+              <div class="p-2 text-white">
+                <small class="text-warning">
+                  {{ artikel.Category_Artikel?.name }}
+                </small>
+                <h6 class="mb-1">{{ artikel.title }}</h6>
+              </div>
+            </div></router-link
+          >
         </div>
       </div>
     </div>
 
-    <!-- OTHER ARTICLES -->
-    <div class="row row-cols-1 row-cols-md-3 g-3 mt-4">
-      <div v-for="artikel in otherArticles" :key="artikel.slug" class="col">
-        <div class="artikel-card artikel-card-md">
-          <img :src="artikel.thumbnail" class="artikel-img" />
+    <!-- 🔥 OTHER ARTICLES -->
+    <div class="row pt-3 g-4">
+      <h2>Others Articles</h2>
+      <div class="col-md-4" v-for="artikel in otherArticles" :key="artikel.id">
+        <router-link
+          :to="`/artikel/${artikel.slug}`"
+          class="text-decoration-none"
+        >
+          <div class="article-card">
+            <div class="article-img">
+              <img :src="artikel.thumbnail" />
 
-          <div class="artikel-info p-3 text-white">
-            <h6 class="mb-1">{{ artikel.title }}</h6>
-            <p class="penulis mb-0">
-              <i class="bi bi-pen me-1"></i> {{ artikel.author }}
-                    <i class="bi bi-calendar-check me-1 ms-3"></i>
-                    {{ formatDate(artikel.updatedAt) }}
-            </p>
-          </div>
+              <div
+                :class="[
+                  'hero-category',
+                  getCategoryClass(artikel.Category_Artikel?.name),
+                ]"
+              >
+                {{ artikel.Category_Artikel?.name }}
+              </div>
+            </div>
 
-          <router-link
-            :to="`/artikel/${artikel.slug}`"
-            class="artikel-overlay"
-          >
-            <span class="see-more-text">See More</span>
-          </router-link>
-        </div>
+            <div class="article-content">
+              <h5>{{ artikel.title }}</h5>
+              <p>{{ artikel.excerpt }}</p>
+
+              <div class="article-meta">
+                <span><i class="bi bi-eye"></i> {{ artikel.views }}</span>
+                <span>{{ formatDate(artikel.updatedAt) }}</span>
+              </div>
+            </div>
+          </div></router-link
+        >
       </div>
     </div>
   </div>
@@ -205,16 +175,12 @@
 
 <script>
 import { ref, onMounted, computed } from "vue";
-import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const articles = ref([]);
     const categories = ref([]);
     const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
-    const router = useRouter();
-    const searchQuery = ref("");
-    const selectedCategory = ref("");
 
     const fetchArticles = async () => {
       const res = await fetch(`${API_BASE_URL}/api/artikels`);
@@ -227,26 +193,26 @@ export default {
       categories.value = await res.json();
     };
 
-    const formatDate = (dataString) => {
-      const date = new Date(dataString);
-      return date.toLocaleString("id-ID");
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString("id-ID");
     };
 
-    const goToSearch = () => {
-      if (!searchQuery.value && !selectedCategory.value) return;
+    const getCategoryClass = (name) => {
+      if (!name) return "cat-default";
 
-      router.push({
-        path: "/artikel/search",
-        query: {
-          search: searchQuery.value || undefined,
-          category_id: selectedCategory.value || undefined
-        }
-      });
+      const map = {
+        "internet of thing (iot)": "cat-iot",
+        "electrical": "cat-listrik",
+        "web development": "cat-webdev",
+      };
+
+      return map[name.toLowerCase()] || "cat-default";
     };
 
-    const carouselArticles = computed(() => articles.value.slice(0, 3));
-    const sideArticles = computed(() => articles.value.slice(3, 5));
-    const otherArticles = computed(() => articles.value.slice(5));
+    // 🔥 SPLIT DATA
+    const popularArticles = computed(() => articles.value.slice(0, 3));
+    const latestArticles = computed(() => articles.value.slice(3, 6));
+    const otherArticles = computed(() => articles.value.slice(6));
 
     onMounted(() => {
       fetchArticles();
@@ -255,13 +221,11 @@ export default {
 
     return {
       categories,
-      carouselArticles,
-      sideArticles,
+      popularArticles,
+      latestArticles,
       otherArticles,
       formatDate,
-      searchQuery,
-      selectedCategory,
-      goToSearch
+      getCategoryClass,
     };
   },
 };
@@ -271,198 +235,174 @@ export default {
 /* HERO */
 .artikel-home-heroes {
   height: 320px;
-  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.1)),
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)),
     url("../../../assets/img_hero_all.PNG");
   background-size: cover;
-  background-position: bottom;
-  position: relative;
-  z-index: 2;
 }
 
-.title-artikel-home-page {
-  font-size: 50px;
+/* CATEGORY */
+.category-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
-.artikel-home-heroes .container-xxl {
-  position: relative;
-  /* z-index: 2; */
+/* 🔥 FIX HEIGHT CAROUSEL */
+.carousel-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Gradasi penyambung */
-/* .artikel-home-heroes::after {
-  content: "";
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  width: 100%;
-  height: 140px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 85%);
-  z-index: 1;
-} */
-
-/* CARD */
-.artikel-card {
-  position: relative;
+/* 🔥 IMAGE FLEX BIAR PROPORSIONAL */
+.carousel-card .article-img {
+  height: 282px; /* 👉 INI BISA KAMU ATUR */
   overflow: hidden;
-  border-radius: 8px;
 }
 
-.artikel-card-lg { height: 480px; }
-.artikel-card-md { height: 260px; }
-.artikel-card-sm { height: 232px; }
-
-.artikel-img {
+.carousel-card .article-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
 }
 
-/* INFO */
-.artikel-info {
+/* 🔥 CONTENT FLEX */
+.carousel-card .article-content {
+  flex: 1;
+}
+
+/* 🔥 SAMAKAN TINGGI DENGAN LATEST */
+#carouselArtikel {
+  height: 100%;
+}
+
+.carousel-inner {
+  height: 100%;
+}
+
+.carousel-item {
+  height: 100%;
+}
+
+/* CARD */
+.article-card-latest {
+  /* background: #111; */
+  /* border-radius: 5px; */
+  overflow: hidden;
+  position: relative;
+  transition: 0.3s;
+}
+
+.article-card-latest:hover {
+  transform: translateY(-5px);
+}
+
+.article-card-latest img{
+  border-radius: 5px;
+}
+
+/* IMAGE */
+.article-img img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* BADGE */
+.hero-category {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(4px);
-  z-index: 2;
+  top: 10px;
+  left: 10px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  color: white;
+}
+
+/* CATEGORY COLORS */
+.cat-iot {
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+}
+.cat-listrik {
+  background: linear-gradient(45deg, #ffb300, #ffcc00);
+  color: #000;
+}
+.cat-webdev {
+  background: linear-gradient(45deg, #8e2de2, #4a00e0);
+}
+.cat-default {
+  background: #6c757d;
+}
+
+/* CONTENT */
+.article-content {
+  padding: 15px;
+  color: white;
+}
+
+/* META */
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  opacity: 0.7;
 }
 
 /* OVERLAY */
 .artikel-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   opacity: 0;
-  pointer-events: none; /* 🔥 INI KUNCINYA */
-  transition: opacity 0.3s ease;
-  z-index: 3;
-  text-decoration: none;
-}
+  transition: 0.3s;
 
-.see-more-text {
+  z-index: 100; /* 🔥 naikkan */
+  text-decoration: none;
   color: #fff;
-  font-size: 20px;
   font-weight: bold;
-  padding: 5px 50px;
-  border: 2px solid #fff;
-  border-radius: 10px;
-  transition: all 0.3s ease;
+
+  pointer-events: auto; /* 🔥 WAJIB */
 }
 
-/* HOVER */
-.artikel-card:hover .artikel-overlay {
+.article-content,
+.article-img,
+.hero-category {
+  position: relative;
+  z-index: 1;
+}
+
+.article-card:hover .artikel-overlay {
   opacity: 1;
-  pointer-events: auto; /* aktif hanya saat hover */
 }
 
-.artikel-card:hover .artikel-img {
-  transform: scale(1.05);
+/* 🔥 HOVER */
+.article-card:hover .artikel-overlay {
+  opacity: 1;
 }
 
-.artikel-card:hover .see-more-text {
-  background: #fff;
-  color: #000;
+.artikel-overlay {
+  cursor: pointer;
 }
 
-/* FIX CAROUSEL */
-.carousel-control-prev,
-.carousel-control-next {
-  z-index: 10;
-}
-
-/* TEXT */
-.penulis {
-  font-size: 12px;
-}
-
-/* CATEGORY WRAPPER */
-.category-wrap {
-  display: flex;
-  flex-wrap: wrap;           /* 🔥 turun ke baris bawah */
-  gap: 10px;
-  justify-content: center;   /* tengah desktop */
-}
-
-/* PILL STYLE */
-.category-pill {
-  padding: 8px 18px;
-  border-radius: 10px;
-  font-size: 14px;
-  white-space: nowrap;
-  text-decoration: none;
-  transition: all 0.25s ease;
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
-  backdrop-filter: blur(6px);
-  /* border: 1px solid rgba(255, 255, 255, 0.15); */
-}
-
-/* Hover */
-.category-pill:hover {
- background: rgba(255, 193, 7, 0.15);
-  border: 1px solid rgba(255, 193, 7, 0.6);
-  transform: translateY(-4px);
-  box-shadow: 0 0 20px rgba(255, 193, 7, 0.35);
-}
-
-/* Active */
-.category-pill.active {
-  /* transform: translateY(-4px); */
-  background: #fff;
-  box-shadow: 0 0 28px rgba(255, 193, 7, 0.7);
-  font-weight: 600;
-  color: #000000;
-}
-
-/* MOBILE OPTIMIZATION */
-@media (max-width: 576px) {
-  .category-wrap {
-    justify-content: flex-center; /* kiri di HP */
-  }
-
-  .category-pill {
-    font-size: 13px;
-    padding: 7px 14px;
+/* 🔥 MOBILE AUTO MUNCUL */
+@media (max-width: 768px) {
+  .artikel-overlay {
+    opacity: 1;
   }
 }
 
-.search-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 20%;
-  background: rgba(255, 255, 255, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 18px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(6px);
-}
+@media (max-width: 768px) {
+  .artikel-home-heroes {
+    height: 30vh;
+  }
 
-.search-btn:hover {
-  background: #ffc107;
-  color: #000;
-  transform: scale(1.1) ;
-}
-
-.search-btn:active {
-  transform: scale(0.95);
-}
-
-@media (max-width: 767px) { 
-  .artikel-home-heroes{ 
-    height: 30vh; 
-  } 
-
-  .title-artikel-home-page { 
-    font-size: 25px; 
-  } 
+  .title-artikel-home-page {
+    font-size: 25px;
+  }
 }
 </style>

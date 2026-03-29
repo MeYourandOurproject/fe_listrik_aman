@@ -54,7 +54,9 @@
   <!-- TOPIK PILIHAN -->
   <div class="container-fluid py-5 topic-section">
     <div class="container-xxl">
-      <h2 class="topic-title text-white fw-bold text-md-start text-center ms-lg-4">
+      <h2
+        class="topic-title text-white fw-bold text-md-start text-center ms-lg-4"
+      >
         Topik <span class="text-warning">Pilihan</span>
       </h2>
 
@@ -101,12 +103,11 @@
   </div>
 
   <div class="container-fluid py-5 artikel-populer">
-    <div class="container-xxl">
+    <!-- <div class="container-xxl">
       <h2 class="topic-title text-white fw-bold text-center">
         Project <span class="text-warning">Terbaru</span>
       </h2>
       <div class="row g-4 mt-4">
-        <!-- CARD 1 -->
         <div class="col-12 col-md-6 col-lg-4">
           <div class="article-card">
             <div class="article-img">
@@ -126,56 +127,15 @@
             </div>
           </div>
         </div>
-
-        <!-- CARD 2 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="article-card">
-            <div class="article-img">
-              <img src="https://picsum.photos/600/400?2" alt="" />
-              <span class="article-badge">Electrical</span>
-            </div>
-            <div class="article-content">
-              <h5>Cara Instalasi Panel Listrik Rumah Aman</h5>
-              <p>
-                Panduan lengkap instalasi panel listrik rumah sesuai standar
-                PUIL dan keamanan.
-              </p>
-              <div class="article-meta">
-                <span><i class="bi bi-eye"></i> 980</span>
-                <span><i class="bi bi-chat-dots"></i> 54</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 3 -->
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="article-card">
-            <div class="article-img">
-              <img src="https://picsum.photos/600/400?3" alt="" />
-              <span class="article-badge">Web Development</span>
-            </div>
-            <div class="article-content">
-              <h5>Membuat Dashboard Monitoring IoT dengan Vue</h5>
-              <p>
-                Tutorial membuat dashboard monitoring realtime berbasis Vue dan
-                integrasi API perangkat IoT.
-              </p>
-              <div class="article-meta">
-                <span><i class="bi bi-eye"></i> 2.4k</span>
-                <span><i class="bi bi-chat-dots"></i> 132</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="text-center my-5">
-      <button class="btn-topic text-warning">
-        Lihat Semua Project
-        <i class="bi bi-chevron-right ms-2"></i>
-      </button>
-    </div>
+      <router-link to="/project"
+        ><button class="btn-topic text-warning">
+          Lihat Semua Project
+          <i class="bi bi-chevron-right ms-2"></i></button
+      ></router-link>
+    </div> -->
 
     <!-- <div class="container-fluid py-5 artikel-populer"> -->
     <div class="container-xxl pt-5 mt-5">
@@ -189,33 +149,39 @@
           :key="artikel.slug"
           class="col-12 col-md-6 col-lg-4"
         >
-          <div class="article-card">
-            <div class="article-img">
-              <img :src="artikel.thumbnail" alt="" />
-              <span class="article-badge">{{
-                artikel.Category_Artikel.name
-              }}</span>
-            </div>
-            <div class="article-content">
-              <h5>{{ artikel.title }}</h5>
-              <p>
-                {{ artikel.excerpt }}
-              </p>
-              <div class="article-meta">
-                <span><i class="bi bi-eye"></i> {{ artikel.views }}</span>
-                <span><i class="bi bi-chat-dots"></i> 86</span>
+          <router-link
+            :to="`/artikel/${artikel.slug}`"
+            class="text-decoration-none"
+          >
+            <div class="article-card">
+              <div class="article-img">
+                <img :src="artikel.thumbnail" alt="" />
+                <span class="article-badge">{{
+                  artikel.Category_Artikel.name
+                }}</span>
               </div>
-            </div>
-          </div>
+              <div class="article-content">
+                <h5>{{ artikel.title }}</h5>
+                <p>
+                  {{ artikel.excerpt }}
+                </p>
+                <div class="article-meta">
+                  <span><i class="bi bi-eye"></i> {{ artikel.views }}</span>
+                  <span><i class="bi bi-chat-dots"></i> 86</span>
+                </div>
+              </div>
+            </div></router-link
+          >
         </div>
       </div>
     </div>
 
     <div class="text-center my-5">
-      <button class="btn-topic text-warning">
-        Lihat Semua Artikel
-        <i class="bi bi-chevron-right ms-2"></i>
-      </button>
+      <router-link to="/artikel"
+        ><button class="btn-topic text-warning">
+          Lihat Semua Artikel
+          <i class="bi bi-chevron-right ms-2"></i></button
+      ></router-link>
     </div>
 
     <!-- Free eBook -->
